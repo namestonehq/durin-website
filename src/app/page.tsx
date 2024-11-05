@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Gelasio } from "next/font/google";
+import Link from "next/link";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -14,7 +15,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900">
       {/* Nav */}
-      <div className="flex items-center justify-between h-16 px-10">
+      <div className="flex items-center justify-between h-16 px-10 mt-4">
         <Image alt="logo" src="durin-logo.svg" width={91} height={24}></Image>
         <button className="px-8 py-2 text-white transition-colors duration-300 rounded-lg bg-stone-900 w-fit hover:bg-stone-700 disabled:opacity-50">
           Connect
@@ -246,8 +247,32 @@ export default function Home() {
           </div>
         </div>
       </main>
-
-      <footer className=""></footer>
+      <footer className="mt-10">
+        <div className=" bg-neutral-900 h-16 absolute items-center w-full z-10 flex">
+          <div className="flex  items-center justify-center sm:w-[800px] mx-auto">
+            <span className="ml-1  text-neutral-300">
+              Built By{" "}
+              <Link
+                href="https://namestone.xyz"
+                target="_blank"
+                className=" hover:text-orange-400 transition-colors duration-300 ease-in text-neutral-300"
+              >
+                NameStone
+              </Link>{" "}
+              <span className="mr-2 text-neutral-300">|</span>
+            </span>
+            <Link href="https://x.com/namestonehq" target="_blank">
+              <Image
+                className="mr-1"
+                src="/x-logo.png"
+                alt="Logo"
+                width={12}
+                height={12}
+              />
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
