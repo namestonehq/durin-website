@@ -13,7 +13,14 @@ export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
   return (
-    <div className="flex flex-col h-screen font-sans text-stone-900">
+    <div className="flex flex-col h-screen font-sans text-stone-900 relative">
+      <Image
+        src="/anvil.png"
+        alt="anvil"
+        width={100}
+        height={100}
+        className="absolute opacity-0 hover:opacity-80 duration-10000 right-14 top-20"
+      ></Image>
       {/* Nav */}
       <div className="flex items-center justify-between h-16 px-10 mt-4">
         <Image alt="logo" src="durin-logo.svg" width={91} height={24}></Image>
