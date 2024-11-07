@@ -23,7 +23,12 @@ export default function Home() {
       ></Image>
       {/* Nav */}
       <div className="flex items-center justify-between h-16 px-10 mt-4">
-        <Image alt="logo" src="durin-logo.svg" width={91} height={24}></Image>
+        <Image
+          alt="logo"
+          src="durin-logo-wordmark.svg"
+          width={91}
+          height={24}
+        ></Image>
         <button className="px-8 py-2 text-white transition-colors duration-300 rounded-lg bg-stone-900 w-fit hover:bg-stone-700 disabled:opacity-50">
           Connect
         </button>
