@@ -7,8 +7,7 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
-import { parseAbi, decodeEventLog } from "viem";
-import { type Address } from "viem";
+import { parseAbi, type Address } from "viem";
 
 interface DeployButtonProps {
   selectedChain: string;
@@ -37,7 +36,6 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address;
   const FACTORY_ABI = parseAbi([
     "function deployRegistry(string name, string symbol, string baseURI) external returns (address)",
-    "event RegistryDeployed(address indexed registry, string name, string symbol, string baseURI)",
   ]);
 
   const { writeContract, data: hash } = useWriteContract();
@@ -51,36 +49,14 @@ const DeployButton: React.FC<DeployButtonProps> = ({
 
   // Extract registry address when deployment succeeds
   React.useEffect(() => {
-    if (deploySuccess && receipt && onDeploySuccess) {
-      try {
-        // Find the RegistryDeployed event in the logs
-        const log = receipt.logs.find((log) => {
-          try {
-            const event = decodeEventLog({
-              abi: FACTORY_ABI,
-              data: log.data,
-              topics: log.topics,
-            });
-            return event.eventName === "RegistryDeployed";
-          } catch {
-            return false;
-          }
-        });
-
-        if (log) {
-          const event = decodeEventLog({
-            abi: FACTORY_ABI,
-            data: log.data,
-            topics: log.topics,
-          });
-
-          // The registry address is the first indexed parameter
-          const registryAddress = log.topics[1] as Address;
-          onDeploySuccess(registryAddress);
-        }
-      } catch (error) {
-        console.error("Error extracting registry address:", error);
-      }
+    if (
+      deploySuccess &&
+      receipt &&
+      onDeploySuccess &&
+      receipt.logs.length > 0
+    ) {
+      const registryAddress = receipt.logs[0].address as Address;
+      onDeploySuccess(registryAddress);
     }
   }, [deploySuccess, receipt, onDeploySuccess]);
 

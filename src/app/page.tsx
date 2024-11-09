@@ -278,8 +278,11 @@ export default function Home() {
                 <input
                   type="text"
                   id="select-domain"
-                  placeholder={true ? "0x1231232" : "Waiting to connect..."}
-                  disabled={false} // Disable input when connecting
+                  placeholder={
+                    true ? "Waiting for Deploy..." : "Waiting to connect..."
+                  }
+                  value={registryAddress}
+                  disabled={!isConnected} // Disable input when connecting
                   className={`w-full mt-2 h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none ${
                     true ? "bg-stone-100 text-stone-400 cursor-not-allowed" : ""
                   }`}
