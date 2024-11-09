@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Gelasio } from "next/font/google";
+import Providers from "./providers";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={gelasio.className}>{children}</body>
+      <body className={gelasio.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

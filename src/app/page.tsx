@@ -1,8 +1,12 @@
 "use client";
-import { useState } from "react";
 import Image from "next/image";
 import { Gelasio } from "next/font/google";
 import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+import DeployButton from "./components/deploy-button";
+import { type Address } from "viem";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -12,6 +16,15 @@ const gelasio = Gelasio({
 export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
+  const { isConnected } = useAccount();
+  const [domainInput, setDomainInput] = useState("");
+  const [registryAddress, setRegistryAddress] = useState("");
+
+  const handleDeploySuccess = (registryAddress: Address) => {
+    console.log("New registry deployed at:", registryAddress);
+    setRegistryAddress(registryAddress);
+  };
+
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
       <Image
@@ -29,9 +42,14 @@ export default function Home() {
           width={115}
           height={30}
         ></Image>
-        <button className="px-8 py-2 text-white transition-colors duration-300 rounded-lg bg-stone-900 w-fit hover:bg-stone-700 disabled:opacity-50">
-          Connect
-        </button>
+        <ConnectButton
+          showBalance={false}
+          chainStatus="none"
+          accountStatus={{
+            smallScreen: "avatar",
+            largeScreen: "full",
+          }}
+        />
       </div>
 
       {/* Main Content */}
@@ -40,13 +58,20 @@ export default function Home() {
           Issue L2 Subnames
         </h1>
         {/* Connection Prompt */}
-        <div className="flex items-center justify-between w-full px-4 py-3 space-x-3 rounded-lg bg-amber-100">
-          {/* Icon for information */}
-          <div>Connect wallet to get started.</div>
-          <button className="px-4 py-1 text-white transition-colors duration-300 rounded-lg bg-stone-900 hover:bg-stone-700 disabled:opacity-50">
-            Connect
-          </button>
-        </div>
+        {!isConnected && (
+          <div className="flex items-center justify-between w-full px-4 py-3 space-x-3 rounded-lg bg-amber-100">
+            {/* Icon for information */}
+            <div>Connect wallet to get started.</div>
+            <ConnectButton
+              showBalance={false}
+              chainStatus="none"
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
+          </div>
+        )}
         {/* Name & Chain Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className={`${gelasio.className} text-xl`}>
@@ -81,7 +106,10 @@ export default function Home() {
             </div>
           </div>
           {/* ENS Search & Drop Down */}
-          <DomainSelector />
+          <DomainSelector
+            domainInput={domainInput}
+            setDomainInput={setDomainInput}
+          />
           <div className="flex flex-col gap-1">
             <div className="font-light">Chain</div>
             <div className="text-sm text-stone-500 ">
@@ -182,9 +210,11 @@ export default function Home() {
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
                 <div className="font-light">Registry</div>
-                <button className="px-4 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100">
-                  Deploy
-                </button>
+                <DeployButton
+                  selectedBaseName={domainInput}
+                  selectedChain={chain}
+                  onDeploySuccess={handleDeploySuccess}
+                />
               </div>
               <div className="text-sm text-stone-500">
                 The registrar controls how a name can be minted. We provide a
@@ -289,24 +319,67 @@ export default function Home() {
   );
 }
 
-function DomainSelector() {
-  const [domainInput, setDomainInput] = useState("");
+interface Domain {
+  name: string;
+}
+
+function DomainSelector({
+  domainInput,
+  setDomainInput,
+}: {
+  domainInput: string;
+  setDomainInput: (domain: string) => void;
+}) {
   const [domainInputSelected, setDomainInputSelected] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const [userDomains, setUserDomains] = useState<Domain[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Dummy domain list for dropdown
-  const dummyDomainList = [
-    { name: "example.eth" },
-    { name: "test.eth" },
-    { name: "mydomain.eth" },
-    { name: "yourdomain.eth" },
-    { name: "anotherdomain.eth" },
-  ];
+  const { address, isConnected } = useAccount();
 
-  // Filtered domain list based on input
-  const filteredDomainList = dummyDomainList.filter((domain) =>
-    domain.name.includes(domainInput)
-  );
+  // Fetch ENS names when wallet is connected
+  useEffect(() => {
+    const fetchENSNames = async () => {
+      if (!isConnected || !address) {
+        setUserDomains([]);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        // Use URL constructor to properly format the URL with query parameters
+        const baseUrl =
+          process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+        const url = new URL(`${baseUrl}/api/get-domains`);
+        url.searchParams.append("address", address);
+
+        const response = await fetch(url.toString());
+        const data: Domain[] = await response.json();
+
+        if (response.status === 200) {
+          // Filter out null values and format the domains
+          const formattedDomains: Domain[] = data.filter(
+            (name) => name !== null
+          );
+          setUserDomains(formattedDomains);
+        } else {
+          console.error("Error fetching domains:", data);
+          setUserDomains([]);
+        }
+      } catch (error) {
+        console.error("Error fetching ENS names:", error);
+        setUserDomains([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchENSNames();
+  }, [address, isConnected]);
+
+  // Filter domains based on input
+  const filteredDomainList = userDomains.filter((domain) => {
+    return domain.name.toLowerCase().includes(domainInput.toLowerCase());
+  });
 
   return (
     <div className="z-20 flex">
@@ -318,7 +391,11 @@ function DomainSelector() {
                 type="text"
                 id="select-domain"
                 placeholder={
-                  isConnected ? "Waiting to connect..." : "slobo.eth"
+                  !isConnected
+                    ? "Connect wallet to see your ENS names"
+                    : isLoading
+                    ? "Loading your ENS names..."
+                    : "Search your ENS names"
                 }
                 onChange={(e) => setDomainInput(e.target.value)}
                 value={domainInput}
@@ -328,9 +405,9 @@ function DomainSelector() {
                     setDomainInputSelected(false);
                   }, 200);
                 }}
-                disabled={isConnected} // Disable input when connecting
-                className={`w-full h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none ${
-                  isConnected
+                disabled={!isConnected || isLoading}
+                className={`w-full h-8 p-4 border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none ${
+                  !isConnected || isLoading
                     ? "bg-stone-100 text-stone-400 cursor-not-allowed"
                     : ""
                 }`}
@@ -341,27 +418,36 @@ function DomainSelector() {
                   src="/chevron-down.svg"
                   width={16}
                   height={16}
-                ></Image>
+                />
               </span>
             </div>
             {/* Dropdown with domain list */}
-            {domainInputSelected && (
+            {isConnected && domainInputSelected && (
               <div className="z-10 w-full max-w-md overflow-x-hidden overflow-y-scroll bg-white border rounded-lg shadow-lg max-h-40">
-                {filteredDomainList.map((domain, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      setDomainInput(domain.name);
-                      setDomainInputSelected(false);
-                    }}
-                    className="h-10 px-4 py-2 text-left border-b cursor-pointer border-stone-300 hover:bg-stone-100 overflow-ellipsis"
-                  >
-                    {domain.name}
+                {isLoading ? (
+                  <div className="h-10 px-4 py-2 text-left text-stone-400">
+                    Loading your ENS names...
                   </div>
-                ))}
-                {filteredDomainList.length === 0 && (
+                ) : filteredDomainList.length > 0 ? (
+                  filteredDomainList.map((domain, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setDomainInput(domain.name);
+                        setDomainInputSelected(false);
+                      }}
+                      className="h-10 px-4 py-2 text-left border-b cursor-pointer border-stone-300 hover:bg-stone-100 overflow-ellipsis"
+                    >
+                      {domain.name}
+                    </div>
+                  ))
+                ) : (
                   <div className="h-10 px-4 py-2 text-left border-b text-stone-400 border-stone-300">
-                    No domains found
+                    {domainInput
+                      ? "No matching ENS names found"
+                      : userDomains.length === 0
+                      ? "No ENS names found for this address"
+                      : "Type to search your ENS names"}
                   </div>
                 )}
               </div>
