@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
+import UpdateResolverButton from "./components/update-resolver-button";
+import AddRecordButton from "./components/add-record-button";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -107,6 +109,7 @@ export default function Home() {
           </div>
           {/* ENS Search & Drop Down */}
           <DomainSelector
+            network={network}
             domainInput={domainInput}
             setDomainInput={setDomainInput}
           />
@@ -251,9 +254,10 @@ export default function Home() {
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
                 <div className="font-light">Change Resolver</div>
-                <button className="px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100">
-                  Update Resolver
-                </button>
+                <UpdateResolverButton
+                  network={network}
+                  domainInput={domainInput}
+                />
               </div>
               <div className="text-sm text-stone-500">
                 Update the resolver to 0x5422 with one click.
@@ -262,9 +266,12 @@ export default function Home() {
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
                 <div className="font-light">Add Record</div>
-                <button className="px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100">
-                  Add Record
-                </button>
+                <AddRecordButton
+                  network={network}
+                  domainInput={domainInput}
+                  registryAddress={registryAddress as Address}
+                  selectedChain={chain}
+                />
               </div>
               <div className="text-sm text-stone-500">
                 Add the registry record with one click. If desired, customize
@@ -281,6 +288,7 @@ export default function Home() {
                   placeholder={
                     true ? "Waiting for Deploy..." : "Waiting to connect..."
                   }
+                  onChange={(e) => setRegistryAddress(e.target.value)}
                   value={registryAddress}
                   disabled={!isConnected} // Disable input when connecting
                   className={`w-full mt-2 h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none ${
@@ -327,9 +335,11 @@ interface Domain {
 }
 
 function DomainSelector({
+  network,
   domainInput,
   setDomainInput,
 }: {
+  network: string;
   domainInput: string;
   setDomainInput: (domain: string) => void;
 }) {
@@ -354,6 +364,7 @@ function DomainSelector({
           process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
         const url = new URL(`${baseUrl}/api/get-domains`);
         url.searchParams.append("address", address);
+        url.searchParams.append("network", network);
 
         const response = await fetch(url.toString());
         const data: Domain[] = await response.json();
@@ -377,7 +388,7 @@ function DomainSelector({
     };
 
     fetchENSNames();
-  }, [address, isConnected]);
+  }, [address, isConnected, network]);
 
   // Filter domains based on input
   const filteredDomainList = userDomains.filter((domain) => {
