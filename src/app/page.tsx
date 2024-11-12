@@ -377,7 +377,7 @@ function DomainSelector({
   setSelectedDomain,
 }: {
   network: string;
-  setSelectedDomain: (domain: Domain) => void;
+  setSelectedDomain: (domain: Domain | undefined) => void;
 }) {
   const [domainInputSelected, setDomainInputSelected] = useState(false);
   const [userDomains, setUserDomains] = useState<Domain[]>([]);

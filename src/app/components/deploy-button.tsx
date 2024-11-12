@@ -102,6 +102,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
 
   const handleDeploy = async (): Promise<void> => {
     try {
+      if (!selectedBaseName) return;
       setIsDeploying(true);
       const targetChainId = chainIdMap[selectedChain];
 
