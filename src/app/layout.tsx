@@ -10,7 +10,7 @@ const gelasio = Gelasio({
 
 export const metadata: Metadata = {
   title: "Durin - L2 Names Made Easy",
-  description: "The developer&rsquo;s gateway to ENS L2 Subnames",
+  description: "The developer's gateway to ENS L2 Subnames",
 };
 
 export default function RootLayout({

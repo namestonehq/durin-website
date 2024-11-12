@@ -40,7 +40,7 @@ export default function Home() {
         className="absolute opacity-0 hover:opacity-80 duration-10000 right-14 top-20"
       ></Image>
       {/* Nav */}
-      <div className="flex items-center justify-between h-16 px-10 mt-4">
+      <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
         <Image
           alt="logo"
           src="durin-logo-with-arch.svg"
@@ -59,7 +59,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex flex-col items-center flex-grow w-full max-w-md gap-6 mx-auto">
-        <h1 className={`self-start ${gelasio.className}  text-3xl`}>
+        <h1 className={`self-start ${gelasio.className}  text-3xl px-4`}>
           Issue L2 Subnames
         </h1>
         {/* Connection Prompt */}
