@@ -9,6 +9,8 @@ import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
 import UpdateResolverButton from "./components/update-resolver-button";
 import AddRecordButton from "./components/add-record-button";
+import { Domain } from "../lib/types";
+import { Copy, Check } from "lucide-react";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -19,8 +21,9 @@ export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
   const { isConnected } = useAccount();
-  const [domainInput, setDomainInput] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const handleDeploySuccess = (registryAddress: Address) => {
     console.log("New registry deployed at:", registryAddress);
@@ -110,8 +113,7 @@ export default function Home() {
           {/* ENS Search & Drop Down */}
           <DomainSelector
             network={network}
-            domainInput={domainInput}
-            setDomainInput={setDomainInput}
+            setSelectedDomain={setSelectedDomain}
           />
           <div className="flex flex-col gap-1">
             <div className="font-light">Chain</div>
@@ -214,31 +216,71 @@ export default function Home() {
               <div className="flex items-end justify-between">
                 <div className="font-light">Registry</div>
                 <DeployButton
-                  selectedBaseName={domainInput}
+                  selectedBaseName={selectedDomain?.name}
                   selectedChain={chain}
                   onDeploySuccess={handleDeploySuccess}
                 />
               </div>
               <div className="text-sm text-stone-500">
-                The registrar controls how a name can be minted. We provide a
-                basic version of a registrar that you can modify.
+                Deploy an instance of a registry via the Durin factory contract.
               </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex items-end justify-between">
-                <div className="font-light ">Registrar</div>
-                <button className="flex items-center gap-2 px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100">
-                  <Image
-                    alt="github"
-                    src="/github.svg"
-                    width={16}
-                    height={16}
-                  ></Image>
-                  Configure
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-end justify-between">
+              <div className="font-light ">Registrar</div>
+              <button
+                onClick={() => {
+                  window.open(
+                    "https://github.com/resolverworks/durin",
+                    "_blank"
+                  );
+                }}
+                className="flex items-center gap-2 px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100"
+              >
+                <Image
+                  alt="github"
+                  src="/github.svg"
+                  width={16}
+                  height={16}
+                ></Image>
+                Configure
+              </button>
+            </div>
+            <div className="text-sm text-stone-500">
+              The registrar controls how a name can be minted. We provide a
+              basic version of a registrar that you can modify. You will need to
+              know your registry address.
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="mb-2 font-light text-stone-900">
+              <div className="flex items-center gap-2">
+                Registry Address
+                <button
+                  onClick={() => {
+                    if (registryAddress) {
+                      navigator.clipboard
+                        .writeText(registryAddress)
+                        .then(() => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        });
+                    }
+                  }}
+                  className="p-1 hover:bg-stone-200 rounded-md transition-colors"
+                >
+                  {copied ? (
+                    <Check className="w-4 h-4 text-green-600" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-stone-600" />
+                  )}
                 </button>
               </div>
-              <div className="text-sm text-stone-500">
-                Deploy an instance of a registry via the Durin factory contract.
+              <div
+                className={`w-full mt-2 h-8 px-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400`}
+              >
+                {registryAddress ? registryAddress : "Waiting for Deploy..."}
               </div>
             </div>
           </div>
@@ -256,11 +298,11 @@ export default function Home() {
                 <div className="font-light">Change Resolver</div>
                 <UpdateResolverButton
                   network={network}
-                  domainInput={domainInput}
+                  selectedDomain={selectedDomain}
                 />
               </div>
               <div className="text-sm text-stone-500">
-                Update the resolver to 0x5422 with one click.
+                Update the resolver with one click.
               </div>
             </div>
             <div className="flex flex-col gap-1">
@@ -268,7 +310,7 @@ export default function Home() {
                 <div className="font-light">Add Record</div>
                 <AddRecordButton
                   network={network}
-                  domainInput={domainInput}
+                  domainInput={selectedDomain?.name}
                   registryAddress={registryAddress as Address}
                   selectedChain={chain}
                 />
@@ -291,8 +333,8 @@ export default function Home() {
                   onChange={(e) => setRegistryAddress(e.target.value)}
                   value={registryAddress}
                   disabled={!isConnected} // Disable input when connecting
-                  className={`w-full mt-2 h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none ${
-                    true ? "bg-stone-100 text-stone-400 cursor-not-allowed" : ""
+                  className={`w-full mt-2 h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400  ${
+                    !isConnected ? "cursor-not-allowed" : ""
                   }`}
                 />
               </div>
@@ -330,22 +372,17 @@ export default function Home() {
   );
 }
 
-interface Domain {
-  name: string;
-}
-
 function DomainSelector({
   network,
-  domainInput,
-  setDomainInput,
+  setSelectedDomain,
 }: {
   network: string;
-  domainInput: string;
-  setDomainInput: (domain: string) => void;
+  setSelectedDomain: (domain: Domain) => void;
 }) {
   const [domainInputSelected, setDomainInputSelected] = useState(false);
   const [userDomains, setUserDomains] = useState<Domain[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [domainInput, setDomainInput] = useState("");
 
   const { address, isConnected } = useAccount();
 
@@ -411,7 +448,10 @@ function DomainSelector({
                     ? "Loading your ENS names..."
                     : "Search your ENS names"
                 }
-                onChange={(e) => setDomainInput(e.target.value)}
+                onChange={(e) => {
+                  setDomainInput(e.target.value);
+                  setSelectedDomain(undefined);
+                }}
                 value={domainInput}
                 onFocus={() => setDomainInputSelected(true)}
                 onBlur={() => {
@@ -448,6 +488,7 @@ function DomainSelector({
                       key={index}
                       onClick={() => {
                         setDomainInput(domain.name);
+                        setSelectedDomain(domain);
                         setDomainInputSelected(false);
                       }}
                       className="h-10 px-4 py-2 text-left border-b cursor-pointer border-stone-300 hover:bg-stone-100 overflow-ellipsis"

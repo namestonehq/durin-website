@@ -15,7 +15,7 @@ import { addEnsContracts } from "@ensdomains/ensjs";
 
 interface AddRecordButtonProps {
   network: string;
-  domainInput: string;
+  domainInput: string | undefined;
   registryAddress: Address;
   selectedChain: string;
 }

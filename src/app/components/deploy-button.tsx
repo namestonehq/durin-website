@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useChains,
   useSwitchChain,
@@ -11,7 +11,7 @@ import { parseAbi, type Address } from "viem";
 
 interface DeployButtonProps {
   selectedChain: string;
-  selectedBaseName: string;
+  selectedBaseName: string | undefined;
   onDeploySuccess?: (registryAddress: Address) => void;
 }
 
@@ -29,6 +29,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   onDeploySuccess,
 }) => {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
+  const [shouldDeploy, setShouldDeploy] = useState<boolean>(false);
   const { chain: current } = useAccount();
   const chains = useChains();
   const { switchChain } = useSwitchChain();
@@ -47,8 +48,46 @@ const DeployButton: React.FC<DeployButtonProps> = ({
     hash,
   });
 
-  // Extract registry address when deployment succeeds
-  React.useEffect(() => {
+  // Watch for network changes and deploy when ready
+  useEffect(() => {
+    if (!selectedBaseName) return;
+
+    const targetChainId = chainIdMap[selectedChain];
+
+    if (shouldDeploy && current?.id === targetChainId) {
+      const deploy = async () => {
+        try {
+          const contractName = "L2Registry";
+          const contractSymbol = selectedBaseName;
+          const baseUri = "";
+
+          await writeContract({
+            address: FACTORY_ADDRESS,
+            abi: FACTORY_ABI,
+            functionName: "deployRegistry",
+            args: [contractName, contractSymbol, baseUri],
+            chainId: targetChainId,
+          });
+        } catch (error) {
+          console.error("Deploy error:", error);
+          setIsDeploying(false);
+        } finally {
+          setShouldDeploy(false);
+        }
+      };
+
+      deploy();
+    }
+  }, [
+    current?.id,
+    shouldDeploy,
+    selectedChain,
+    selectedBaseName,
+    writeContract,
+  ]);
+
+  // Handle deployment success
+  useEffect(() => {
     if (
       deploySuccess &&
       receipt &&
@@ -57,22 +96,9 @@ const DeployButton: React.FC<DeployButtonProps> = ({
     ) {
       const registryAddress = receipt.logs[0].address as Address;
       onDeploySuccess(registryAddress);
+      setIsDeploying(false);
     }
   }, [deploySuccess, receipt, onDeploySuccess]);
-
-  const deployRegistry = async (chainId: number) => {
-    const contractName = "L2Registry";
-    const contractSymbol = selectedBaseName;
-    const baseUri = "";
-
-    await writeContract({
-      address: FACTORY_ADDRESS,
-      abi: FACTORY_ABI,
-      functionName: "deployRegistry",
-      args: [contractName, contractSymbol, baseUri],
-      chainId,
-    });
-  };
 
   const handleDeploy = async (): Promise<void> => {
     try {
@@ -81,42 +107,55 @@ const DeployButton: React.FC<DeployButtonProps> = ({
 
       if (current?.id !== targetChainId) {
         const targetChain = chains.find((chain) => chain.id === targetChainId);
-        if (targetChain) {
-          await switchChain({ chainId: targetChainId });
-          await new Promise((resolve) => setTimeout(resolve, 500));
-        } else {
+        if (!targetChain) {
           throw new Error("Selected chain not configured in wagmi");
         }
-      }
+        setShouldDeploy(true);
+        await switchChain({ chainId: targetChainId });
+      } else {
+        // If we're already on the right network, deploy immediately
+        const contractName = "L2Registry";
+        const contractSymbol = selectedBaseName;
+        const baseUri = "";
 
-      await deployRegistry(targetChainId);
+        await writeContract({
+          address: FACTORY_ADDRESS,
+          abi: FACTORY_ABI,
+          functionName: "deployRegistry",
+          args: [contractName, contractSymbol, baseUri],
+          chainId: targetChainId,
+        });
+      }
     } catch (error) {
       console.error(
         "Deployment error:",
         error instanceof Error ? error.message : "Unknown error"
       );
-    } finally {
       setIsDeploying(false);
+      setShouldDeploy(false);
     }
+  };
+
+  const buttonText = () => {
+    if (isWaitingForTx) return "Deploying...";
+    if (deploySuccess) return "Deployed!";
+    if (shouldDeploy) return "Switching Network...";
+    return "Deploy";
   };
 
   return (
     <button
       onClick={handleDeploy}
-      disabled={isDeploying || isWaitingForTx}
+      disabled={
+        isDeploying || isWaitingForTx || shouldDeploy || !selectedBaseName
+      }
       className={`px-4 py-1 text-sm border rounded text-stone-900 ${
-        isDeploying || isWaitingForTx
+        isDeploying || isWaitingForTx || shouldDeploy
           ? "bg-stone-100 cursor-not-allowed"
           : "hover:bg-stone-100"
       }`}
     >
-      {isDeploying
-        ? "Switching Network..."
-        : isWaitingForTx
-        ? "Deploying..."
-        : deploySuccess
-        ? "Deployed!"
-        : "Deploy"}
+      {buttonText()}
     </button>
   );
 };
