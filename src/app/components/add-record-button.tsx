@@ -12,6 +12,7 @@ import { mainnet, sepolia } from "viem/chains";
 import { createWalletClient, custom } from "viem";
 import { setRecords } from "@ensdomains/ensjs/wallet";
 import { addEnsContracts } from "@ensdomains/ensjs";
+import toast from "react-hot-toast";
 
 interface AddRecordButtonProps {
   network: string;
@@ -56,16 +57,14 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
     });
 
   const handleAddRecord = async () => {
-    if (
-      !isConnected ||
-      !domainInput ||
-      !walletClient ||
-      !address ||
-      !registryAddress
-    ) {
-      console.error(
-        "Wallet not connected, no domain selected, or no registry address"
-      );
+    if (!isConnected || !domainInput || !walletClient || !address) {
+      console.error("Wallet not connected, no domain selected");
+      toast("Please connect your wallet and select a domain");
+      return;
+    }
+    if (!registryAddress) {
+      console.error("Invalid registry address");
+      toast("Invalid registry address");
       return;
     }
 
@@ -126,6 +125,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       setButtonText("Pending...");
     } catch (error) {
       console.error("Add record error:", error);
+      toast("Failed to add record");
       setButtonText("Failed");
       setTimeout(() => {
         setButtonText("Add Record");
@@ -144,16 +144,13 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
     }
   }, [updateSuccess]);
 
+  const isDisabled = isWaitingForTx;
   return (
     <button
       onClick={handleAddRecord}
-      disabled={
-        !isConnected || isWaitingForTx || !domainInput || !registryAddress
-      }
+      disabled={isDisabled}
       className={`px-2 py-1 text-sm border rounded text-stone-900 ${
-        !isConnected || isWaitingForTx || !domainInput || !registryAddress
-          ? "bg-stone-100 cursor-not-allowed"
-          : "hover:bg-stone-100"
+        isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
       }`}
     >
       {buttonText}

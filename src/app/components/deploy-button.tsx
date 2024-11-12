@@ -8,6 +8,7 @@ import {
   useAccount,
 } from "wagmi";
 import { parseAbi, type Address } from "viem";
+import toast from "react-hot-toast";
 
 interface DeployButtonProps {
   selectedChain: string;
@@ -102,7 +103,10 @@ const DeployButton: React.FC<DeployButtonProps> = ({
 
   const handleDeploy = async (): Promise<void> => {
     try {
-      if (!selectedBaseName) return;
+      if (!selectedBaseName) {
+        toast("Wallet not connected or no domain selected");
+        return;
+      }
       setIsDeploying(true);
       const targetChainId = chainIdMap[selectedChain];
 
@@ -147,9 +151,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   return (
     <button
       onClick={handleDeploy}
-      disabled={
-        isDeploying || isWaitingForTx || shouldDeploy || !selectedBaseName
-      }
+      disabled={isDeploying || isWaitingForTx || shouldDeploy}
       className={`px-4 py-1 text-sm border rounded text-stone-900 ${
         isDeploying || isWaitingForTx || shouldDeploy
           ? "bg-stone-100 cursor-not-allowed"

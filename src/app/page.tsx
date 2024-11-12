@@ -11,6 +11,7 @@ import UpdateResolverButton from "./components/update-resolver-button";
 import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
 import { Copy, Check } from "lucide-react";
+import toast from "react-hot-toast";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -47,6 +48,7 @@ export default function Home() {
           width={115}
           height={30}
         ></Image>
+
         <ConnectButton
           showBalance={false}
           chainStatus="none"
@@ -266,6 +268,8 @@ export default function Home() {
                           setCopied(true);
                           setTimeout(() => setCopied(false), 2000);
                         });
+                    } else {
+                      toast("No registry address to copy");
                     }
                   }}
                   className="p-1 hover:bg-stone-200 rounded-md transition-colors"

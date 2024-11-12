@@ -14,6 +14,7 @@ import { addEnsContracts } from "@ensdomains/ensjs";
 import { createWalletClient, createPublicClient, custom, http } from "viem";
 import { namehash } from "viem/ens";
 import { Domain } from "../../lib/types";
+import toast from "react-hot-toast";
 
 interface UpdateResolverButtonProps {
   network: string;
@@ -197,7 +198,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
     }
 
     if (!isConnected || !selectedDomain || !walletClient || !address) {
-      console.error("Wallet not connected or no domain selected");
+      toast("Wallet not connected or no domain selected");
       return;
     }
 
@@ -250,9 +251,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
   }, [updateSuccess]);
 
   const isDisabled =
-    !isConnected ||
     isWaitingForTx ||
-    !selectedDomain ||
     isProcessing ||
     currentResolver ===
       RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
