@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Types
 type EnrichedNameData = NameWithRelation & {
-  validResolver: boolean;
   resolver: string | null;
 };
 
@@ -67,7 +66,9 @@ export async function GET(request: NextRequest) {
 
     const displayedData = await batch(
       client,
-      ...filteredResult.map((item) => getResolver.batch({ name: item.name }))
+      ...filteredResult.map((item) =>
+        getResolver.batch({ name: item.name || "" })
+      )
     );
 
     const enrichedData: EnrichedNameData[] = filteredResult.map(
