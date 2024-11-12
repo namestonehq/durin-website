@@ -51,7 +51,7 @@ export default function Home() {
 
         <ConnectButton
           showBalance={false}
-          chainStatus="none"
+          chainStatus="icon"
           accountStatus={{
             smallScreen: "avatar",
             largeScreen: "full",
@@ -269,7 +269,7 @@ export default function Home() {
                           setTimeout(() => setCopied(false), 2000);
                         });
                     } else {
-                      toast("No registry address to copy");
+                      toast("Waiting for deploy...");
                     }
                   }}
                   className="p-1 hover:bg-stone-200 rounded-md transition-colors"
@@ -393,6 +393,9 @@ function DomainSelector({
   // Fetch ENS names when wallet is connected
   useEffect(() => {
     const fetchENSNames = async () => {
+      //set selectedDomain to undefined
+      setSelectedDomain(undefined);
+      setDomainInput("");
       if (!isConnected || !address) {
         setUserDomains([]);
         return;

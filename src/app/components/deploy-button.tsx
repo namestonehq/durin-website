@@ -30,17 +30,18 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   onDeploySuccess,
 }) => {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
+  const [isNetworkSwitching, setIsNetworkSwitching] = useState<boolean>(false);
   const [shouldDeploy, setShouldDeploy] = useState<boolean>(false);
   const { chain: current } = useAccount();
   const chains = useChains();
-  const { switchChain } = useSwitchChain();
+  const { switchChain, error: switchError } = useSwitchChain();
 
   const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address;
   const FACTORY_ABI = parseAbi([
     "function deployRegistry(string name, string symbol, string baseURI) external returns (address)",
   ]);
 
-  const { writeContract, data: hash } = useWriteContract();
+  const { writeContract, data: hash, error: writeError } = useWriteContract();
   const {
     isLoading: isWaitingForTx,
     isSuccess: deploySuccess,
@@ -49,15 +50,37 @@ const DeployButton: React.FC<DeployButtonProps> = ({
     hash,
   });
 
+  // Handle network switch error
+  useEffect(() => {
+    if (switchError) {
+      console.error("Network switch error:", switchError);
+      toast("Network switch cancelled");
+      setIsDeploying(false);
+      setShouldDeploy(false);
+      setIsNetworkSwitching(false);
+    }
+  }, [switchError]);
+
+  // Reset states when write contract fails
+  useEffect(() => {
+    if (writeError) {
+      setIsDeploying(false);
+      setShouldDeploy(false);
+      setIsNetworkSwitching(false);
+      toast("Transaction rejected");
+    }
+  }, [writeError]);
+
   // Watch for network changes and deploy when ready
   useEffect(() => {
-    if (!selectedBaseName) return;
-
     const targetChainId = chainIdMap[selectedChain];
 
     if (shouldDeploy && current?.id === targetChainId) {
+      setIsNetworkSwitching(false);
       const deploy = async () => {
         try {
+          if (!selectedBaseName) return;
+
           const contractName = "L2Registry";
           const contractSymbol = selectedBaseName;
           const baseUri = "";
@@ -71,9 +94,10 @@ const DeployButton: React.FC<DeployButtonProps> = ({
           });
         } catch (error) {
           console.error("Deploy error:", error);
+          toast("Failed to deploy contract");
           setIsDeploying(false);
-        } finally {
           setShouldDeploy(false);
+          setIsNetworkSwitching(false);
         }
       };
 
@@ -98,6 +122,9 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       const registryAddress = receipt.logs[0].address as Address;
       onDeploySuccess(registryAddress);
       setIsDeploying(false);
+      setShouldDeploy(false);
+      setIsNetworkSwitching(false);
+      toast.success("Contract deployed successfully!");
     }
   }, [deploySuccess, receipt, onDeploySuccess]);
 
@@ -116,7 +143,9 @@ const DeployButton: React.FC<DeployButtonProps> = ({
           throw new Error("Selected chain not configured in wagmi");
         }
         setShouldDeploy(true);
-        await switchChain({ chainId: targetChainId });
+        setIsNetworkSwitching(true);
+        // Don't wrap this in try/catch - we'll handle the error in the useEffect
+        switchChain({ chainId: targetChainId });
       } else {
         // If we're already on the right network, deploy immediately
         const contractName = "L2Registry";
@@ -136,26 +165,29 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         "Deployment error:",
         error instanceof Error ? error.message : "Unknown error"
       );
+      toast("Deployment failed");
       setIsDeploying(false);
       setShouldDeploy(false);
+      setIsNetworkSwitching(false);
     }
   };
 
   const buttonText = () => {
     if (isWaitingForTx) return "Deploying...";
+    if (isNetworkSwitching) return "Switching Network...";
     if (deploySuccess) return "Deployed!";
-    if (shouldDeploy) return "Switching Network...";
+    if (isDeploying) return "Confirming...";
     return "Deploy";
   };
+
+  const isDisabled = isWaitingForTx || isDeploying || isNetworkSwitching;
 
   return (
     <button
       onClick={handleDeploy}
-      disabled={isDeploying || isWaitingForTx || shouldDeploy}
+      disabled={isDisabled}
       className={`px-4 py-1 text-sm border rounded text-stone-900 ${
-        isDeploying || isWaitingForTx || shouldDeploy
-          ? "bg-stone-100 cursor-not-allowed"
-          : "hover:bg-stone-100"
+        isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
       }`}
     >
       {buttonText()}
