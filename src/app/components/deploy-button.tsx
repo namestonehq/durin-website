@@ -124,7 +124,6 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       setIsDeploying(false);
       setShouldDeploy(false);
       setIsNetworkSwitching(false);
-      toast.success("Contract deployed successfully!");
     }
   }, [deploySuccess, receipt, onDeploySuccess]);
 

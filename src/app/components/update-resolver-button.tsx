@@ -22,6 +22,7 @@ interface UpdateResolverButtonProps {
 }
 
 const NAMEWRAPPER = "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401";
+const NAMEWRAPPER_SEPOLIA = "0x0635513f179D50A207757E05759CbD106d7dFcE8";
 
 const RESOLVER_ADDRESSES = {
   Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
@@ -152,11 +153,19 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
             transport: custom(walletClient.transport),
           });
 
+          console.log(
+            "Updating resolver for",
+            selectedDomain.name,
+            selectedDomain?.owner,
+            resolverAddress,
+            address
+          );
           // Update resolver using ENS.js
           const txHash = await setResolver(ensWalletClient, {
             name: selectedDomain.name,
             contract:
-              selectedDomain?.owner === NAMEWRAPPER
+              selectedDomain?.owner === NAMEWRAPPER ||
+              selectedDomain?.owner === NAMEWRAPPER_SEPOLIA
                 ? "nameWrapper"
                 : "registry",
             resolverAddress: resolverAddress,
