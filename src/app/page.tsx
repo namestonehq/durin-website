@@ -42,15 +42,18 @@ export default function Home() {
   const [registryAddress, setRegistryAddress] = useState("");
   const [copied, setCopied] = useState(false);
   const [txHistory, setTxHistory] = useState<Transactionn[]>([]);
+  const [recordInput, setRecordInput] = useState("");
 
   const handleDeploySuccess = (registryAddress: Address) => {
     console.log("New registry deployed at:", registryAddress);
     setRegistryAddress(registryAddress);
+    setRecordInput(registryAddress);
   };
 
   //function to add a transction to the history if it is not already there
   const addTransaction = (action: string, chain: string, hash: string) => {
     if (!txHistory.some((tx) => tx.hash === hash)) {
+      console.log("Adding transaction to history:", action, chain, hash);
       setTxHistory((prev) => [
         ...prev,
         {
@@ -398,11 +401,12 @@ export default function Home() {
                 </div>
 
                 {/* Right section */}
-                <div className="flex-1 px-3 py-2 bg-stone-100 text-stone-500 text-xs">
-                  {registryAddress
-                    ? registryAddress
-                    : "Waiting for Registry..."}
-                </div>
+                <input
+                  className="flex-1 px-3 py-2 bg-stone-100 text-stone-500 text-xs"
+                  value={recordInput}
+                  onChange={(e) => setRecordInput(e.target.value)}
+                  placeholder="Waiting for registry deploy..."
+                />
               </div>
             </div>
 
@@ -445,7 +449,9 @@ export default function Home() {
                           onClick={() => {
                             window.open(
                               `${
-                                chainScanMap[chain as keyof typeof chainScanMap]
+                                chainScanMap[
+                                  tx.chain as keyof typeof chainScanMap
+                                ]
                               }${tx.hash}`,
                               "_blank"
                             );
