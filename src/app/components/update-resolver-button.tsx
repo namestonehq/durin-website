@@ -15,6 +15,7 @@ import { createWalletClient, createPublicClient, custom, http } from "viem";
 import { namehash } from "viem/ens";
 import { Domain } from "../../lib/types";
 import toast from "react-hot-toast";
+import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
 interface UpdateResolverButtonProps {
   network: string;
@@ -23,11 +24,6 @@ interface UpdateResolverButtonProps {
 
 const NAMEWRAPPER = "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401";
 const NAMEWRAPPER_SEPOLIA = "0x0635513f179D50A207757E05759CbD106d7dFcE8";
-
-const RESOLVER_ADDRESSES = {
-  Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
-  Mainnet: "0x2A6C785b002Ad859a3BAED69211167C7e998aAeC" as Address,
-};
 
 const CHAIN_IDS = {
   Sepolia: 11155111,

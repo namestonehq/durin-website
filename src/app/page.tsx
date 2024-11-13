@@ -12,6 +12,7 @@ import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
 import { Copy, Check } from "lucide-react";
 import toast from "react-hot-toast";
+import { RESOLVER_ADDRESSES, formatEthereumAddress } from "@/lib/utils";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -306,7 +307,11 @@ export default function Home() {
                 />
               </div>
               <div className="text-sm text-stone-500">
-                Update the resolver with one click.
+                Update the resolver to{" "}
+                {formatEthereumAddress(
+                  RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES]
+                )}{" "}
+                with one click.
               </div>
             </div>
             <div className="flex flex-col gap-1">
