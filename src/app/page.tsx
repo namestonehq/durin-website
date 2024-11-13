@@ -35,11 +35,11 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
       <Image
-        src="/anvil.png"
+        src="/anviltools.png"
         alt="anvil"
-        width={100}
-        height={100}
-        className="absolute opacity-0 hover:opacity-80 duration-10000 right-14 top-20"
+        width={120}
+        height={120}
+        className="absolute opacity-0 hover:cursor-pointer hover:opacity-80 duration-10000 right-14  top-32"
       ></Image>
       {/* Nav */}
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
@@ -65,26 +65,13 @@ export default function Home() {
         <h1 className={`self-start ${gelasio.className}  text-3xl px-4`}>
           Issue L2 Subnames
         </h1>
-        {/* Connection Prompt */}
-        {!isConnected && (
-          <div className="flex items-center justify-between w-full px-4 py-3 space-x-3 rounded-lg bg-amber-100">
-            {/* Icon for information */}
-            <div>Connect wallet to get started.</div>
-            <ConnectButton
-              showBalance={false}
-              chainStatus="none"
-              accountStatus={{
-                smallScreen: "avatar",
-                largeScreen: "full",
-              }}
-            />
-          </div>
-        )}
+
         {/* Name & Chain Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className={`${gelasio.className} text-xl`}>
             Choose Name & Chain
           </div>
+
           <hr className=" bg-stone-100"></hr>
           <div className="flex items-end justify-between">
             <div className="font-light">ENS Name</div>
@@ -112,6 +99,9 @@ export default function Home() {
                 Mainnet
               </button>
             </div>
+          </div>
+          <div className="text-sm text-stone-500 ">
+            Choose between Sepolia & Mainnet ENS name resolution.
           </div>
           {/* ENS Search & Drop Down */}
           <DomainSelector
@@ -300,18 +290,29 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
-                <div className="font-light">Change Resolver</div>
+                <div className="font-light">Update Resolver</div>
                 <UpdateResolverButton
                   network={network}
                   selectedDomain={selectedDomain}
                 />
               </div>
               <div className="text-sm text-stone-500">
-                Update the resolver to{" "}
-                {formatEthereumAddress(
-                  RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES]
-                )}{" "}
-                with one click.
+                Update the resolver to:
+                <div className="font-mono text-stone-700">
+                  <Link
+                    href={`https://sepolia.etherscan.io/address/${
+                      RESOLVER_ADDRESSES[
+                        network as keyof typeof RESOLVER_ADDRESSES
+                      ]
+                    }`}
+                  >
+                    {
+                      RESOLVER_ADDRESSES[
+                        network as keyof typeof RESOLVER_ADDRESSES
+                      ]
+                    }
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-1">
