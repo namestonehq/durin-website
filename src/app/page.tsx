@@ -300,11 +300,20 @@ export default function Home() {
                 Update the resolver to:
                 <div className="font-mono text-stone-700">
                   <Link
-                    href={`https://sepolia.etherscan.io/address/${
-                      RESOLVER_ADDRESSES[
-                        network as keyof typeof RESOLVER_ADDRESSES
-                      ]
-                    }`}
+                    target="_blank"
+                    href={
+                      network === "Sepolia"
+                        ? `https://sepolia.etherscan.io/address/${
+                            RESOLVER_ADDRESSES[
+                              network as keyof typeof RESOLVER_ADDRESSES
+                            ]
+                          }`
+                        : `https://etherscan.io/address/${
+                            RESOLVER_ADDRESSES[
+                              network as keyof typeof RESOLVER_ADDRESSES
+                            ]
+                          }`
+                    }
                   >
                     {
                       RESOLVER_ADDRESSES[
