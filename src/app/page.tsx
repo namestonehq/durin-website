@@ -12,7 +12,7 @@ import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
 import { Copy, Check } from "lucide-react";
 import toast from "react-hot-toast";
-import { RESOLVER_ADDRESSES, formatEthereumAddress } from "@/lib/utils";
+import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
