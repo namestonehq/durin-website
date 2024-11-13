@@ -9,25 +9,20 @@ import {
 } from "wagmi";
 import { parseAbi, type Address } from "viem";
 import toast from "react-hot-toast";
+import { chainIdMap } from "@/lib/utils";
 
 interface DeployButtonProps {
   selectedChain: string;
   selectedBaseName: string | undefined;
   onDeploySuccess?: (registryAddress: Address) => void;
+  addTransaction: (action: string, chain: string, hash: string) => void;
 }
-
-const chainIdMap: { [key: string]: number } = {
-  Base: 8453,
-  Optimism: 10,
-  Arbitrum: 42161,
-  Scroll: 534352,
-  Linea: 59144,
-};
 
 const DeployButton: React.FC<DeployButtonProps> = ({
   selectedChain,
   selectedBaseName,
   onDeploySuccess,
+  addTransaction,
 }) => {
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [isNetworkSwitching, setIsNetworkSwitching] = useState<boolean>(false);
@@ -124,6 +119,11 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       setIsDeploying(false);
       setShouldDeploy(false);
       setIsNetworkSwitching(false);
+      addTransaction(
+        "Deployed Registry",
+        selectedChain,
+        receipt.transactionHash
+      );
     }
   }, [deploySuccess, receipt, onDeploySuccess]);
 

@@ -20,6 +20,7 @@ import { RESOLVER_ADDRESSES } from "@/lib/utils";
 interface UpdateResolverButtonProps {
   network: string;
   selectedDomain: Domain | undefined;
+  addTransaction: (action: string, chain: string, hash: string) => void;
 }
 
 const NAMEWRAPPER = "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401";
@@ -48,6 +49,7 @@ const REGISTRY_ADDRESSES = {
 const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
   network,
   selectedDomain,
+  addTransaction,
 }) => {
   const [buttonText, setButtonText] = useState("Checking resolver...");
   const [hash, setHash] = useState<`0x${string}` | undefined>();
@@ -247,6 +249,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
       setButtonText("Success!");
       setIsProcessing(false);
       setShouldUpdate(false);
+      addTransaction("Update Resolver", network, hash as string);
       setTimeout(() => {
         // Recheck resolver after update
         setButtonText("Checking resolver...");

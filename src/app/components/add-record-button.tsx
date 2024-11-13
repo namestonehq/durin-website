@@ -19,6 +19,7 @@ interface AddRecordButtonProps {
   domainInput: string | undefined;
   registryAddress: Address;
   selectedChain: string;
+  addTransaction: (action: string, chain: string, hash: string) => void;
 }
 
 const CHAIN_IDS = {
@@ -41,6 +42,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   domainInput,
   registryAddress,
   selectedChain,
+  addTransaction,
 }) => {
   const [buttonText, setButtonText] = useState("Add Record");
   const [hash, setHash] = useState<`0x${string}` | undefined>();
@@ -137,6 +139,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   React.useEffect(() => {
     if (updateSuccess) {
       setButtonText("Success!");
+      addTransaction("Added Record", network, hash as string);
       setTimeout(() => {
         setButtonText("Add Record");
         setHash(undefined);

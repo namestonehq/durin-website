@@ -10,28 +10,57 @@ import { type Address } from "viem";
 import UpdateResolverButton from "./components/update-resolver-button";
 import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, ExternalLink } from "lucide-react";
 import toast from "react-hot-toast";
-import { RESOLVER_ADDRESSES } from "@/lib/utils";
+import { RESOLVER_ADDRESSES, chainIdMap } from "@/lib/utils";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
   subsets: ["latin"],
 });
 
+interface Transactionn {
+  action: string;
+  chain: string;
+  hash: string;
+}
+
+const chainScanMap = {
+  Sepolia: "https://sepolia.etherscan.io/tx/",
+  Mainnet: "https://etherscan.io/tx/",
+  Base: "https://basescan.org/tx/",
+  Optimism: "https://optimistic.etherscan.io/tx/",
+  Arbitrum: "https://arbiscan.io/tx/",
+  Scroll: "https://scrollscan.io/tx/",
+  Linea: "https://linea.scan.io/tx/",
+};
+
 export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
-  const { isConnected } = useAccount();
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
   const [copied, setCopied] = useState(false);
+  const [txHistory, setTxHistory] = useState<Transactionn[]>([]);
 
   const handleDeploySuccess = (registryAddress: Address) => {
     console.log("New registry deployed at:", registryAddress);
     setRegistryAddress(registryAddress);
   };
 
+  //function to add a transction to the history if it is not already there
+  const addTransaction = (action: string, chain: string, hash: string) => {
+    if (!txHistory.some((tx) => tx.hash === hash)) {
+      setTxHistory((prev) => [
+        ...prev,
+        {
+          action,
+          chain,
+          hash,
+        },
+      ]);
+    }
+  };
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
       <Image
@@ -212,6 +241,7 @@ export default function Home() {
                   selectedBaseName={selectedDomain?.name}
                   selectedChain={chain}
                   onDeploySuccess={handleDeploySuccess}
+                  addTransaction={addTransaction}
                 />
               </div>
               <div className="text-sm text-stone-500">
@@ -290,37 +320,48 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
-                <div className="font-light">Update Resolver</div>
+                <div className="font-light">Change Resolver</div>
                 <UpdateResolverButton
                   network={network}
                   selectedDomain={selectedDomain}
+                  addTransaction={addTransaction}
                 />
               </div>
               <div className="text-sm text-stone-500">
                 Update the resolver to:
-                <div className="font-mono text-stone-700">
-                  <Link
-                    target="_blank"
-                    href={
-                      network === "Sepolia"
-                        ? `https://sepolia.etherscan.io/address/${
-                            RESOLVER_ADDRESSES[
-                              network as keyof typeof RESOLVER_ADDRESSES
-                            ]
-                          }`
-                        : `https://etherscan.io/address/${
-                            RESOLVER_ADDRESSES[
-                              network as keyof typeof RESOLVER_ADDRESSES
-                            ]
-                          }`
-                    }
-                  >
-                    {
-                      RESOLVER_ADDRESSES[
-                        network as keyof typeof RESOLVER_ADDRESSES
-                      ]
-                    }
-                  </Link>
+                <div className="flex gap-2 mt-2">
+                  <div className="inline-flex items-center gap-2.5 px-2 py-1 relative bg-stone-50 rounded-lg border border-solid border-stone-200">
+                    <div className="relative w-fit font-inline-code text-[12px] text-stone-500 whitespace-nowrap ">
+                      {
+                        RESOLVER_ADDRESSES[
+                          network as keyof typeof RESOLVER_ADDRESSES
+                        ]
+                      }
+                    </div>
+                  </div>
+                  <Image
+                    src={"etherscan-logo.svg"}
+                    alt="etherscan"
+                    width={16}
+                    height={16}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      window.open(
+                        network === "Sepolia"
+                          ? `https://sepolia.etherscan.io/address/${
+                              RESOLVER_ADDRESSES[
+                                network as keyof typeof RESOLVER_ADDRESSES
+                              ]
+                            }`
+                          : `https://etherscan.io/address/${
+                              RESOLVER_ADDRESSES[
+                                network as keyof typeof RESOLVER_ADDRESSES
+                              ]
+                            }`,
+                        "_blank"
+                      );
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -332,6 +373,7 @@ export default function Home() {
                   domainInput={selectedDomain?.name}
                   registryAddress={registryAddress as Address}
                   selectedChain={chain}
+                  addTransaction={addTransaction}
                 />
               </div>
               <div className="text-sm text-stone-500">
@@ -340,24 +382,87 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <div className="mb-2 font-light text-stone-900">
-                Customize Registry Address{" "}
-                <span className="text-stone-400">(optional)</span>
-                <input
-                  type="text"
-                  id="select-domain"
-                  placeholder={
-                    true ? "Waiting for Deploy..." : "Waiting to connect..."
-                  }
-                  onChange={(e) => setRegistryAddress(e.target.value)}
-                  value={registryAddress}
-                  disabled={!isConnected} // Disable input when connecting
-                  className={`w-full mt-2 h-8 p-4 border-stone-200 border focus:border-transparent  rounded-lg appearance-none  focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400  ${
-                    !isConnected ? "cursor-not-allowed" : ""
-                  }`}
-                />
+              <div className="flex items-center rounded-md border border-stone-200 overflow-hidden">
+                {/* Left section */}
+                <div className="flex items-center gap-2 px-3 py-2 bg-stone-100 border-r border-stone-200 rounded-l-md">
+                  <Image
+                    src={`/${chain.toLowerCase()}.svg`}
+                    alt={chain}
+                    width={16}
+                    height={16}
+                    className="py-1"
+                  />
+                  <div className="text-stone-500 font-p whitespace-nowrap">
+                    {chainIdMap[chain]} :
+                  </div>
+                </div>
+
+                {/* Right section */}
+                <div className="flex-1 px-3 py-2 bg-stone-100 text-stone-500 text-xs">
+                  {registryAddress
+                    ? registryAddress
+                    : "Waiting for Registry..."}
+                </div>
               </div>
             </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="font-sans text-stone-500">Record format:</div>
+              <div className="flex px-2 py-1 bg-stone-50 rounded-lg border border-stone-200 gap-2 w-min text-nowrap flex-nowrap">
+                <div className="font-mono text-xs font-bold text-stone-500">
+                  registry
+                </div>
+                <div className="font-mono text-xs text-stone-500">
+                  {"{"}chain_id{"}"}: {"{"}registry_contract{"}"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Tx history */}
+        <div className="items-start w-full flex-col gap-2">
+          <div className={`${gelasio.className} text-xl  py-4 `}>
+            Transaction History
+          </div>
+
+          <div className="flex flex-col w-full gap-3 px-6 py-3 bg-white border rounded-lg border-stone-200">
+            {txHistory.length === 0 ? (
+              <div className="text-sm text-stone-500">No transactions yet</div>
+            ) : (
+              txHistory.map((tx, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="p-3 rounded-lg justify-start items-start gap-3 inline-flex  overflow-clip"
+                  >
+                    <div className=" flex-col justify-start items-start gap-2 inline-flex">
+                      <div className="flex gap-2 items-center">
+                        <div className="text-stone-900 text-base font-normal font-['Helvetica Neue'] leading-normal">
+                          {tx.action}
+                        </div>
+                        <ExternalLink
+                          className="text-stone-500 h-4 w-4 cursor-pointer"
+                          onClick={() => {
+                            window.open(
+                              `${
+                                chainScanMap[chain as keyof typeof chainScanMap]
+                              }${tx.hash}`,
+                              "_blank"
+                            );
+                          }}
+                        />
+                      </div>
+                      <div className="justify-start items-center gap-2 inline-flex">
+                        <div className="grow shrink basis-0 text-stone-500 text-xs font-normal font-['Menlo'] leading-tight text-ellipsis">
+                          {tx.hash}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-5 h-5 relative" />
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </main>

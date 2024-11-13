@@ -17,3 +17,11 @@ export const RESOLVER_ADDRESSES = {
   Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
   Mainnet: "0x2A6C785b002Ad859a3BAED69211167C7e998aAeC" as Address,
 };
+
+export const chainIdMap: { [key: string]: number } = {
+  Base: 8453,
+  Optimism: 10,
+  Arbitrum: 42161,
+  Scroll: 534352,
+  Linea: 59144,
+};
