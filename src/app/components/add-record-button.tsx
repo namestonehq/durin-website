@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useChains,
   useSwitchChain,
@@ -46,43 +46,114 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
 }) => {
   const [buttonText, setButtonText] = useState("Add Record");
   const [hash, setHash] = useState<`0x${string}` | undefined>();
-  const { isConnected, address } = useAccount();
-  const { chain: current } = useAccount();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const { isConnected, address, chain: current } = useAccount();
   const chains = useChains();
   const { switchChain } = useSwitchChain();
   const { data: walletClient } = useWalletClient();
 
-  // Wait for transaction hook
   const { isLoading: isWaitingForTx, isSuccess: updateSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
 
+  // Handle network switch and record update
+  useEffect(() => {
+    const addRecord = async () => {
+      if (
+        !shouldUpdate ||
+        !isConnected ||
+        !domainInput ||
+        !walletClient ||
+        !address
+      )
+        return;
+
+      try {
+        const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
+        if (!targetChainId) {
+          throw new Error("Invalid network selected");
+        }
+
+        // Only proceed if we're on the correct network
+        if (current?.id === targetChainId) {
+          setButtonText("Waiting for approval...");
+
+          const chainId = CHAIN_IDS[selectedChain as keyof typeof CHAIN_IDS];
+          if (!chainId) {
+            throw new Error("Invalid L2 chain selected");
+          }
+
+          // Create the record value string
+          const recordValue = `${chainId}:${registryAddress}`;
+
+          // Create ENS wallet client
+          const ensWalletClient = createWalletClient({
+            account: address,
+            chain: addEnsContracts(network === "Mainnet" ? mainnet : sepolia),
+            transport: custom(walletClient.transport),
+          });
+
+          // Set the record using ENS.js
+          const txHash = await setRecords(ensWalletClient, {
+            name: domainInput,
+            resolverAddress:
+              RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES],
+            texts: [
+              {
+                key: "registry",
+                value: recordValue,
+              },
+            ],
+          });
+
+          setHash(txHash);
+          setButtonText("Pending...");
+          setShouldUpdate(false);
+        }
+      } catch (error) {
+        console.error("Add record error:", error);
+        toast("Failed to add record");
+        setButtonText("Failed");
+        setShouldUpdate(false);
+        setIsProcessing(false);
+        setTimeout(() => {
+          setButtonText("Add Record");
+        }, 1500);
+      }
+    };
+
+    addRecord();
+  }, [
+    current?.id,
+    shouldUpdate,
+    network,
+    domainInput,
+    walletClient,
+    address,
+    isConnected,
+    registryAddress,
+    selectedChain,
+  ]);
+
   const handleAddRecord = async () => {
     if (!isConnected || !domainInput || !walletClient || !address) {
-      console.error("Wallet not connected, no domain selected");
       toast("Please connect your wallet and select a domain");
       return;
     }
     if (!registryAddress) {
-      console.error("Invalid registry address");
-      toast("Invalid registry address");
+      toast("Please deploy a registry first");
       return;
     }
 
     try {
+      setIsProcessing(true);
       setButtonText("Preparing...");
 
-      // Get target chain ID for ENS network
       const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
       if (!targetChainId) {
         throw new Error("Invalid network selected");
-      }
-
-      // Get L2 chain ID
-      const l2ChainId = CHAIN_IDS[selectedChain as keyof typeof CHAIN_IDS];
-      if (!l2ChainId) {
-        throw new Error("Invalid L2 chain selected");
       }
 
       // Check if network switch is needed
@@ -90,64 +161,43 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
         setButtonText("Switching network...");
         const targetChain = chains.find((chain) => chain.id === targetChainId);
         if (targetChain) {
+          setShouldUpdate(true);
           await switchChain({ chainId: targetChainId });
-          // Small delay to ensure chain switch is processed
-          await new Promise((resolve) => setTimeout(resolve, 500));
         } else {
           throw new Error("Selected chain not configured in wagmi");
         }
+      } else {
+        // If already on correct network, trigger update directly
+        setShouldUpdate(true);
       }
-
-      setButtonText("Waiting for approval...");
-
-      // Create the record value string
-      const recordValue = `${l2ChainId}:${registryAddress}`;
-
-      // Create ENS wallet client
-      const ensWalletClient = createWalletClient({
-        account: address,
-        chain: addEnsContracts(network === "Mainnet" ? mainnet : sepolia),
-        transport: custom(walletClient.transport),
-      });
-
-      // Set the record using ENS.js
-      const txHash = await setRecords(ensWalletClient, {
-        name: domainInput,
-        resolverAddress:
-          RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES],
-        texts: [
-          {
-            key: "registry",
-            value: recordValue,
-          },
-        ],
-      });
-
-      setHash(txHash);
-      setButtonText("Pending...");
     } catch (error) {
       console.error("Add record error:", error);
-      toast("Failed to add record");
+      toast("Failed to switch network");
       setButtonText("Failed");
+      setIsProcessing(false);
+      setShouldUpdate(false);
       setTimeout(() => {
         setButtonText("Add Record");
       }, 1500);
     }
   };
 
-  // Reset button text on success
-  React.useEffect(() => {
+  // Reset states on success
+  useEffect(() => {
     if (updateSuccess) {
       setButtonText("Success!");
+      setIsProcessing(false);
+      setShouldUpdate(false);
       addTransaction("Added Record", network, hash as string);
       setTimeout(() => {
         setButtonText("Add Record");
         setHash(undefined);
       }, 1500);
     }
-  }, [updateSuccess]);
+  }, [updateSuccess, hash, network, addTransaction]);
 
-  const isDisabled = isWaitingForTx;
+  const isDisabled = isWaitingForTx || isProcessing;
+
   return (
     <button
       onClick={handleAddRecord}

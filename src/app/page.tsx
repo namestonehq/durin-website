@@ -374,7 +374,7 @@ export default function Home() {
                 <AddRecordButton
                   network={network}
                   domainInput={selectedDomain?.name}
-                  registryAddress={registryAddress as Address}
+                  registryAddress={recordInput as Address}
                   selectedChain={chain}
                   addTransaction={addTransaction}
                 />
@@ -417,7 +417,7 @@ export default function Home() {
                   registry
                 </div>
                 <div className="font-mono text-xs text-stone-500">
-                  {"{"}chain_id{"}"}: {"{"}registry_contract{"}"}
+                  {"{"}chain_id{"}"}:{"{"}registry_contract{"}"}
                 </div>
               </div>
             </div>
