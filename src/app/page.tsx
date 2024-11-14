@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Gelasio } from "next/font/google";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
