@@ -69,6 +69,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   // Watch for network changes and deploy when ready
   useEffect(() => {
     const targetChainId = chainIdMap[selectedChain];
+    console.log("targetChainId", targetChainId, selectedChain);
 
     if (shouldDeploy && current?.id === targetChainId) {
       setIsNetworkSwitching(false);

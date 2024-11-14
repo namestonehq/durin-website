@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Gelasio } from "next/font/google";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useAccount } from "wagmi";
 import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
@@ -29,15 +29,23 @@ const chainScanMap = {
   Sepolia: "https://sepolia.etherscan.io/tx/",
   Mainnet: "https://etherscan.io/tx/",
   Base: "https://basescan.org/tx/",
+  "Base Sepolia": "https://sepolia.basescan.org/tx/",
   Optimism: "https://optimistic.etherscan.io/tx/",
+  "Optimism Sepolia": "https://sepolia-optimism.etherscan.io/tx/",
   Arbitrum: "https://arbiscan.io/tx/",
+  "Arbitrum Sepolia": "https://sepolia.arbiscan.io/tx/",
   Scroll: "https://scrollscan.io/tx/",
+  "Scroll Sepolia": "https://sepolia-blockscout.scroll.io/tx/",
   Linea: "https://linea.scan.io/tx/",
+  "Linea Sepolia": "https://sepolia.lineascan.build/tx/",
 };
 
 export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
+  const [chainName, setChainName] = useState("Base");
+  const [chainModifier, setChainModifier] = useState("");
+
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
   const [copied, setCopied] = useState(false);
@@ -64,6 +72,16 @@ export default function Home() {
       ]);
     }
   };
+
+  // useEffect to update chain when chainName or chainModifier changes
+  useEffect(() => {
+    if (chainModifier === "") {
+      setChain(chainName);
+    } else {
+      setChain(`${chainName} ${chainModifier}`);
+    }
+  }, [chainName, chainModifier]);
+
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
       <Image
@@ -141,7 +159,32 @@ export default function Home() {
             setSelectedDomain={setSelectedDomain}
           />
           <div className="flex flex-col gap-1">
-            <div className="font-light">Chain</div>
+            <div className="flex items-end justify-between">
+              <div className="font-light">Chain</div>
+              {/* Toggle testnet or mainnet */}
+              <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                <button
+                  onClick={() => setChainModifier("Sepolia")}
+                  className={`px-4 rounded transition ${
+                    chainModifier === "Sepolia"
+                      ? "bg-white shadow text-black py-1"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Sepolia
+                </button>
+                <button
+                  onClick={() => setChainModifier("")}
+                  className={`px-4  rounded transition ${
+                    chainModifier === ""
+                      ? "bg-white shadow text-stone-900  py-1"
+                      : "text-stone-500"
+                  }`}
+                >
+                  Mainnet
+                </button>
+              </div>
+            </div>
             <div className="text-sm text-stone-500 ">
               Pick a chain where the registry contract will live. The registry
               contract tracks ownership and stores text records.{" "}
@@ -149,9 +192,11 @@ export default function Home() {
             {/* Toggle Chain */}
             <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
               <button
-                onClick={() => setChain("Base")}
+                onClick={() => setChainName("Base")}
                 className={`px-4 rounded transition ${
-                  chain === "Base" ? "bg-white shadow text-black" : "opacity-50"
+                  chainName === "Base"
+                    ? "bg-white shadow text-black"
+                    : "opacity-50"
                 }`}
               >
                 <Image
@@ -163,9 +208,9 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChain("Optimism")}
+                onClick={() => setChainName("Optimism")}
                 className={`px-4  rounded transition ${
-                  chain === "Optimism"
+                  chainName === "Optimism"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
                 }`}
@@ -179,9 +224,9 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChain("Arbitrum")}
+                onClick={() => setChainName("Arbitrum")}
                 className={`px-4  rounded transition ${
-                  chain === "Arbitrum"
+                  chainName === "Arbitrum"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
                 }`}
@@ -195,9 +240,9 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChain("Scroll")}
+                onClick={() => setChainName("Scroll")}
                 className={`px-4  rounded transition ${
-                  chain === "Scroll"
+                  chainName === "Scroll"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
                 }`}
@@ -211,9 +256,9 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChain("Linea")}
+                onClick={() => setChainName("Linea")}
                 className={`px-4  rounded transition ${
-                  chain === "Linea"
+                  chainName === "Linea"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
                 }`}
@@ -389,7 +434,7 @@ export default function Home() {
                 {/* Left section */}
                 <div className="flex items-center gap-2 px-3 py-2 bg-stone-100 border-r border-stone-200 rounded-l-md">
                   <Image
-                    src={`/${chain.toLowerCase()}.svg`}
+                    src={`/${chainName.toLowerCase()}.svg`}
                     alt={chain}
                     width={16}
                     height={16}
@@ -564,6 +609,14 @@ function DomainSelector({
   const filteredDomainList = userDomains.filter((domain) => {
     return domain.name.toLowerCase().includes(domainInput.toLowerCase());
   });
+
+  // useEffect if filteredDomainList.length === 1, set selectedDomain to that domain
+  useEffect(() => {
+    if (filteredDomainList.length === 1) {
+      setSelectedDomain(filteredDomainList[0]);
+      setDomainInput(filteredDomainList[0].name);
+    }
+  }, [filteredDomainList]);
 
   return (
     <div className="z-20 flex">

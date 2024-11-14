@@ -13,13 +13,31 @@ import {
   arbitrum,
   linea,
   scroll,
+  baseSepolia,
+  optimismSepolia,
+  arbitrumSepolia,
+  lineaSepolia,
+  scrollSepolia,
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const config = getDefaultConfig({
   appName: "Durin",
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "",
-  chains: [mainnet, sepolia, base, optimism, arbitrum, linea, scroll],
+  chains: [
+    mainnet,
+    sepolia,
+    base,
+    optimism,
+    arbitrum,
+    linea,
+    scroll,
+    baseSepolia,
+    optimismSepolia,
+    arbitrumSepolia,
+    lineaSepolia,
+    scrollSepolia,
+  ],
   ssr: true,
 });
 

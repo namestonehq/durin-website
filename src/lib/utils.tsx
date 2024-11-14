@@ -20,8 +20,13 @@ export const RESOLVER_ADDRESSES = {
 
 export const chainIdMap: { [key: string]: number } = {
   Base: 8453,
+  "Base Sepolia": 84532,
   Optimism: 10,
+  "Optimism Sepolia": 11155420,
   Arbitrum: 42161,
+  "Arbitrum Sepolia": 421614,
   Scroll: 534352,
+  "Scroll Sepolia": 534351,
   Linea: 59144,
+  "Linea Sepolia": 59141,
 };
