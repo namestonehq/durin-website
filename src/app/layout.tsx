@@ -26,12 +26,34 @@ export default function RootLayout({
           <Toaster
             position="top-right"
             toastOptions={{
-              style: {
-                fontFamily: "Arial",
-                fontSize: "1rem",
-                fontWeight: "700",
-                color: "#fff",
-                background: "rgb(220 38 38)",
+              success: {
+                icon: null,
+                style: {
+                  fontFamily: "Arial",
+                  fontSize: "1rem",
+                  fontWeight: "700",
+                  color: "#fff",
+                  background: "rgb(34 197 94)",
+                },
+              },
+              error: {
+                icon: null,
+                style: {
+                  fontFamily: "Arial",
+                  fontSize: "1rem",
+                  fontWeight: "700",
+                  color: "#fff",
+                  background: "rgb(220 38 38)",
+                },
+              },
+              custom: {
+                style: {
+                  fontFamily: "Arial",
+                  fontSize: "1rem",
+                  fontWeight: "700",
+                  color: "#000",
+                  background: "#fff",
+                },
               },
             }}
           />

@@ -26,18 +26,18 @@ interface Transactionn {
 }
 
 const chainScanMap = {
-  Sepolia: "https://sepolia.etherscan.io/tx/",
-  Mainnet: "https://etherscan.io/tx/",
-  Base: "https://basescan.org/tx/",
-  "Base Sepolia": "https://sepolia.basescan.org/tx/",
-  Optimism: "https://optimistic.etherscan.io/tx/",
-  "Optimism Sepolia": "https://sepolia-optimism.etherscan.io/tx/",
-  Arbitrum: "https://arbiscan.io/tx/",
-  "Arbitrum Sepolia": "https://sepolia.arbiscan.io/tx/",
-  Scroll: "https://scrollscan.io/tx/",
-  "Scroll Sepolia": "https://sepolia-blockscout.scroll.io/tx/",
-  Linea: "https://linea.scan.io/tx/",
-  "Linea Sepolia": "https://sepolia.lineascan.build/tx/",
+  Sepolia: "https://sepolia.etherscan.io/",
+  Mainnet: "https://etherscan.io/",
+  Base: "https://basescan.org/",
+  "Base Sepolia": "https://sepolia.basescan.org/",
+  Optimism: "https://optimistic.etherscan.io/",
+  "Optimism Sepolia": "https://sepolia-optimism.etherscan.io/",
+  Arbitrum: "https://arbiscan.io/",
+  "Arbitrum Sepolia": "https://sepolia.arbiscan.io/",
+  Scroll: "https://scrollscan.io/",
+  "Scroll Sepolia": "https://sepolia-blockscout.scroll.io/",
+  Linea: "https://linea.scan.io/",
+  "Linea Sepolia": "https://sepolia.lineascan.build/",
 };
 
 export default function Home() {
@@ -338,7 +338,7 @@ export default function Home() {
                           setTimeout(() => setCopied(false), 2000);
                         });
                     } else {
-                      toast("Waiting for deploy...");
+                      toast.error("Waiting for deploy...");
                     }
                   }}
                   className="p-1 hover:bg-stone-200 rounded-md transition-colors"
@@ -349,6 +349,24 @@ export default function Home() {
                     <Copy className="w-4 h-4 text-stone-600" />
                   )}
                 </button>
+                {/* Link to blockscan if registry deployed */}
+                {registryAddress && (
+                  <Image
+                    src={"etherscan-logo.svg"}
+                    alt="etherscan"
+                    width={24}
+                    height={24}
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
+                    onClick={() => {
+                      window.open(
+                        chainScanMap[chain as keyof typeof chainScanMap] +
+                          "address/" +
+                          registryAddress,
+                        "_blank"
+                      );
+                    }}
+                  />
+                )}
               </div>
               <div
                 className={`w-full mt-2 h-8 px-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400`}
@@ -390,9 +408,9 @@ export default function Home() {
                   <Image
                     src={"etherscan-logo.svg"}
                     alt="etherscan"
-                    width={16}
-                    height={16}
-                    className="cursor-pointer"
+                    width={24}
+                    height={24}
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
                     onClick={() => {
                       window.open(
                         network === "Sepolia"
@@ -497,7 +515,7 @@ export default function Home() {
                                 chainScanMap[
                                   tx.chain as keyof typeof chainScanMap
                                 ]
-                              }${tx.hash}`,
+                              }tx/${tx.hash}`,
                               "_blank"
                             );
                           }}

@@ -105,7 +105,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
         }
       } catch (error) {
         console.error("Add record error:", error);
-        toast("Failed to add record");
+        toast.error("Failed to add record");
         setButtonText("Failed");
         setShouldUpdate(false);
         setIsProcessing(false);
@@ -130,11 +130,11 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
 
   const handleAddRecord = async () => {
     if (!isConnected || !domainInput || !walletClient || !address) {
-      toast("Please connect your wallet and select a domain");
+      toast.error("Please connect your wallet and select a domain");
       return;
     }
     if (!registryAddress) {
-      toast("Please deploy a registry first");
+      toast.error("Please deploy a registry first");
       return;
     }
 
@@ -163,7 +163,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       }
     } catch (error) {
       console.error("Add record error:", error);
-      toast("Failed to switch network");
+      toast.error("Failed to switch network");
       setButtonText("Failed");
       setIsProcessing(false);
       setShouldUpdate(false);
@@ -180,6 +180,10 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       setIsProcessing(false);
       setShouldUpdate(false);
       addTransaction("Added Record", network, hash as string);
+      const toastOptions = {
+        id: `record-add-${hash}`, // Prevent duplicate toasts
+      };
+      toast.success("Record added ", toastOptions);
       setTimeout(() => {
         setButtonText("Add Record");
         setHash(undefined);

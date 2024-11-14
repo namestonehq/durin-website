@@ -27,6 +27,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const [isNetworkSwitching, setIsNetworkSwitching] = useState<boolean>(false);
   const [shouldDeploy, setShouldDeploy] = useState<boolean>(false);
+  const [deploySuccess, setDeploySuccess] = useState<boolean>(false);
   const { chain: current } = useAccount();
   const chains = useChains();
   const { switchChain, error: switchError } = useSwitchChain();
@@ -39,17 +40,25 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   const { writeContract, data: hash, error: writeError } = useWriteContract();
   const {
     isLoading: isWaitingForTx,
-    isSuccess: deploySuccess,
+    isSuccess: txDeploySuccess,
     data: receipt,
   } = useWaitForTransactionReceipt({
     hash,
   });
 
+  // @notice This useEffect hook is used to set the deploySuccess state to true when the transaction is successful
+  // @dev We can't use the txDeploySuccess state directly because waitForTransactionReceipt resets when reused in other places
+  useEffect(() => {
+    if (txDeploySuccess) {
+      setDeploySuccess(true);
+    }
+  }, [txDeploySuccess]);
+
   // Handle network switch error
   useEffect(() => {
     if (switchError) {
       console.error("Network switch error:", switchError);
-      toast("Network switch cancelled");
+      toast.error("Network switch cancelled");
       setIsDeploying(false);
       setShouldDeploy(false);
       setIsNetworkSwitching(false);
@@ -62,14 +71,13 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       setIsDeploying(false);
       setShouldDeploy(false);
       setIsNetworkSwitching(false);
-      toast("Transaction rejected");
+      toast.error("Transaction rejected");
     }
   }, [writeError]);
 
   // Watch for network changes and deploy when ready
   useEffect(() => {
     const targetChainId = chainIdMap[selectedChain];
-    console.log("targetChainId", targetChainId, selectedChain);
 
     if (shouldDeploy && current?.id === targetChainId) {
       setIsNetworkSwitching(false);
@@ -90,7 +98,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
           });
         } catch (error) {
           console.error("Deploy error:", error);
-          toast("Failed to deploy contract");
+          toast.error("Failed to deploy contract");
           setIsDeploying(false);
           setShouldDeploy(false);
           setIsNetworkSwitching(false);
@@ -110,28 +118,35 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   // Handle deployment success
   useEffect(() => {
     if (
-      deploySuccess &&
-      receipt &&
-      onDeploySuccess &&
-      receipt.logs.length > 0
+      !isDeploying || // Add this check to prevent double handling
+      !deploySuccess ||
+      !receipt ||
+      !onDeploySuccess ||
+      receipt.logs.length === 0
     ) {
-      const registryAddress = receipt.logs[0].address as Address;
-      onDeploySuccess(registryAddress);
-      setIsDeploying(false);
-      setShouldDeploy(false);
-      setIsNetworkSwitching(false);
-      addTransaction(
-        "Deployed Registry",
-        selectedChain,
-        receipt.transactionHash
-      );
+      return;
     }
-  }, [deploySuccess, receipt, onDeploySuccess]);
+
+    const registryAddress = receipt.logs[0].address as Address;
+    onDeploySuccess(registryAddress);
+    setIsDeploying(false);
+    setShouldDeploy(false);
+    setIsNetworkSwitching(false);
+    toast.success("Registry deployed");
+    addTransaction("Deployed Registry", selectedChain, receipt.transactionHash);
+  }, [
+    deploySuccess,
+    receipt,
+    onDeploySuccess,
+    isDeploying,
+    selectedChain,
+    addTransaction,
+  ]);
 
   const handleDeploy = async (): Promise<void> => {
     try {
       if (!selectedBaseName) {
-        toast("Wallet not connected or no domain selected");
+        toast.error("Wallet not connected or no domain selected");
         return;
       }
       setIsDeploying(true);
@@ -144,10 +159,8 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         }
         setShouldDeploy(true);
         setIsNetworkSwitching(true);
-        // Don't wrap this in try/catch - we'll handle the error in the useEffect
         switchChain({ chainId: targetChainId });
       } else {
-        // If we're already on the right network, deploy immediately
         const contractName = "L2Registry";
         const contractSymbol = selectedBaseName;
         const baseUri = "";
@@ -165,7 +178,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         "Deployment error:",
         error instanceof Error ? error.message : "Unknown error"
       );
-      toast("Deployment failed");
+      toast.error("Deployment failed");
       setIsDeploying(false);
       setShouldDeploy(false);
       setIsNetworkSwitching(false);
@@ -173,14 +186,15 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   };
 
   const buttonText = () => {
+    if (deploySuccess) return "Deployed!";
     if (isWaitingForTx) return "Deploying...";
     if (isNetworkSwitching) return "Switching Network...";
-    if (deploySuccess) return "Deployed!";
     if (isDeploying) return "Confirming...";
     return "Deploy";
   };
 
-  const isDisabled = isWaitingForTx || isDeploying || isNetworkSwitching;
+  const isDisabled =
+    isWaitingForTx || isDeploying || isNetworkSwitching || deploySuccess;
 
   return (
     <button

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   useChains,
   useSwitchChain,
@@ -11,39 +11,26 @@ import { type Address } from "viem";
 import { mainnet, sepolia } from "viem/chains";
 import { setResolver } from "@ensdomains/ensjs/wallet";
 import { addEnsContracts } from "@ensdomains/ensjs";
-import { createWalletClient, createPublicClient, custom, http } from "viem";
-import { namehash } from "viem/ens";
+import { createWalletClient, custom } from "viem";
 import { Domain } from "../../lib/types";
 import toast from "react-hot-toast";
 import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
+// Component props interface
 interface UpdateResolverButtonProps {
-  network: string;
-  selectedDomain: Domain | undefined;
-  addTransaction: (action: string, chain: string, hash: string) => void;
+  network: string; // Current network (Mainnet or Sepolia)
+  selectedDomain: Domain | undefined; // Selected ENS domain details
+  addTransaction: (action: string, chain: string, hash: string) => void; // Callback to track transactions
 }
 
+// Constants for NameWrapper contract addresses
 const NAMEWRAPPER = "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401";
 const NAMEWRAPPER_SEPOLIA = "0x0635513f179D50A207757E05759CbD106d7dFcE8";
 
+// Chain IDs for supported networks
 const CHAIN_IDS = {
   Sepolia: 11155111,
   Mainnet: 1,
-};
-
-const REGISTRY_ABI = [
-  {
-    inputs: [{ name: "node", type: "bytes32" }],
-    name: "resolver",
-    outputs: [{ name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-] as const;
-
-const REGISTRY_ADDRESSES = {
-  Sepolia: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" as Address,
-  Mainnet: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" as Address,
 };
 
 const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
@@ -51,72 +38,92 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
   selectedDomain,
   addTransaction,
 }) => {
-  const [buttonText, setButtonText] = useState("Checking resolver...");
-  const [hash, setHash] = useState<`0x${string}` | undefined>();
-  const [shouldUpdate, setShouldUpdate] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [currentResolver, setCurrentResolver] = useState<Address | null>(null);
+  // State management
+  const [buttonText, setButtonText] = useState("Update Resolver"); // Button text that changes based on state
+  const [hash, setHash] = useState<`0x${string}` | undefined>(); // Transaction hash
+  const [shouldUpdate, setShouldUpdate] = useState(false); // Flag to trigger resolver update
+  const [isProcessing, setIsProcessing] = useState(false); // Processing state flag
+  const [currentResolver, setCurrentResolver] = useState<Address | null>(null); // Current resolver address
 
+  // Wagmi hooks for wallet interaction
   const { isConnected, address } = useAccount();
   const { chain: current } = useAccount();
   const chains = useChains();
   const { switchChain } = useSwitchChain();
   const { data: walletClient } = useWalletClient();
-
   const { isLoading: isWaitingForTx, isSuccess: updateSuccess } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+    useWaitForTransactionReceipt({ hash });
 
-  // Check current resolver
+  // useEffect to setCurrentResolver when selectedDomain changes
   useEffect(() => {
-    const checkResolver = async () => {
-      if (!selectedDomain?.name) {
+    setCurrentResolver(selectedDomain?.resolver as `0x${string}`);
+  }, [selectedDomain]);
+
+  // Check resolver when domain changes and on
+  useEffect(() => {
+    try {
+      const expectedResolver =
+        RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
+
+      // Update button text based on resolver status
+      console.log("Checking resolver:", currentResolver, expectedResolver);
+      if (currentResolver === expectedResolver) {
+        setButtonText("Resolver up to date ✓");
+      } else if (
+        currentResolver === "0x0000000000000000000000000000000000000000"
+      ) {
+        setButtonText("Set Resolver");
+      } else {
         setButtonText("Update Resolver");
-        return;
       }
+    } catch (error) {
+      console.error("Error checking resolver:", error);
+      setButtonText("Update Resolver");
+    }
+  }, [selectedDomain?.name, network, currentResolver]);
 
-      try {
-        setButtonText("Checking resolver...");
-        const registryAddress =
-          REGISTRY_ADDRESSES[network as keyof typeof REGISTRY_ADDRESSES];
-        const expectedResolver =
-          RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
+  // Handle button click
+  const handleUpdateResolver = async () => {
+    const expectedResolver =
+      RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
+    if (currentResolver === expectedResolver) return;
 
-        // Create a public client for the target network
-        const client = createPublicClient({
-          chain: network === "Mainnet" ? mainnet : sepolia,
-          transport: http(),
-        });
+    if (!isConnected || !selectedDomain || !walletClient || !address) {
+      toast.error("Wallet not connected or no domain selected");
+      return;
+    }
 
-        // Get the current resolver
-        const node = namehash(selectedDomain.name);
-        const resolver = await client.readContract({
-          address: registryAddress,
-          abi: REGISTRY_ABI,
-          functionName: "resolver",
-          args: [node],
-        });
+    try {
+      setIsProcessing(true);
+      setButtonText("Preparing...");
 
-        setCurrentResolver(resolver);
+      // Handle network switching if needed
+      const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
+      if (!targetChainId) throw new Error("Invalid network selected");
 
-        if (resolver === expectedResolver) {
-          setButtonText("Resolver up to date ✓");
-        } else if (resolver === "0x0000000000000000000000000000000000000000") {
-          setButtonText("Set Resolver");
+      if (current?.id !== targetChainId) {
+        setButtonText("Switching network...");
+        const targetChain = chains.find((chain) => chain.id === targetChainId);
+        if (targetChain) {
+          setShouldUpdate(true);
+          await switchChain({ chainId: targetChainId });
         } else {
-          setButtonText("Update Resolver");
+          throw new Error("Selected chain not configured in wagmi");
         }
-      } catch (error) {
-        console.error("Error checking resolver:", error);
-        setButtonText("Update Resolver");
+      } else {
+        setShouldUpdate(true);
       }
-    };
+    } catch (error) {
+      console.error("Update resolver error:", error);
+      setButtonText("Failed");
+      setIsProcessing(false);
+      setShouldUpdate(false);
+      setTimeout(() => setButtonText("Update Resolver"), 1500);
+    }
+  };
 
-    checkResolver();
-  }, [selectedDomain?.name, network]);
-
-  // Handle network switch and resolver update
+  // Handle resolver update process
+  // Actually swiches the resolver
   useEffect(() => {
     const updateResolver = async () => {
       if (
@@ -130,19 +137,14 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
 
       try {
         const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
-        if (!targetChainId) {
-          throw new Error("Invalid network selected");
-        }
+        if (!targetChainId) throw new Error("Invalid network selected");
 
-        // Only proceed if we're on the correct network
         if (current?.id === targetChainId) {
           setButtonText("Waiting for approval...");
 
           const resolverAddress =
             RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
-          if (!resolverAddress) {
-            throw new Error("Invalid network selected");
-          }
+          if (!resolverAddress) throw new Error("Invalid network selected");
 
           // Create ENS wallet client
           const ensWalletClient = createWalletClient({
@@ -151,14 +153,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
             transport: custom(walletClient.transport),
           });
 
-          console.log(
-            "Updating resolver for",
-            selectedDomain.name,
-            selectedDomain?.owner,
-            resolverAddress,
-            address
-          );
-          // Update resolver using ENS.js
+          // Set resolver using ENS.js
           const txHash = await setResolver(ensWalletClient, {
             name: selectedDomain.name,
             contract:
@@ -179,9 +174,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
         setButtonText("Failed");
         setShouldUpdate(false);
         setIsProcessing(false);
-        setTimeout(() => {
-          setButtonText("Update Resolver");
-        }, 1500);
+        setTimeout(() => setButtonText("Update Resolver"), 1500);
       }
     };
 
@@ -196,68 +189,30 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
     isConnected,
   ]);
 
-  const handleUpdateResolver = async () => {
-    // Don't proceed if resolver is already correct
-    const expectedResolver =
-      RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES];
-    if (currentResolver === expectedResolver) {
-      return;
-    }
-
-    if (!isConnected || !selectedDomain || !walletClient || !address) {
-      toast("Wallet not connected or no domain selected");
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      setButtonText("Preparing...");
-
-      const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
-      if (!targetChainId) {
-        throw new Error("Invalid network selected");
-      }
-
-      // Check if network switch is needed
-      if (current?.id !== targetChainId) {
-        setButtonText("Switching network...");
-        const targetChain = chains.find((chain) => chain.id === targetChainId);
-        if (targetChain) {
-          setShouldUpdate(true);
-          await switchChain({ chainId: targetChainId });
-        } else {
-          throw new Error("Selected chain not configured in wagmi");
-        }
-      } else {
-        // If already on correct network, trigger update directly
-        setShouldUpdate(true);
-      }
-    } catch (error) {
-      console.error("Update resolver error:", error);
-      setButtonText("Failed");
-      setIsProcessing(false);
-      setShouldUpdate(false);
-      setTimeout(() => {
-        setButtonText("Update Resolver");
-      }, 1500);
-    }
-  };
-
-  // Reset states on success
+  // Handle successful update
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccess && hash) {
       setButtonText("Success!");
       setIsProcessing(false);
       setShouldUpdate(false);
-      addTransaction("Update Resolver", network, hash as string);
-      setTimeout(() => {
-        // Recheck resolver after update
-        setButtonText("Checking resolver...");
-        setHash(undefined);
-      }, 1500);
-    }
-  }, [updateSuccess]);
+      addTransaction("Update Resolver", network, hash);
+      setCurrentResolver(
+        RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES]
+      );
 
+      const toastOptions = {
+        id: `resolver-update-${hash}`, // Prevent duplicate toasts
+      };
+      toast.success("Resolver successfully updated!", toastOptions);
+
+      setTimeout(() => {
+        setHash(undefined);
+        setButtonText("Resolver up to date ✓");
+      }, 2000);
+    }
+  }, [updateSuccess, hash, network, addTransaction]);
+
+  // Disable button conditions
   const isDisabled =
     isWaitingForTx ||
     isProcessing ||
