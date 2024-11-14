@@ -274,12 +274,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Configure & Deploy Box*/}
+        {/* Deploy Registry Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
-          <div className={`${gelasio.className} text-xl`}>
-            Configure & Deploy Contracts
-          </div>
+          <div className={`${gelasio.className} text-xl`}>Deploy Registry</div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
@@ -295,33 +293,6 @@ export default function Home() {
               <div className="text-sm text-stone-500">
                 Deploy an instance of a registry via the Durin factory contract.
               </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-end justify-between">
-              <div className="font-light ">Registrar</div>
-              <button
-                onClick={() => {
-                  window.open(
-                    "https://github.com/resolverworks/durin",
-                    "_blank"
-                  );
-                }}
-                className="flex items-center gap-2 px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100"
-              >
-                <Image
-                  alt="github"
-                  src="/github.svg"
-                  width={16}
-                  height={16}
-                ></Image>
-                Configure
-              </button>
-            </div>
-            <div className="text-sm text-stone-500">
-              The registrar controls how a name can be minted. We provide a
-              basic version of a registrar that you can modify. You will need to
-              know your registry address.
             </div>
           </div>
           <div className="flex flex-col gap-1">
@@ -482,6 +453,92 @@ export default function Home() {
                 <div className="font-mono text-xs text-stone-500">
                   {"{"}chain_id{"}"}:{"{"}registry_contract{"}"}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Configure Registrar Box*/}
+        <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
+          {" "}
+          <div className={`${gelasio.className} text-xl`}>
+            Configure Registrar
+          </div>
+          <hr className="mb-2 bg-stone-100"></hr>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-end justify-between">
+              <div className="font-light ">Registrar</div>
+              <button
+                onClick={() => {
+                  window.open(
+                    "https://github.com/resolverworks/durin",
+                    "_blank"
+                  );
+                }}
+                className="flex items-center gap-2 px-2 py-1 text-sm border rounded text- text-stone-900 hover:bg-stone-100"
+              >
+                <Image
+                  alt="github"
+                  src="/github.svg"
+                  width={16}
+                  height={16}
+                ></Image>
+                Configure
+              </button>
+            </div>
+            <div className="text-sm text-stone-500">
+              The registrar controls how a name can be minted. We provide a
+              basic version of a registrar that you can modify. You will need to
+              know your registry address.
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="mb-2 font-light text-stone-900">
+              <div className="flex items-center gap-2">
+                Registry Address
+                <button
+                  onClick={() => {
+                    if (registryAddress) {
+                      navigator.clipboard
+                        .writeText(registryAddress)
+                        .then(() => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        });
+                    } else {
+                      toast.error("Waiting for deploy...");
+                    }
+                  }}
+                  className="p-1 hover:bg-stone-200 rounded-md transition-colors"
+                >
+                  {copied ? (
+                    <Check className="w-4 h-4 text-green-600" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-stone-600" />
+                  )}
+                </button>
+                {/* Link to blockscan if registry deployed */}
+                {registryAddress && (
+                  <Image
+                    src={"etherscan-logo.svg"}
+                    alt="etherscan"
+                    width={24}
+                    height={24}
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
+                    onClick={() => {
+                      window.open(
+                        chainScanMap[chain as keyof typeof chainScanMap] +
+                          "address/" +
+                          registryAddress,
+                        "_blank"
+                      );
+                    }}
+                  />
+                )}
+              </div>
+              <div
+                className={`w-full mt-2 h-8 px-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400`}
+              >
+                {registryAddress ? registryAddress : "Waiting for Deploy..."}
               </div>
             </div>
           </div>
