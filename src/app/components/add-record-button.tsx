@@ -13,6 +13,7 @@ import { createWalletClient, custom } from "viem";
 import { setRecords } from "@ensdomains/ensjs/wallet";
 import { addEnsContracts } from "@ensdomains/ensjs";
 import toast from "react-hot-toast";
+import { chainIdMap } from "@/lib/utils";
 
 interface AddRecordButtonProps {
   network: string;
@@ -21,16 +22,6 @@ interface AddRecordButtonProps {
   selectedChain: string;
   addTransaction: (action: string, chain: string, hash: string) => void;
 }
-
-const CHAIN_IDS = {
-  Sepolia: 11155111,
-  Mainnet: 1,
-  Base: 8453,
-  Optimism: 10,
-  Arbitrum: 42161,
-  Scroll: 534352,
-  Linea: 59144,
-};
 
 const RESOLVER_ADDRESSES = {
   Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
@@ -71,7 +62,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
         return;
 
       try {
-        const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
+        const targetChainId = chainIdMap[network as keyof typeof chainIdMap];
         if (!targetChainId) {
           throw new Error("Invalid network selected");
         }
@@ -80,7 +71,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
         if (current?.id === targetChainId) {
           setButtonText("Waiting for approval...");
 
-          const chainId = CHAIN_IDS[selectedChain as keyof typeof CHAIN_IDS];
+          const chainId = chainIdMap[selectedChain as keyof typeof chainIdMap];
           if (!chainId) {
             throw new Error("Invalid L2 chain selected");
           }
@@ -151,7 +142,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       setIsProcessing(true);
       setButtonText("Preparing...");
 
-      const targetChainId = CHAIN_IDS[network as keyof typeof CHAIN_IDS];
+      const targetChainId = chainIdMap[network as keyof typeof chainIdMap];
       if (!targetChainId) {
         throw new Error("Invalid network selected");
       }
