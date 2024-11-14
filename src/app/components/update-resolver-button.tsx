@@ -195,7 +195,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
       setButtonText("Success!");
       setIsProcessing(false);
       setShouldUpdate(false);
-      addTransaction("Update Resolver", network, hash);
+      addTransaction("Updated Resolver", network, hash);
       setCurrentResolver(
         RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES]
       );

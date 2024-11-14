@@ -496,7 +496,7 @@ export default function Home() {
             {txHistory.length === 0 ? (
               <div className="text-sm text-stone-500">No transactions yet</div>
             ) : (
-              txHistory.map((tx, index) => {
+              txHistory.reverse().map((tx, index) => {
                 return (
                   <div
                     key={index}
