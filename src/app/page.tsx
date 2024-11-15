@@ -208,38 +208,6 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChainName("Optimism")}
-                className={`px-4  rounded transition ${
-                  chainName === "Optimism"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/optimism.svg"
-                  alt="optimism"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
-                onClick={() => setChainName("Arbitrum")}
-                className={`px-4  rounded transition ${
-                  chainName === "Arbitrum"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/arbitrum.svg"
-                  alt="arbitrum"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
                 onClick={() => setChainName("Scroll")}
                 className={`px-4  rounded transition ${
                   chainName === "Scroll"
@@ -256,11 +224,59 @@ export default function Home() {
                 />
               </button>
               <button
+                onClick={() => setChainName("Optimism")}
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
+                  chainName === "Optimism"
+                    ? "bg-white shadow text-stone-900"
+                    : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
+                }`}
+              >
+                <Image
+                  src="/optimism.svg"
+                  alt="optimism"
+                  width={28}
+                  height={28}
+                  className="inline-block"
+                />
+              </button>
+              <button
+                onClick={() => setChainName("Arbitrum")}
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
+                  chainName === "Arbitrum"
+                    ? "bg-white shadow text-stone-900"
+                    : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
+                }`}
+              >
+                <Image
+                  src="/arbitrum.svg"
+                  alt="arbitrum"
+                  width={28}
+                  height={28}
+                  className="inline-block"
+                />
+              </button>
+
+              <button
                 onClick={() => setChainName("Linea")}
-                className={`px-4  rounded transition ${
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
                   chainName === "Linea"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
                 }`}
               >
                 <Image
