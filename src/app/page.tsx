@@ -44,7 +44,7 @@ export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
   const [chainName, setChainName] = useState("Base");
-  const [chainModifier, setChainModifier] = useState("");
+  const [chainModifier, setChainModifier] = useState("Sepolia");
 
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
@@ -84,13 +84,13 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
-      <Image
+      {/* <Image
         src="/anviltools.png"
         alt="anvil"
         width={120}
         height={120}
         className="absolute opacity-0 hover:cursor-pointer hover:opacity-80 duration-10000 right-14  top-32"
-      ></Image>
+      ></Image> */}
       {/* Nav */}
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
         <Image
@@ -112,10 +112,23 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex flex-col items-center flex-grow w-full max-w-md gap-6 mx-auto">
-        <h1 className={`self-start ${gelasio.className}  text-3xl px-4`}>
-          Issue L2 Subnames
+        <h1 className={`self-start ${gelasio.className}  text-3xl`}>
+          Issue Subnames
         </h1>
-
+        <div className="self-start -mt-5  text-stone-600">
+          Durin is an opinionated approach to issuing ENS subnames on L2.
+          Project docs, contracts, and architecture can be found on{" "}
+          <Link
+            target="_blank"
+            href={
+              "https://github.com/resolverworks/durin?tab=readme-ov-file#instructions-to-deploy-l2-ens-subnames"
+            }
+            className="underline underline-offset-4"
+          >
+            GitHub
+          </Link>
+          .
+        </div>
         {/* Name & Chain Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className={`${gelasio.className} text-xl`}>
@@ -208,38 +221,6 @@ export default function Home() {
                 />
               </button>
               <button
-                onClick={() => setChainName("Optimism")}
-                className={`px-4  rounded transition ${
-                  chainName === "Optimism"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/optimism.svg"
-                  alt="optimism"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
-                onClick={() => setChainName("Arbitrum")}
-                className={`px-4  rounded transition ${
-                  chainName === "Arbitrum"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/arbitrum.svg"
-                  alt="arbitrum"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
                 onClick={() => setChainName("Scroll")}
                 className={`px-4  rounded transition ${
                   chainName === "Scroll"
@@ -256,11 +237,59 @@ export default function Home() {
                 />
               </button>
               <button
+                onClick={() => setChainName("Optimism")}
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
+                  chainName === "Optimism"
+                    ? "bg-white shadow text-stone-900"
+                    : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
+                }`}
+              >
+                <Image
+                  src="/optimism.svg"
+                  alt="optimism"
+                  width={28}
+                  height={28}
+                  className="inline-block"
+                />
+              </button>
+              <button
+                onClick={() => setChainName("Arbitrum")}
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
+                  chainName === "Arbitrum"
+                    ? "bg-white shadow text-stone-900"
+                    : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
+                }`}
+              >
+                <Image
+                  src="/arbitrum.svg"
+                  alt="arbitrum"
+                  width={28}
+                  height={28}
+                  className="inline-block"
+                />
+              </button>
+
+              <button
                 onClick={() => setChainName("Linea")}
-                className={`px-4  rounded transition ${
+                disabled={chainModifier !== "Sepolia"}
+                className={`px-4 rounded transition ${
                   chainName === "Linea"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
+                } ${
+                  chainModifier !== "Sepolia"
+                    ? "cursor-not-allowed filter blur-[2px]"
+                    : ""
                 }`}
               >
                 <Image
