@@ -315,7 +315,7 @@ export default function Home() {
         {/* Deploy Registry Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
-          <div className={`${gelasio.className} text-xl`}>Deploy Registry</div>
+          <div className={`${gelasio.className} text-xl`}>Deploy L2 Registry</div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
@@ -389,7 +389,7 @@ export default function Home() {
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
           <div className={`${gelasio.className} text-xl`}>
-            Update Name Records
+            Configure L1 Name
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
@@ -442,7 +442,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-end justify-between">
-                <div className="font-light">Add Record</div>
+                <div className="font-light">Set L2 Target Info</div>
                 <AddRecordButton
                   network={network}
                   domainInput={selectedDomain?.name}
@@ -452,8 +452,7 @@ export default function Home() {
                 />
               </div>
               <div className="text-sm text-stone-500">
-                Add the registry record with one click. If desired, customize
-                the registry address.
+                This connects the L2 registry to your L1 name.
               </div>
             </div>
             <div className="flex flex-col gap-1">
@@ -474,7 +473,7 @@ export default function Home() {
 
                 {/* Right section */}
                 <input
-                  className="flex-1 px-3 py-2 bg-stone-100 text-stone-500 text-xs"
+                  className="flex-1 px-3 py-3 bg-stone-100 text-stone-500 text-xs"
                   value={recordInput}
                   onChange={(e) => setRecordInput(e.target.value)}
                   placeholder="Waiting for registry deploy..."
@@ -499,7 +498,7 @@ export default function Home() {
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
           <div className={`${gelasio.className} text-xl`}>
-            Configure Registrar
+            Configure L2 Registrar
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-1">
@@ -508,7 +507,7 @@ export default function Home() {
               <button
                 onClick={() => {
                   window.open(
-                    "https://github.com/resolverworks/durin",
+                    "https://github.com/resolverworks/durin?tab=readme-ov-file#3-customize-registrar-template",
                     "_blank"
                   );
                 }}
