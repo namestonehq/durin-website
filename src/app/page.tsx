@@ -34,7 +34,7 @@ const chainScanMap = {
   "Optimism Sepolia": "https://sepolia-optimism.etherscan.io/",
   Arbitrum: "https://arbiscan.io/",
   "Arbitrum Sepolia": "https://sepolia.arbiscan.io/",
-  Scroll: "https://scrollscan.io/",
+  Scroll: "https://scrollscan.com/",
   "Scroll Sepolia": "https://sepolia-blockscout.scroll.io/",
   Linea: "https://linea.scan.io/",
   "Linea Sepolia": "https://sepolia.lineascan.build/",
