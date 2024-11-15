@@ -112,10 +112,23 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex flex-col items-center flex-grow w-full max-w-md gap-6 mx-auto">
-        <h1 className={`self-start ${gelasio.className}  text-3xl px-4`}>
-          Issue L2 Subnames
+        <h1 className={`self-start ${gelasio.className}  text-3xl`}>
+          Issue Subnames
         </h1>
-
+        <div className="self-start -mt-5  text-stone-600">
+          Durin is an opinionated approach to issuing ENS subnames on L2.
+          Project docs, contracts, and architecture can be found on{" "}
+          <Link
+            target="_blank"
+            href={
+              "https://github.com/resolverworks/durin?tab=readme-ov-file#instructions-to-deploy-l2-ens-subnames"
+            }
+            className="underline underline-offset-4"
+          >
+            GitHub
+          </Link>
+          .
+        </div>
         {/* Name & Chain Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className={`${gelasio.className} text-xl`}>
