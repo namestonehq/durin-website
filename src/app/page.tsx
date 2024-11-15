@@ -44,7 +44,7 @@ export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
   const [chain, setChain] = useState("Base");
   const [chainName, setChainName] = useState("Base");
-  const [chainModifier, setChainModifier] = useState("");
+  const [chainModifier, setChainModifier] = useState("Sepolia");
 
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
