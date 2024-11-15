@@ -84,13 +84,13 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
-      <Image
+      {/* <Image
         src="/anviltools.png"
         alt="anvil"
         width={120}
         height={120}
         className="absolute opacity-0 hover:cursor-pointer hover:opacity-80 duration-10000 right-14  top-32"
-      ></Image>
+      ></Image> */}
       {/* Nav */}
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
         <Image
