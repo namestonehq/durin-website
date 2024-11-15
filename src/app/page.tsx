@@ -120,9 +120,7 @@ export default function Home() {
           Project docs, contracts, and architecture can be found on{" "}
           <Link
             target="_blank"
-            href={
-              "https://github.com/resolverworks/durin?tab=readme-ov-file#instructions-to-deploy-l2-ens-subnames"
-            }
+            href={"https://github.com/resolverworks/durin"}
             className="underline underline-offset-4"
           >
             GitHub
@@ -187,7 +185,18 @@ export default function Home() {
                   Sepolia
                 </button>
                 <button
-                  onClick={() => setChainModifier("")}
+                  onClick={() => {
+                    // Set chainModifier to empty string meaining mainnet
+                    setChainModifier("");
+                    // if chainName is optimisim, arbitrum, or linea, set it to base
+                    if (
+                      chainName === "Optimism" ||
+                      chainName === "Arbitrum" ||
+                      chainName === "Linea"
+                    ) {
+                      setChainName("Base");
+                    }
+                  }}
                   className={`px-4  rounded transition ${
                     chainModifier === ""
                       ? "bg-white shadow text-stone-900  py-1"
