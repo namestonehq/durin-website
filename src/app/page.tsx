@@ -315,7 +315,9 @@ export default function Home() {
         {/* Deploy Registry Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
-          <div className={`${gelasio.className} text-xl`}>Deploy L2 Registry</div>
+          <div className={`${gelasio.className} text-xl`}>
+            Deploy L2 Registry
+          </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
@@ -329,7 +331,8 @@ export default function Home() {
                 />
               </div>
               <div className="text-sm text-stone-500">
-                Deploy an instance of a registry via the Durin factory contract.
+                This contract stores subnames as ERC-721 NFTs on the L2 chain
+                you selected above.
               </div>
             </div>
           </div>
@@ -498,7 +501,7 @@ export default function Home() {
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           {" "}
           <div className={`${gelasio.className} text-xl`}>
-            Configure L2 Registrar
+            Customize L2 Registrar
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-1">
@@ -523,9 +526,9 @@ export default function Home() {
               </button>
             </div>
             <div className="text-sm text-stone-500">
-              The registrar controls how a name can be minted. We provide a
-              basic version of a registrar that you can modify. You will need to
-              know your registry address.
+              The registrar controls how a name can be minted from the registry
+              you deployed earlier. We provide a basic version that you can
+              modify.
             </div>
           </div>
           <div className="flex flex-col gap-1">
@@ -580,6 +583,22 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Configure L2 Registry Box */}
+        <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
+          <div className={`${gelasio.className} text-xl`}>
+            Configure L2 Registry
+          </div>
+          <hr className="mb-2 bg-stone-100"></hr>
+          <div className="text-sm text-stone-500">
+            As the final step, call{" "}
+            <div className="w-fit inline px-2 py-1 bg-stone-50 rounded-lg border border-stone-200 font-mono text-xs text-stone-500">
+              addRegistrar()
+            </div>{" "}
+            on your registry with the address of your deployed registrar.
+          </div>
+        </div>
+
         {/* Tx history */}
         <div className="items-start w-full flex-col gap-2">
           <div className={`${gelasio.className} text-xl  py-4 `}>
