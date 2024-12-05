@@ -85,7 +85,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         try {
           if (!selectedBaseName) return;
 
-          const contractName = "selectedBaseName";
+          const contractName = selectedBaseName;
           const contractSymbol = selectedBaseName;
           const baseUri = "";
 
