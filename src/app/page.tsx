@@ -120,7 +120,7 @@ export default function Home() {
           Project docs, contracts, and architecture can be found on{" "}
           <Link
             target="_blank"
-            href={"https://github.com/resolverworks/durin"}
+            href={"https://github.com/namestonehq/durin"}
             className="underline underline-offset-4"
           >
             GitHub
@@ -510,7 +510,7 @@ export default function Home() {
               <button
                 onClick={() => {
                   window.open(
-                    "https://github.com/resolverworks/durin?tab=readme-ov-file#3-customize-registrar-template",
+                    "https://github.com/namestonehq/durin?tab=readme-ov-file#3-customize-registrar-template",
                     "_blank"
                   );
                 }}
