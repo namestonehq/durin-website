@@ -161,7 +161,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         setIsNetworkSwitching(true);
         switchChain({ chainId: targetChainId });
       } else {
-        const contractName = "L2Registry";
+        const contractName = selectedBaseName;
         const contractSymbol = selectedBaseName;
         const baseUri = "";
 
