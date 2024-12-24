@@ -189,13 +189,13 @@ export default function Home() {
                     // Set chainModifier to empty string meaining mainnet
                     setChainModifier("");
                     // if chainName is optimisim, arbitrum, or linea, set it to base
-                    if (
-                      chainName === "Optimism" ||
-                      chainName === "Arbitrum" ||
-                      chainName === "Linea"
-                    ) {
-                      setChainName("Base");
-                    }
+                    // if (
+                    //   chainName === "Optimism" ||
+                    //   chainName === "Arbitrum" ||
+                    //   chainName === "Linea"
+                    // ) {
+                    //   setChainName("Base");
+                    // }
                   }}
                   className={`px-4  rounded transition ${
                     chainModifier === ""
@@ -247,15 +247,20 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setChainName("Optimism")}
-                disabled={chainModifier !== "Sepolia"}
+                // disabled={chainModifier !== "Sepolia"}
+                // className={`px-4 rounded transition ${
+                //   chainName === "Optimism"
+                //     ? "bg-white shadow text-stone-900"
+                //     : "opacity-50"
+                // } ${
+                //   chainModifier !== "Sepolia"
+                //     ? "cursor-not-allowed filter blur-[2px]"
+                //     : ""
+                // }`}
                 className={`px-4 rounded transition ${
                   chainName === "Optimism"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
-                } ${
-                  chainModifier !== "Sepolia"
-                    ? "cursor-not-allowed filter blur-[2px]"
-                    : ""
                 }`}
               >
                 <Image
@@ -268,15 +273,20 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setChainName("Arbitrum")}
-                disabled={chainModifier !== "Sepolia"}
+                // disabled={chainModifier !== "Sepolia"}
+                // className={`px-4 rounded transition ${
+                //   chainName === "Arbitrum"
+                //     ? "bg-white shadow text-stone-900"
+                //     : "opacity-50"
+                // } ${
+                //   chainModifier !== "Sepolia"
+                //     ? "cursor-not-allowed filter blur-[2px]"
+                //     : ""
+                // }`}
                 className={`px-4 rounded transition ${
                   chainName === "Arbitrum"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
-                } ${
-                  chainModifier !== "Sepolia"
-                    ? "cursor-not-allowed filter blur-[2px]"
-                    : ""
                 }`}
               >
                 <Image
@@ -290,15 +300,20 @@ export default function Home() {
 
               <button
                 onClick={() => setChainName("Linea")}
-                disabled={chainModifier !== "Sepolia"}
+                // disabled={chainModifier !== "Sepolia"}
+                // className={`px-4 rounded transition ${
+                //   chainName === "Linea"
+                //     ? "bg-white shadow text-stone-900"
+                //     : "opacity-50"
+                // } ${
+                //   chainModifier !== "Sepolia"
+                //     ? "cursor-not-allowed filter blur-[2px]"
+                //     : ""
+                // }`}
                 className={`px-4 rounded transition ${
                   chainName === "Linea"
                     ? "bg-white shadow text-stone-900"
                     : "opacity-50"
-                } ${
-                  chainModifier !== "Sepolia"
-                    ? "cursor-not-allowed filter blur-[2px]"
-                    : ""
                 }`}
               >
                 <Image
