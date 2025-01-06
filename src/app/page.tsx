@@ -720,9 +720,11 @@ function DomainSelector({
 
   // useEffect if filteredDomainList.length === 1, set selectedDomain to that domain
   useEffect(() => {
-    if (filteredDomainList.length === 1) {
+    if (
+      filteredDomainList.length === 1 &&
+      domainInput === filteredDomainList[0].name
+    ) {
       setSelectedDomain(filteredDomainList[0]);
-      setDomainInput(filteredDomainList[0].name);
     }
   }, [filteredDomainList]);
 

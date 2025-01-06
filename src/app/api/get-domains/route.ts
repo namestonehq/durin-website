@@ -53,8 +53,6 @@ export async function GET(request: NextRequest) {
     // Get the appropriate client based on the network
     const client = getNetworkClient(network);
 
-    console.log(client.chain.subgraphs.ens.url);
-
     const result = await client.getNamesForAddress({
       address: address,
       pageSize: 1000,
@@ -70,7 +68,6 @@ export async function GET(request: NextRequest) {
         getResolver.batch({ name: item.name || "" })
       )
     );
-
     const enrichedData: EnrichedNameData[] = filteredResult.map(
       (item, index) => ({
         ...item,
