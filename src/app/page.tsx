@@ -631,7 +631,7 @@ export default function Home() {
             <span className="ml-1  text-neutral-300">
               Built By{" "}
               <Link
-                href="https://namestone.xyz"
+                href="https://namestone.com"
                 target="_blank"
                 className=" hover:text-orange-400 transition-colors duration-300 ease-in text-neutral-300"
               >
