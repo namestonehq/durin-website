@@ -113,10 +113,15 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex flex-col items-center flex-grow w-full max-w-md gap-6 mx-auto">
         <h1 className={`self-start ${gelasio.className}  text-3xl`}>
-          Issue Subnames
+          Issue Onchain ENS Subnames
         </h1>
         <div className="self-start -mt-5  text-stone-600">
-          Durin is an opinionated approach to issuing ENS subnames on L2.
+          Follow this guide to let your users mint ENS subnames as NFTs on an L2
+          of your choice.
+          <br />
+          You will be able to change the price, expiration, and other aspects of
+          the subnames by changing the provided contracts.
+          <br />
           Project docs, contracts, and architecture can be found on{" "}
           <Link
             target="_blank"
@@ -129,8 +134,23 @@ export default function Home() {
         </div>
         {/* Name & Chain Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          <div className={`${gelasio.className} text-xl`}>
-            Choose Name & Chain
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl`}>
+              Choose Name & Chain
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Select the ENS name you want to enable subnames for, and choose
+                which L2 chain those subnames will live on.
+                <br />
+                <br />
+                Your users will be able to mint subnames like
+                bob.your-ens-name.eth.
+              </div>
+            </div>
           </div>
 
           <hr className=" bg-stone-100"></hr>
@@ -291,9 +311,22 @@ export default function Home() {
         </div>
         {/* Deploy Registry Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          {" "}
-          <div className={`${gelasio.className} text-xl`}>
-            Deploy L2 Registry
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl`}>
+              Deploy L2 Registry
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Deploy a registry contract to store your subname NFTs on the L2
+                chain. This is the core contract that tracks subname ownership.
+                <br />
+                <br />
+                You can customize how these subnames work in later steps.
+              </div>
+            </div>
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
@@ -367,9 +400,24 @@ export default function Home() {
         </div>
         {/* Update Records Box */}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          {" "}
-          <div className={`${gelasio.className} text-xl`}>
-            Configure L1 Name
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl`}>
+              Configure L1 Name
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Connect your ENS name to the L2 registry by updating its
+                resolver and adding a pointer to your registry contract. Your
+                new resolver allows your subnames to resolve.
+                <br />
+                <br />
+                You can always revert this by changing the resolver back on
+                app.ens.domains.
+              </div>
+            </div>
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-6">
@@ -476,9 +524,25 @@ export default function Home() {
         </div>
         {/* Configure Registrar Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          {" "}
-          <div className={`${gelasio.className} text-xl`}>
-            Customize L2 Registrar
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl`}>
+              Customize L2 Registrar
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Customize how users can mint subnames by modifying the registrar
+                contract. You can set prices, expiration times, and other rules.
+                The GitHub link below has instructions on how to mint your
+                registrar and example code.
+                <br />
+                <br />
+                You&apos;ll need your registry address for some of the steps
+                which is why it&apos;s included below.
+              </div>
+            </div>
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="flex flex-col gap-1">
@@ -563,13 +627,25 @@ export default function Home() {
 
         {/* Configure L2 Registry Box */}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          <div className={`${gelasio.className} text-xl`}>
-            Configure L2 Registry
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl`}>
+              Connect L2 Registry to Registrar
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Grant permission to your registrar contract so it can mint
+                subnames through your registry. Calling addRegisrar() on the
+                registry connects the two contracts together.
+              </div>
+            </div>
           </div>
           <hr className="mb-2 bg-stone-100"></hr>
           <div className="text-sm text-stone-500">
             As the final step, call{" "}
-            <div className="w-fit inline px-2 py-1 bg-stone-50 rounded-lg border border-stone-200 font-mono text-xs text-stone-500">
+            <div className="w-fit inline px-1 py-1 bg-stone-50 rounded-lg border border-stone-200 font-mono text-xs text-stone-500">
               addRegistrar()
             </div>{" "}
             on your registry with the address of your deployed registrar.
@@ -578,8 +654,19 @@ export default function Home() {
 
         {/* Tx history */}
         <div className="items-start w-full flex-col gap-2">
-          <div className={`${gelasio.className} text-xl  py-4 `}>
-            Transaction History
+          <div className="flex items-center justify-between">
+            <div className={`${gelasio.className} text-xl py-4`}>
+              Transaction History
+            </div>
+            <div className="relative group">
+              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
+                ?
+              </div>
+              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
+                Track your progress through the guide. Each transaction shows up
+                here when completed.
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col w-full gap-3 px-6 py-3 bg-white border rounded-lg border-stone-200">
