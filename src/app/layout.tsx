@@ -12,6 +12,7 @@ const gelasio = Gelasio({
 export const metadata: Metadata = {
   title: "Durin - ENS L2 Names Made Easy",
   description: "The developer's gateway to ENS L2 Subnames",
+  metadataBase: new URL("https://durin.dev"),
   openGraph: {
     title: "Durin - ENS L2 Names Made Easy",
     description: "The developer's gateway to ENS L2 Subnames",
