@@ -10,8 +10,26 @@ const gelasio = Gelasio({
 });
 
 export const metadata: Metadata = {
-  title: "Durin - L2 Names Made Easy",
+  title: "Durin - ENS L2 Names Made Easy",
   description: "The developer's gateway to ENS L2 Subnames",
+  openGraph: {
+    title: "Durin - ENS L2 Names Made Easy",
+    description: "The developer's gateway to ENS L2 Subnames",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Durin - L2 Names Made Easy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Durin - L2 Names Made Easy",
+    description: "The developer's gateway to ENS L2 Subnames",
+    images: ["/opengraph-image.png"],
+  },
 };
 
 export default function RootLayout({
