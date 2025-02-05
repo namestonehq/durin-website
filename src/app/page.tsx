@@ -10,7 +10,7 @@ import { type Address } from "viem";
 import UpdateResolverButton from "./components/update-resolver-button";
 import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
-import { Copy, Check, ExternalLink } from "lucide-react";
+import { Copy, Check, ExternalLink, ScrollText } from "lucide-react";
 import toast from "react-hot-toast";
 import { RESOLVER_ADDRESSES, chainIdMap } from "@/lib/utils";
 
@@ -84,14 +84,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
-      {/* <Image
-        src="/anviltools.png"
-        alt="anvil"
-        width={120}
-        height={120}
-        className="absolute opacity-0 hover:cursor-pointer hover:opacity-80 duration-10000 right-14  top-32"
-      ></Image> */}
-      {/* Nav */}
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
         <Image
           alt="logo"
@@ -111,204 +103,253 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex flex-col items-center flex-grow w-full max-w-md gap-6 mx-auto">
-        <h1 className={`self-start ${gelasio.className}  text-3xl`}>
-          Issue Onchain ENS Subnames
-        </h1>
-        <div className="self-start -mt-5  text-stone-600">
-          Follow this guide to let your users mint ENS subnames as NFTs on an L2
-          of your choice.
-          <br />
-          You will be able to change the price, expiration, and other aspects of
-          the subnames by changing the provided contracts.
-          <br />
-          Project docs, contracts, and architecture can be found on{" "}
-          <Link
-            target="_blank"
-            href={"https://github.com/namestonehq/durin"}
-            className="underline underline-offset-4"
-          >
-            GitHub
-          </Link>
-          .
+      <main className="flex flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
+        <Image
+          className="rounded-lg mt-4"
+          src="/banner.svg"
+          alt="durin"
+          width={1024}
+          height={1024}
+        ></Image>
+        <div className="relative">
+          <h1 className={`self-start ${gelasio.className} text-3xl`}>
+            Issue onchain ENS subnames on an L2
+          </h1>
+          <div className="flex">
+            <div className="self-start mt-4 w-[calc(100%-340px)] text-stone-600 mr-12">
+              Durin is an opinionated approach to issuing ENS L2 subnames. Durin
+              is{" "}
+              <Link
+                target="_blank"
+                href={"https://github.com/namestonehq/durin"}
+                className="underline underline-offset-4"
+              >
+                open source
+              </Link>{" "}
+              and PRs are welcomed. For support reach out to Slobo on{" "}
+              <Link
+                target="_blank"
+                href={"https://t.me/superslobo"}
+                className="underline underline-offset-4"
+              >
+                Telegram
+              </Link>
+              .
+            </div>
+            <div className="absolute right-4 -top-20 bg-stone-100 p-6 w-80 rounded-lg shadow-md">
+              <div className="text-stone-900 font-bold mb-2">
+                What you&apos;ll need
+              </div>
+              <ul className="list-disc text-sm list-inside text-stone-600 space-y-2 pl-2">
+                <li>ENS name (Sepolia or Mainnet)</li>
+                <li>Etherscan API key for verification</li>
+                <li>Familiarity with solidity</li>
+                <li>RPC URL for the chosen chain</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <span className="font-bold">Objective: </span>Launch an onchain ENS
+            subname project on an L2 with mintable subname NFTs
+          </div>
+          <hr className="bg-stone-100 my-6" />
+          <h2 className={`${gelasio.className} mb-3 text-xl`}>
+            1. Deploy the L2 Registry
+          </h2>
+          <div className="flex gap-20">
+            <div className="bg-stone-100 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+              <div className="flex items-center gap-2">
+                <ScrollText /> Key Contract:{" "}
+                <span className="font-bold">L2 Registry</span>
+              </div>
+              <div className="text-sm text-stone-700">
+                The <span className="font-bold">L2 registry</span> tracks
+                ownership of ENS subnames. These names are represented as
+                ERC-721 NFTs. Durin&apos;s implementation of the registry stores
+                text records, cointypes, and contenthash that can be associated
+                with a subname.
+              </div>
+            </div>
+            {/* Name & Chain Box*/}
+            <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
+              <div className="flex items-end justify-between">
+                <div className="font-light">Choose an ENS Name</div>
+
+                {/* Toggle Network */}
+                <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                  <button
+                    onClick={() => setNetwork("Sepolia")}
+                    className={`px-4 rounded transition ${
+                      network === "Sepolia"
+                        ? "bg-white shadow text-black py-1"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Sepolia
+                  </button>
+                  <button
+                    onClick={() => setNetwork("Mainnet")}
+                    className={`px-4  rounded transition ${
+                      network === "Mainnet"
+                        ? "bg-white shadow text-stone-900  py-1"
+                        : "text-stone-500"
+                    }`}
+                  >
+                    Mainnet
+                  </button>
+                </div>
+              </div>
+
+              {/* ENS Search & Drop Down */}
+              <DomainSelector
+                network={network}
+                setSelectedDomain={setSelectedDomain}
+              />
+              <div className="flex flex-col gap-2">
+                <div className="flex items-end justify-between">
+                  <div className="font-light">Choose a Chain</div>
+                  {/* Toggle testnet or mainnet */}
+                  <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                    <button
+                      onClick={() => setChainModifier("Sepolia")}
+                      className={`px-4 rounded transition ${
+                        chainModifier === "Sepolia"
+                          ? "bg-white shadow text-black py-1"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      Sepolia
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Set chainModifier to empty string meaining mainnet
+                        setChainModifier("");
+                      }}
+                      className={`px-4  rounded transition ${
+                        chainModifier === ""
+                          ? "bg-white shadow text-stone-900  py-1"
+                          : "text-stone-500"
+                      }`}
+                    >
+                      Mainnet
+                    </button>
+                  </div>
+                </div>
+                <div className="text-sm text-stone-600 ">
+                  This is where L2 registry contract will be deployed.{" "}
+                </div>
+                {/* Toggle Chain */}
+                <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
+                  <button
+                    onClick={() => setChainName("Base")}
+                    className={`px-4 rounded transition ${
+                      chainName === "Base"
+                        ? "bg-white shadow text-black"
+                        : "opacity-50"
+                    }`}
+                  >
+                    <Image
+                      src="/base.svg"
+                      alt="Base"
+                      width={28}
+                      height={28}
+                      className="py-1"
+                    />
+                  </button>
+                  <button
+                    onClick={() => setChainName("Scroll")}
+                    className={`px-4  rounded transition ${
+                      chainName === "Scroll"
+                        ? "bg-white shadow text-stone-900"
+                        : "opacity-50"
+                    }`}
+                  >
+                    <Image
+                      src="/scroll.svg"
+                      alt="scroll"
+                      width={28}
+                      height={28}
+                      className="inline-block"
+                    />
+                  </button>
+                  <button
+                    onClick={() => setChainName("Optimism")}
+                    className={`px-4 rounded transition ${
+                      chainName === "Optimism"
+                        ? "bg-white shadow text-stone-900"
+                        : "opacity-50"
+                    }`}
+                  >
+                    <Image
+                      src="/optimism.svg"
+                      alt="optimism"
+                      width={28}
+                      height={28}
+                      className="inline-block"
+                    />
+                  </button>
+                  <button
+                    onClick={() => setChainName("Arbitrum")}
+                    className={`px-4 rounded transition ${
+                      chainName === "Arbitrum"
+                        ? "bg-white shadow text-stone-900"
+                        : "opacity-50"
+                    } `}
+                  >
+                    <Image
+                      src="/arbitrum.svg"
+                      alt="arbitrum"
+                      width={28}
+                      height={28}
+                      className="inline-block"
+                    />
+                  </button>
+
+                  <button
+                    onClick={() => setChainName("Linea")}
+                    className={`px-4 rounded transition ${
+                      chainName === "Linea"
+                        ? "bg-white shadow text-stone-900"
+                        : "opacity-50"
+                    } `}
+                  >
+                    <Image
+                      src="/linea.svg"
+                      alt="Linea"
+                      width={28}
+                      height={28}
+                      className="inline-block"
+                    />
+                  </button>
+                </div>
+                <div className="font-light mt-6">
+                  Deploy L2{" "}
+                  <Link
+                    target="_blank"
+                    className="underline underline-offset-4"
+                    href={
+                      "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
+                    }
+                  >
+                    Registry
+                  </Link>{" "}
+                  on {chainName} {chainModifier}
+                </div>
+                <div className="text-sm text-stone-600 ">
+                  This will use your connected wallet to deploy the L2 Registry.
+                </div>
+                <DeployButton
+                  selectedBaseName={selectedDomain?.name}
+                  selectedChain={chain}
+                  onDeploySuccess={handleDeploySuccess}
+                  addTransaction={addTransaction}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        {/* Name & Chain Box*/}
-        <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          <div className="flex items-center justify-between">
-            <div className={`${gelasio.className} text-xl`}>
-              Choose Name & Chain
-            </div>
-            <div className="relative group">
-              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
-                ?
-              </div>
-              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
-                Select the ENS name you want to enable subnames for, and choose
-                which L2 chain those subnames will live on.
-                <br />
-                <br />
-                Your users will be able to mint subnames like
-                bob.your-ens-name.eth.
-              </div>
-            </div>
-          </div>
 
-          <hr className=" bg-stone-100"></hr>
-          <div className="flex items-end justify-between">
-            <div className="font-light">ENS Name</div>
-
-            {/* Toggle Network */}
-            <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
-              <button
-                onClick={() => setNetwork("Sepolia")}
-                className={`px-4 rounded transition ${
-                  network === "Sepolia"
-                    ? "bg-white shadow text-black py-1"
-                    : "text-gray-500"
-                }`}
-              >
-                Sepolia
-              </button>
-              <button
-                onClick={() => setNetwork("Mainnet")}
-                className={`px-4  rounded transition ${
-                  network === "Mainnet"
-                    ? "bg-white shadow text-stone-900  py-1"
-                    : "text-stone-500"
-                }`}
-              >
-                Mainnet
-              </button>
-            </div>
-          </div>
-          <div className="text-sm text-stone-500 ">
-            Choose between Sepolia & Mainnet ENS name resolution.
-          </div>
-          {/* ENS Search & Drop Down */}
-          <DomainSelector
-            network={network}
-            setSelectedDomain={setSelectedDomain}
-          />
-          <div className="flex flex-col gap-1">
-            <div className="flex items-end justify-between">
-              <div className="font-light">Chain</div>
-              {/* Toggle testnet or mainnet */}
-              <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
-                <button
-                  onClick={() => setChainModifier("Sepolia")}
-                  className={`px-4 rounded transition ${
-                    chainModifier === "Sepolia"
-                      ? "bg-white shadow text-black py-1"
-                      : "text-gray-500"
-                  }`}
-                >
-                  Sepolia
-                </button>
-                <button
-                  onClick={() => {
-                    // Set chainModifier to empty string meaining mainnet
-                    setChainModifier("");
-                  }}
-                  className={`px-4  rounded transition ${
-                    chainModifier === ""
-                      ? "bg-white shadow text-stone-900  py-1"
-                      : "text-stone-500"
-                  }`}
-                >
-                  Mainnet
-                </button>
-              </div>
-            </div>
-            <div className="text-sm text-stone-500 ">
-              Pick a chain where the registry contract will live. The registry
-              contract tracks ownership and stores text records.{" "}
-            </div>
-            {/* Toggle Chain */}
-            <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
-              <button
-                onClick={() => setChainName("Base")}
-                className={`px-4 rounded transition ${
-                  chainName === "Base"
-                    ? "bg-white shadow text-black"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/base.svg"
-                  alt="Base"
-                  width={28}
-                  height={28}
-                  className="py-1"
-                />
-              </button>
-              <button
-                onClick={() => setChainName("Scroll")}
-                className={`px-4  rounded transition ${
-                  chainName === "Scroll"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/scroll.svg"
-                  alt="scroll"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
-                onClick={() => setChainName("Optimism")}
-                className={`px-4 rounded transition ${
-                  chainName === "Optimism"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                }`}
-              >
-                <Image
-                  src="/optimism.svg"
-                  alt="optimism"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-              <button
-                onClick={() => setChainName("Arbitrum")}
-                className={`px-4 rounded transition ${
-                  chainName === "Arbitrum"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                } `}
-              >
-                <Image
-                  src="/arbitrum.svg"
-                  alt="arbitrum"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-
-              <button
-                onClick={() => setChainName("Linea")}
-                className={`px-4 rounded transition ${
-                  chainName === "Linea"
-                    ? "bg-white shadow text-stone-900"
-                    : "opacity-50"
-                } `}
-              >
-                <Image
-                  src="/linea.svg"
-                  alt="Linea"
-                  width={28}
-                  height={28}
-                  className="inline-block"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
         {/* Deploy Registry Box*/}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className="flex items-center justify-between">
@@ -759,9 +800,9 @@ function DomainSelector({
   // Fetch ENS names when wallet is connected
   useEffect(() => {
     const fetchENSNames = async () => {
-      //set selectedDomain to undefined
       setSelectedDomain(undefined);
       setDomainInput("");
+
       if (!isConnected || !address) {
         setUserDomains([]);
         return;
@@ -769,7 +810,6 @@ function DomainSelector({
 
       try {
         setIsLoading(true);
-        // Use URL constructor to properly format the URL with query parameters
         const baseUrl =
           process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
         const url = new URL(`${baseUrl}/api/get-domains`);
@@ -780,11 +820,7 @@ function DomainSelector({
         const data: Domain[] = await response.json();
 
         if (response.status === 200) {
-          // Filter out null values and format the domains
-          const formattedDomains: Domain[] = data.filter(
-            (name) => name !== null
-          );
-          setUserDomains(formattedDomains);
+          setUserDomains(data.filter((name) => name !== null));
         } else {
           console.error("Error fetching domains:", data);
           setUserDomains([]);
@@ -798,14 +834,12 @@ function DomainSelector({
     };
 
     fetchENSNames();
-  }, [address, isConnected, network]);
+  }, [address, isConnected, network, setSelectedDomain]);
 
-  // Filter domains based on input
-  const filteredDomainList = userDomains.filter((domain) => {
-    return domain.name.toLowerCase().includes(domainInput.toLowerCase());
-  });
+  const filteredDomainList = userDomains.filter((domain) =>
+    domain.name.toLowerCase().includes(domainInput.toLowerCase())
+  );
 
-  // useEffect if filteredDomainList.length === 1, set selectedDomain to that domain
   useEffect(() => {
     if (
       filteredDomainList.length === 1 &&
@@ -813,85 +847,77 @@ function DomainSelector({
     ) {
       setSelectedDomain(filteredDomainList[0]);
     }
-  }, [filteredDomainList]);
+  }, [filteredDomainList, domainInput, setSelectedDomain]);
 
   return (
-    <div className="z-20 flex">
-      <div className="flex flex-col items-start w-full max-w-md">
-        <div className="relative w-full h-12">
-          <div className="absolute flex-col w-full h-12">
-            <div className="relative flex flex-1">
-              <input
-                type="text"
-                id="select-domain"
-                placeholder={
-                  !isConnected
-                    ? "Connect wallet to see your ENS names"
-                    : isLoading
-                    ? "Loading your ENS names..."
-                    : "Search your ENS names"
-                }
-                onChange={(e) => {
-                  setDomainInput(e.target.value);
-                  setSelectedDomain(undefined);
-                }}
-                value={domainInput}
-                onFocus={() => setDomainInputSelected(true)}
-                onBlur={() => {
-                  setTimeout(() => {
+    <div className="w-full">
+      <div className="relative">
+        <input
+          type="text"
+          id="select-domain"
+          placeholder={
+            !isConnected
+              ? "Connect wallet to see your ENS names"
+              : isLoading
+              ? "Loading your ENS names..."
+              : "Search your ENS names"
+          }
+          onChange={(e) => {
+            setDomainInput(e.target.value);
+            setSelectedDomain(undefined);
+          }}
+          value={domainInput}
+          onFocus={() => setDomainInputSelected(true)}
+          onBlur={() => {
+            setTimeout(() => setDomainInputSelected(false), 200);
+          }}
+          disabled={!isConnected || isLoading}
+          className={`w-full h-10 px-4 border-stone-200 border rounded-lg appearance-none focus:ring-2 focus:ring-stone-200 focus:outline-none focus:border-transparent ${
+            !isConnected || isLoading
+              ? "bg-stone-100 text-stone-400 cursor-not-allowed"
+              : ""
+          }`}
+        />
+        <Image
+          alt="chevron"
+          src="/chevron-down.svg"
+          width={16}
+          height={16}
+          className="absolute transform -translate-y-1/2 right-3 top-1/2"
+        />
+
+        {/* Dropdown with domain list */}
+        {isConnected && domainInputSelected && (
+          <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-40 overflow-auto">
+            {isLoading ? (
+              <div className="p-3 text-stone-400">
+                Loading your ENS names...
+              </div>
+            ) : filteredDomainList.length > 0 ? (
+              filteredDomainList.map((domain, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setDomainInput(domain.name);
+                    setSelectedDomain(domain);
                     setDomainInputSelected(false);
-                  }, 200);
-                }}
-                disabled={!isConnected || isLoading}
-                className={`w-full h-8 p-4 border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none ${
-                  !isConnected || isLoading
-                    ? "bg-stone-100 text-stone-400 cursor-not-allowed"
-                    : ""
-                }`}
-              />
-              <span className="absolute transform -translate-y-1/2 right-3 top-1/2">
-                <Image
-                  alt="chevron"
-                  src="/chevron-down.svg"
-                  width={16}
-                  height={16}
-                />
-              </span>
-            </div>
-            {/* Dropdown with domain list */}
-            {isConnected && domainInputSelected && (
-              <div className="z-10 w-full max-w-md overflow-x-hidden overflow-y-scroll bg-white border rounded-lg shadow-lg max-h-40">
-                {isLoading ? (
-                  <div className="h-10 px-4 py-2 text-left text-stone-400">
-                    Loading your ENS names...
-                  </div>
-                ) : filteredDomainList.length > 0 ? (
-                  filteredDomainList.map((domain, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setDomainInput(domain.name);
-                        setSelectedDomain(domain);
-                        setDomainInputSelected(false);
-                      }}
-                      className="h-10 px-4 py-2 text-left border-b cursor-pointer border-stone-300 hover:bg-stone-100 overflow-ellipsis"
-                    >
-                      {domain.name}
-                    </div>
-                  ))
-                ) : (
-                  <div className="h-10 px-4 py-2 text-left border-b text-stone-400 border-stone-300">
-                    {domainInput
-                      ? "No matching ENS names found"
-                      : userDomains.length === 0
-                      ? "No ENS names found for this address"
-                      : "Type to search your ENS names"}
-                  </div>
-                )}
+                  }}
+                  className="p-2 cursor-pointer hover:bg-stone-100 border-b border-stone-200 last:border-none"
+                >
+                  {domain.name}
+                </div>
+              ))
+            ) : (
+              <div className="p-3 text-stone-400">
+                {domainInput
+                  ? "No matching ENS names found"
+                  : userDomains.length === 0
+                  ? "No ENS names found for this address"
+                  : "Type to search your ENS names"}
               </div>
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
