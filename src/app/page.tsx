@@ -158,7 +158,7 @@ export default function Home() {
             1. Deploy the L2 Registry
           </h2>
           <div className="flex gap-20">
-            <div className="bg-stone-100 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-100 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registry</span>
@@ -172,49 +172,16 @@ export default function Home() {
               </div>
             </div>
             {/* Name & Chain Box*/}
-            <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-              <div className="flex items-end justify-between">
-                <div className="font-light">Choose an ENS Name</div>
-
-                {/* Toggle Network */}
-                <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
-                  <button
-                    onClick={() => setNetwork("Sepolia")}
-                    className={`px-4 rounded transition ${
-                      network === "Sepolia"
-                        ? "bg-white shadow text-black py-1"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    Sepolia
-                  </button>
-                  <button
-                    onClick={() => setNetwork("Mainnet")}
-                    className={`px-4  rounded transition ${
-                      network === "Mainnet"
-                        ? "bg-white shadow text-stone-900  py-1"
-                        : "text-stone-500"
-                    }`}
-                  >
-                    Mainnet
-                  </button>
-                </div>
-              </div>
-
-              {/* ENS Search & Drop Down */}
-              <DomainSelector
-                network={network}
-                setSelectedDomain={setSelectedDomain}
-              />
-              <div className="flex flex-col gap-2">
+            <div className="w-full">
+              <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200 relative z-10">
                 <div className="flex items-end justify-between">
-                  <div className="font-light">Choose a Chain</div>
-                  {/* Toggle testnet or mainnet */}
+                  <div className="font-light">Choose an ENS Name</div>
+                  {/* Toggle Network */}
                   <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
                     <button
-                      onClick={() => setChainModifier("Sepolia")}
+                      onClick={() => setNetwork("Sepolia")}
                       className={`px-4 rounded transition ${
-                        chainModifier === "Sepolia"
+                        network === "Sepolia"
                           ? "bg-white shadow text-black py-1"
                           : "text-gray-500"
                       }`}
@@ -222,12 +189,9 @@ export default function Home() {
                       Sepolia
                     </button>
                     <button
-                      onClick={() => {
-                        // Set chainModifier to empty string meaining mainnet
-                        setChainModifier("");
-                      }}
+                      onClick={() => setNetwork("Mainnet")}
                       className={`px-4  rounded transition ${
-                        chainModifier === ""
+                        network === "Mainnet"
                           ? "bg-white shadow text-stone-900  py-1"
                           : "text-stone-500"
                       }`}
@@ -236,209 +200,202 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-                <div className="text-sm text-stone-600 ">
-                  This is where L2 registry contract will be deployed.{" "}
-                </div>
-                {/* Toggle Chain */}
-                <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
-                  <button
-                    onClick={() => setChainName("Base")}
-                    className={`px-4 rounded transition ${
-                      chainName === "Base"
-                        ? "bg-white shadow text-black"
-                        : "opacity-50"
-                    }`}
-                  >
-                    <Image
-                      src="/base.svg"
-                      alt="Base"
-                      width={28}
-                      height={28}
-                      className="py-1"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setChainName("Scroll")}
-                    className={`px-4  rounded transition ${
-                      chainName === "Scroll"
-                        ? "bg-white shadow text-stone-900"
-                        : "opacity-50"
-                    }`}
-                  >
-                    <Image
-                      src="/scroll.svg"
-                      alt="scroll"
-                      width={28}
-                      height={28}
-                      className="inline-block"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setChainName("Optimism")}
-                    className={`px-4 rounded transition ${
-                      chainName === "Optimism"
-                        ? "bg-white shadow text-stone-900"
-                        : "opacity-50"
-                    }`}
-                  >
-                    <Image
-                      src="/optimism.svg"
-                      alt="optimism"
-                      width={28}
-                      height={28}
-                      className="inline-block"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setChainName("Arbitrum")}
-                    className={`px-4 rounded transition ${
-                      chainName === "Arbitrum"
-                        ? "bg-white shadow text-stone-900"
-                        : "opacity-50"
-                    } `}
-                  >
-                    <Image
-                      src="/arbitrum.svg"
-                      alt="arbitrum"
-                      width={28}
-                      height={28}
-                      className="inline-block"
-                    />
-                  </button>
-
-                  <button
-                    onClick={() => setChainName("Linea")}
-                    className={`px-4 rounded transition ${
-                      chainName === "Linea"
-                        ? "bg-white shadow text-stone-900"
-                        : "opacity-50"
-                    } `}
-                  >
-                    <Image
-                      src="/linea.svg"
-                      alt="Linea"
-                      width={28}
-                      height={28}
-                      className="inline-block"
-                    />
-                  </button>
-                </div>
-                <div className="font-light mt-6">
-                  Deploy L2{" "}
-                  <Link
-                    target="_blank"
-                    className="underline underline-offset-4"
-                    href={
-                      "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
-                    }
-                  >
-                    Registry
-                  </Link>{" "}
-                  on {chainName} {chainModifier}
-                </div>
-                <div className="text-sm text-stone-600 ">
-                  This will use your connected wallet to deploy the L2 Registry.
-                </div>
-                <DeployButton
-                  selectedBaseName={selectedDomain?.name}
-                  selectedChain={chain}
-                  onDeploySuccess={handleDeploySuccess}
-                  addTransaction={addTransaction}
+                {/* ENS Search & Drop Down */}
+                <DomainSelector
+                  network={network}
+                  setSelectedDomain={setSelectedDomain}
                 />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Deploy Registry Box*/}
-        <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
-          <div className="flex items-center justify-between">
-            <div className={`${gelasio.className} text-xl`}>
-              Deploy L2 Registry
-            </div>
-            <div className="relative group">
-              <div className="flex items-center justify-center w-5 h-5 text-sm text-stone-500 border border-stone-300 rounded-full cursor-help">
-                ?
-              </div>
-              <div className="absolute z-50 invisible w-72 p-2 text-sm text-stone-600 bg-white border border-stone-200 rounded-lg shadow-lg group-hover:visible right-0 top-6">
-                Deploy a registry contract to store your subname NFTs on the L2
-                chain. This is the core contract that tracks subname ownership.
-                <br />
-                <br />
-                You can customize how these subnames work in later steps.
-              </div>
-            </div>
-          </div>
-          <hr className="mb-2 bg-stone-100"></hr>
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-end justify-between">
-                <div className="font-light">Registry</div>
-                <DeployButton
-                  selectedBaseName={selectedDomain?.name}
-                  selectedChain={chain}
-                  onDeploySuccess={handleDeploySuccess}
-                  addTransaction={addTransaction}
-                />
-              </div>
-              <div className="text-sm text-stone-500">
-                This contract stores subnames as ERC-721 NFTs on the L2 chain
-                you selected above.
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="mb-2 font-light text-stone-900">
-              <div className="flex items-center gap-2">
-                Registry Address
-                <button
-                  onClick={() => {
-                    if (registryAddress) {
-                      navigator.clipboard
-                        .writeText(registryAddress)
-                        .then(() => {
-                          setCopied(true);
-                          setTimeout(() => setCopied(false), 2000);
-                        });
-                    } else {
-                      toast.error("Waiting for deploy...");
-                    }
-                  }}
-                  className="p-1 hover:bg-stone-200 rounded-md transition-colors"
-                >
-                  {copied ? (
-                    <Check className="w-4 h-4 text-green-600" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-stone-600" />
-                  )}
-                </button>
-                {/* Link to blockscan if registry deployed */}
-                {registryAddress && (
-                  <Image
-                    src={"etherscan-logo.svg"}
-                    alt="etherscan"
-                    width={24}
-                    height={24}
-                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
-                    onClick={() => {
-                      window.open(
-                        chainScanMap[chain as keyof typeof chainScanMap] +
-                          "address/" +
-                          registryAddress,
-                        "_blank"
-                      );
-                    }}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-end justify-between">
+                    <div className="font-light">Choose a Chain</div>
+                    {/* Toggle testnet or mainnet */}
+                    <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                      <button
+                        onClick={() => setChainModifier("Sepolia")}
+                        className={`px-4 rounded transition ${
+                          chainModifier === "Sepolia"
+                            ? "bg-white shadow text-black py-1"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        Sepolia
+                      </button>
+                      <button
+                        onClick={() => {
+                          // Set chainModifier to empty string meaining mainnet
+                          setChainModifier("");
+                        }}
+                        className={`px-4  rounded transition ${
+                          chainModifier === ""
+                            ? "bg-white shadow text-stone-900  py-1"
+                            : "text-stone-500"
+                        }`}
+                      >
+                        Mainnet
+                      </button>
+                    </div>
+                  </div>
+                  <div className="text-sm text-stone-600 ">
+                    This is where L2 registry contract will be deployed.{" "}
+                  </div>
+                  {/* Toggle Chain */}
+                  <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
+                    <button
+                      onClick={() => setChainName("Base")}
+                      className={`px-4 rounded transition ${
+                        chainName === "Base"
+                          ? "bg-white shadow text-black"
+                          : "opacity-50"
+                      }`}
+                    >
+                      <Image
+                        src="/base.svg"
+                        alt="Base"
+                        width={28}
+                        height={28}
+                        className="py-1"
+                      />
+                    </button>
+                    <button
+                      onClick={() => setChainName("Scroll")}
+                      className={`px-4  rounded transition ${
+                        chainName === "Scroll"
+                          ? "bg-white shadow text-stone-900"
+                          : "opacity-50"
+                      }`}
+                    >
+                      <Image
+                        src="/scroll.svg"
+                        alt="scroll"
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
+                    </button>
+                    <button
+                      onClick={() => setChainName("Optimism")}
+                      className={`px-4 rounded transition ${
+                        chainName === "Optimism"
+                          ? "bg-white shadow text-stone-900"
+                          : "opacity-50"
+                      }`}
+                    >
+                      <Image
+                        src="/optimism.svg"
+                        alt="optimism"
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
+                    </button>
+                    <button
+                      onClick={() => setChainName("Arbitrum")}
+                      className={`px-4 rounded transition ${
+                        chainName === "Arbitrum"
+                          ? "bg-white shadow text-stone-900"
+                          : "opacity-50"
+                      } `}
+                    >
+                      <Image
+                        src="/arbitrum.svg"
+                        alt="arbitrum"
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
+                    </button>
+                    <button
+                      onClick={() => setChainName("Linea")}
+                      className={`px-4 rounded transition ${
+                        chainName === "Linea"
+                          ? "bg-white shadow text-stone-900"
+                          : "opacity-50"
+                      } `}
+                    >
+                      <Image
+                        src="/linea.svg"
+                        alt="Linea"
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
+                    </button>
+                  </div>
+                  <div className="font-light mt-6">
+                    Deploy L2{" "}
+                    <Link
+                      target="_blank"
+                      className="underline underline-offset-4"
+                      href={
+                        "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
+                      }
+                    >
+                      Registry
+                    </Link>{" "}
+                    on {chainName} {chainModifier}
+                  </div>
+                  <div className="text-sm text-stone-600 ">
+                    This will use your connected wallet to deploy the L2
+                    Registry.
+                  </div>
+                  <DeployButton
+                    selectedBaseName={selectedDomain?.name}
+                    selectedChain={chain}
+                    onDeploySuccess={handleDeploySuccess}
+                    addTransaction={addTransaction}
                   />
-                )}
+                </div>
               </div>
-              <div
-                className={`w-full mt-2 h-8 px-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-stone-100 text-stone-400`}
-              >
-                {registryAddress ? registryAddress : "Waiting for Deploy..."}
+              <div className="bg-stone-200 flex text-stone-700 rounded-lg h-16 text-sm z-0 -mt-2 relative">
+                <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
+                  Registry Address:
+                </div>
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-center">
+                  {registryAddress ? registryAddress : "Waiting for Deploy..."}
+                  <button
+                    onClick={() => {
+                      if (registryAddress) {
+                        navigator.clipboard
+                          .writeText(registryAddress)
+                          .then(() => {
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                          });
+                      } else {
+                        toast.error("Waiting for deploy...");
+                      }
+                    }}
+                    className="p-1 pl-2 hover:bg-stone-200 rounded-md transition-colors"
+                  >
+                    {copied ? (
+                      <Check className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-stone-600" />
+                    )}
+                  </button>
+                  {registryAddress && (
+                    <Image
+                      src={"etherscan-logo.svg"}
+                      alt="etherscan"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
+                      onClick={() => {
+                        window.open(
+                          chainScanMap[chain as keyof typeof chainScanMap] +
+                            "address/" +
+                            registryAddress,
+                          "_blank"
+                        );
+                      }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         {/* Update Records Box */}
         <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200">
           <div className="flex items-center justify-between">
