@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "stone-150": "#F2F1F1",
       },
       transitionDuration: {
         "10000": "10000ms",
