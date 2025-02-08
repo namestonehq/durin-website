@@ -356,6 +356,7 @@ export default function Home() {
                   />
                 </div>
               </div>
+              {/* Registry Address */}
               <div className="bg-stone-150 flex text-stone-700 rounded-lg h-16 text-sm z-0 -mt-2 relative">
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
