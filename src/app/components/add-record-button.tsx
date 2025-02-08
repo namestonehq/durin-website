@@ -197,7 +197,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
     <button
       onClick={handleAddRecord}
       disabled={isDisabled}
-      className={`px-2 py-1 text-sm border rounded text-stone-900 ${
+      className={`px-4 shadow border-stone-300 h-9 text-sm border rounded-lg text-stone-900 ${
         isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
       }`}
     >

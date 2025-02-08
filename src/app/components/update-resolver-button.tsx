@@ -223,7 +223,7 @@ const UpdateResolverButton: React.FC<UpdateResolverButtonProps> = ({
     <button
       onClick={handleUpdateResolver}
       disabled={isDisabled}
-      className={`px-4 h-9 text-sm border rounded text-stone-900 ${
+      className={`px-4 shadow border-stone-300 h-9 text-sm border rounded-lg text-stone-900 ${
         isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
       }`}
     >
