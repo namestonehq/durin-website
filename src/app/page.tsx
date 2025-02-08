@@ -11,7 +11,7 @@ import UpdateResolverButton from "./components/update-resolver-button";
 import AddRecordButton from "./components/add-record-button";
 import { Domain } from "../lib/types";
 import { Copy, Check, ExternalLink, ScrollText, Sparkles } from "lucide-react";
-import toast from "react-hot-toast";
+
 import { RESOLVER_ADDRESSES, chainIdMap } from "@/lib/utils";
 
 const gelasio = Gelasio({
@@ -351,29 +351,27 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-center">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
-                  <button
-                    onClick={() => {
-                      if (registryAddress) {
+                  {registryAddress && (
+                    <button
+                      onClick={() => {
                         navigator.clipboard
                           .writeText(registryAddress)
                           .then(() => {
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           });
-                      } else {
-                        toast.error("Waiting for deploy...");
-                      }
-                    }}
-                    className="p-1 pl-2 hover:bg-stone-200 rounded-md transition-colors"
-                  >
-                    {copied ? (
-                      <Check className="w-4 h-4 text-green-600" />
-                    ) : (
-                      <Copy className="w-4 h-4 text-stone-600" />
-                    )}
-                  </button>
+                      }}
+                      className="p-1 pl-2 hover:bg-stone-200 rounded-md transition-colors"
+                    >
+                      {copied ? (
+                        <Check className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-stone-600" />
+                      )}
+                    </button>
+                  )}
                   {registryAddress && (
                     <Image
                       src={"etherscan-logo.svg"}
@@ -536,7 +534,7 @@ export default function Home() {
             </div>
           </div>
           {/* Customize Registrar */}
-          <h2 className={`${gelasio.className} mb-3 text-xl`}>
+          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             3. Customize Registrar
           </h2>
           <div className="flex gap-20">
@@ -600,29 +598,27 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-center">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
-                  <button
-                    onClick={() => {
-                      if (registryAddress) {
+                  {registryAddress && (
+                    <button
+                      onClick={() => {
                         navigator.clipboard
                           .writeText(registryAddress)
                           .then(() => {
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                           });
-                      } else {
-                        toast.error("Waiting for deploy...");
-                      }
-                    }}
-                    className="p-1 pl-2 hover:bg-stone-200 rounded-md transition-colors"
-                  >
-                    {copied ? (
-                      <Check className="w-4 h-4 text-green-600" />
-                    ) : (
-                      <Copy className="w-4 h-4 text-stone-600" />
-                    )}
-                  </button>
+                      }}
+                      className="p-1 pl-2 hover:bg-stone-200 rounded-md transition-colors"
+                    >
+                      {copied ? (
+                        <Check className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-stone-600" />
+                      )}
+                    </button>
+                  )}
                   {registryAddress && (
                     <Image
                       src={"etherscan-logo.svg"}
@@ -645,7 +641,7 @@ export default function Home() {
             </div>
           </div>
           {/* Connect Registrar to Registry*/}
-          <h2 className={`${gelasio.className} mb-3 text-xl`}>
+          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             4. Connect Registrar to Registry
           </h2>
           <div className="flex gap-20">
@@ -695,7 +691,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <h2 className={`${gelasio.className} mb-3 text-xl`}>
+          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             5. Mint your first subname
           </h2>
           <div className="flex gap-20">
