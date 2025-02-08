@@ -103,20 +103,29 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
+      <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
         <Image
-          className="rounded-lg mt-4"
+          className="rounded-lg mt-4 hidden md:block"
           src="/banner.svg"
           alt="durin"
           width={1024}
           height={1024}
         ></Image>
+        <Image
+          className="rounded-lg mt-4 self-center block md:hidden"
+          src="/banner-square.png"
+          alt="durin"
+          width={256}
+          height={256}
+        ></Image>
         <div className="relative">
-          <h1 className={`self-start ${gelasio.className} text-3xl`}>
+          <h1
+            className={`self-start ${gelasio.className} w-full md:w-[calc(100%-340px)] text-2xl md:text-3xl`}
+          >
             Issue onchain ENS subnames on an L2
           </h1>
           <div className="flex">
-            <div className="self-start mt-4 w-[calc(100%-340px)] text-stone-600 mr-12">
+            <div className="self-start mt-4 w-full md:w-[calc(100%-340px)] text-stone-600 mr-12">
               Durin is an opinionated approach to issuing ENS L2 subnames. Durin
               is{" "}
               <Link
@@ -136,7 +145,7 @@ export default function Home() {
               </Link>
               .
             </div>
-            <div className="absolute right-4 -top-20 bg-stone-150 p-6 w-80 rounded-lg shadow-md">
+            <div className="absolute hidden md:block right-4 -top-20 bg-stone-150 p-6 w-80 rounded-lg shadow-md">
               <div className="text-stone-900 font-bold mb-2">
                 What you&apos;ll need
               </div>
@@ -158,8 +167,8 @@ export default function Home() {
           <h2 className={`${gelasio.className} mb-3 text-xl`}>
             1. Deploy the L2 Registry
           </h2>
-          <div className="flex gap-20">
-            <div className="bg-stone-150 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+          <div className="flex flex-col md:flex-row gap-20">
+            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registry</span>
@@ -397,9 +406,9 @@ export default function Home() {
           <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             2. Configure L1 Resolver
           </h2>
-          <div className="flex gap-20">
+          <div className="flex flex-col md:flex-row gap-20">
             {/* L1 Resolver Box*/}
-            <div className="bg-stone-150 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L1 Resolver</span>
@@ -444,18 +453,22 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Resolver Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-center">
-                  {
-                    RESOLVER_ADDRESSES[
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-between">
+                  <div className="truncate">
+                    {RESOLVER_ADDRESSES[
                       network as keyof typeof RESOLVER_ADDRESSES
-                    ]
-                  }
+                    ]?.slice(0, 6)}
+                    ...
+                    {RESOLVER_ADDRESSES[
+                      network as keyof typeof RESOLVER_ADDRESSES
+                    ]?.slice(-4)}
+                  </div>
                   <Image
                     src={"etherscan-logo.svg"}
                     alt="etherscan"
                     width={24}
                     height={24}
-                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1 flex-shrink-0 ml-2"
                     onClick={() => {
                       window.open(
                         network === "Sepolia"
@@ -537,8 +550,8 @@ export default function Home() {
           <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             3. Customize Registrar
           </h2>
-          <div className="flex gap-20">
-            <div className="bg-stone-150 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+          <div className="flex flex-col md:flex-row gap-20">
+            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registrar</span>
@@ -644,8 +657,8 @@ export default function Home() {
           <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             4. Connect Registrar to Registry
           </h2>
-          <div className="flex gap-20">
-            <div className="bg-stone-150 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+          <div className="flex flex-col md:flex-row gap-20">
+            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText />
                 <span className="font-bold">
@@ -694,8 +707,8 @@ export default function Home() {
           <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
             5. Mint your first subname
           </h2>
-          <div className="flex gap-20">
-            <div className="bg-stone-150 z-10 w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+          <div className="flex flex-col md:flex-row gap-20">
+            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <Sparkles />
                 <span className="font-bold">Mint</span>
