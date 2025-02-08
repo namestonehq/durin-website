@@ -122,12 +122,12 @@ export default function Home() {
           <h1
             className={`self-start ${gelasio.className} w-full md:w-[calc(100%-340px)] text-2xl md:text-3xl`}
           >
-            Issue onchain ENS subnames on an L2
+            Issue onchain ENS subdomains on an L2
           </h1>
           <div className="flex">
             <div className="self-start mt-4 w-full md:w-[calc(100%-340px)] text-stone-600 mr-12">
-              Durin is an opinionated approach to issuing ENS L2 subnames. Durin
-              is{" "}
+              Durin is an opinionated approach to issuing ENS L2 subdomains.
+              Durin is{" "}
               <Link
                 target="_blank"
                 href={"https://github.com/namestonehq/durin"}
@@ -160,7 +160,7 @@ export default function Home() {
 
           <div className="mt-4">
             <span className="font-bold">Objective: </span>Launch an onchain ENS
-            subname project on an L2 with mintable subname NFTs
+            subdomain project on an L2 with mintable subdomain NFTs
           </div>
           <hr className="bg-stone-100 my-6" />
           {/* Deploy L2 Registry */}
@@ -175,10 +175,10 @@ export default function Home() {
               </div>
               <div className="text-sm text-stone-700">
                 The <span className="font-bold">L2 registry</span> tracks
-                ownership of ENS subnames. These names are represented as
+                ownership of ENS subdomains. These names are represented as
                 ERC-721 NFTs. Durin&apos;s implementation of the registry stores
                 text records, cointypes, and contenthash that can be associated
-                with a subname.
+                with a subdomain.
               </div>
             </div>
             {/* Name & Chain Box*/}
@@ -558,10 +558,10 @@ export default function Home() {
               </div>
               <div className="text-sm text-stone-700">
                 The registrar controls how names are minted. Users can only
-                register a subname through the registrar by calling register().
-                The registrar is where minting logic—such as pricing models,
-                renewal mechanisms, and expiration dates—should be implemented.
-                We provide an example on GitHub.
+                register a subdomain through the registrar by calling
+                register(). The registrar is where minting logic—such as pricing
+                models, renewal mechanisms, and expiration dates—should be
+                implemented. We provide an example on GitHub.
               </div>
             </div>
             {/* Configure Registrar Box*/}
@@ -667,7 +667,7 @@ export default function Home() {
               </div>
               <div className="text-sm text-stone-700">
                 This step grants permission to your registrar contract to mint
-                subnames through your registry. Calling addRegistrar() on the
+                subdomains through your registry. Calling addRegistrar() on the
                 registry connects the two contracts together.
               </div>
             </div>
@@ -705,7 +705,7 @@ export default function Home() {
             </div>
           </div>
           <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
-            5. Mint your first subname
+            5. Mint your first subdomain
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
             <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
@@ -714,7 +714,7 @@ export default function Home() {
                 <span className="font-bold">Mint</span>
               </div>
               <div className="text-sm text-stone-700">
-                Congrats on the launch! Create a subname via Etherscan.
+                Congrats on the launch! Create a subdomain via Etherscan.
               </div>
             </div>
             {/* Configure Registrar Box*/}
@@ -724,7 +724,7 @@ export default function Home() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-end justify-between">
                       <div className="font-light">
-                        Mint a subname via Etherscan
+                        Mint a subdomain via Etherscan
                       </div>
                     </div>
                     <div className="text-sm mt-2 text-stone-500">
