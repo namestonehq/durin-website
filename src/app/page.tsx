@@ -106,7 +106,7 @@ export default function Home() {
       <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
         <Image
           className="rounded-lg mt-4 hidden md:block"
-          src="/banner.svg"
+          src="/banner.png"
           alt="durin"
           width={1024}
           height={1024}
