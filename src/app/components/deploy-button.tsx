@@ -200,7 +200,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
     <button
       onClick={handleDeploy}
       disabled={isDisabled}
-      className={`px-4 py-1 text-sm border rounded text-stone-900 ${
+      className={`py-1 text-sm w-24 border rounded text-stone-900 ${
         isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
       }`}
     >
