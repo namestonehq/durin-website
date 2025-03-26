@@ -565,13 +565,15 @@ export default function Home() {
                 implemented. We provide an example on GitHub.
               </div>
             </div>
-            {/* Configure Registrar Box*/}
+            {/* Customize Registrar Box*/}
             <div className="w-full">
               <div className="flex flex-col w-full gap-3 px-6 py-4 bg-white border rounded-lg border-stone-200 relative z-10">
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-end justify-between">
-                      <div className="font-light">Configure L2 Registrar</div>
+                      <div className="font-light">
+                        Customize and Deploy L2 Registrar
+                      </div>
                     </div>
                     <div className="text-sm mt-2 text-stone-500">
                       Select a template{" "}
@@ -602,7 +604,7 @@ export default function Home() {
                           width={16}
                           height={16}
                         ></Image>
-                        Configure
+                        Customize
                       </button>
                     </div>
                   </div>
