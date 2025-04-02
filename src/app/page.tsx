@@ -511,31 +511,6 @@ export default function Home() {
                     <div className="text-sm mt-2 text-stone-500">
                       This button adds your L2 registry to the L1 resolver.
                       <div className="my-4">
-<<<<<<< Updated upstream
-=======
-                        <div className="flex items-center rounded-md border border-stone-200 overflow-hidden">
-                          <div className="flex items-center gap-2 px-3 py-2 border-r border-stone-200 rounded-l-md">
-                            <Image
-                              src={`/${chainName.toLowerCase()}-icon.svg`}
-                              alt={chain}
-                              width={16}
-                              height={16}
-                              className="py-1"
-                            />
-                            <div className="text-stone-500 font-p whitespace-nowrap">
-                              {chainIdMap[chain]} :
-                            </div>
-                          </div>
-
-                          {/* Right section */}
-                          <input
-                            className="flex-1 px-3 py-3 text-stone-500 italic text-xs"
-                            value={recordInput}
-                            onChange={(e) => setRecordInput(e.target.value)}
-                            placeholder="Waiting for registry deploy..."
-                          />
-                        </div>
->>>>>>> Stashed changes
                         <div className="my-4">
                           <SetRegistryButton
                             network={network}
