@@ -31,4 +31,10 @@ export const chainIdMap: { [key: string]: number } = {
   "Scroll Sepolia": 534351,
   Linea: 59144,
   "Linea Sepolia": 59141,
+  "World Chain": 480,
+  "World Chain Sepolia": 4801,
+  Celo: 42220,
+  "Celo alfajores": 44787,
+  Polygon: 137,
+  "Polygon Amoy": 80001,
 };

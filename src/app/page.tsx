@@ -38,6 +38,12 @@ const chainScanMap = {
   "Scroll Sepolia": "https://sepolia-blockscout.scroll.io/",
   Linea: "https://linea.scan.io/",
   "Linea Sepolia": "https://sepolia.lineascan.build/",
+  "World Chain": "https://worldscan.org/",
+  "World Chain Sepolia": "https://sepolia.worldscan.org/",
+  Celo: "https://explorer.celo.org/mainnet",
+  "Celo Alfajores": "https://explorer.celo.org/alfajores",
+  Polygon: "https://polygonscan.com/",
+  "Polygon Amoy": "https://amoy.polygonscan.com/",
 };
 
 export default function Home() {
@@ -45,6 +51,7 @@ export default function Home() {
   const [chain, setChain] = useState("Base");
   const [chainName, setChainName] = useState("Base");
   const [chainModifier, setChainModifier] = useState("Sepolia");
+  const [chainDropdownOpen, setChainDropdownOpen] = useState(false);
 
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
   const [registryAddress, setRegistryAddress] = useState("");
@@ -221,18 +228,27 @@ export default function Home() {
                     {/* Toggle testnet or mainnet */}
                     <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
                       <button
-                        onClick={() => setChainModifier("Sepolia")}
+                        onClick={() => {
+                          // Set chain-specific testnet name
+                          const testnetName =
+                            chainName === "Celo"
+                              ? "Alfajores"
+                              : chainName === "Polygon"
+                              ? "Amoy"
+                              : "Sepolia";
+                          setChainModifier(testnetName);
+                        }}
                         className={`px-4 rounded transition ${
-                          chainModifier === "Sepolia"
+                          chainModifier !== ""
                             ? "bg-white shadow text-black py-1"
                             : "text-gray-500"
                         }`}
                       >
-                        Sepolia
+                        Testnet
                       </button>
                       <button
                         onClick={() => {
-                          // Set chainModifier to empty string meaining mainnet
+                          // Set chainModifier to empty string meaning mainnet
                           setChainModifier("");
                         }}
                         className={`px-4  rounded transition ${
@@ -248,88 +264,85 @@ export default function Home() {
                   <div className="text-sm text-stone-600 ">
                     This is where L2 registry contract will be deployed.{" "}
                   </div>
-                  {/* Toggle Chain */}
-                  <div className="flex justify-between p-1 mt-2 text-sm bg-gray-100 rounded">
+                  {/* Chain Dropdown */}
+                  <div className="relative">
                     <button
-                      onClick={() => setChainName("Base")}
-                      className={`px-4 rounded transition ${
-                        chainName === "Base"
-                          ? "bg-white shadow text-black"
-                          : "opacity-50"
-                      }`}
+                      onClick={() => setChainDropdownOpen(!chainDropdownOpen)}
+                      className="flex items-center justify-between w-full p-3 text-sm bg-gray-100 rounded"
                     >
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={`/${chainName.toLowerCase()}-icon.svg`}
+                          alt={chainName}
+                          width={24}
+                          height={24}
+                          className="rounded-full"
+                        />
+                        <span>
+                          {chainName}{" "}
+                          {chainModifier === ""
+                            ? ""
+                            : chainName === "Celo"
+                            ? "Alfajores"
+                            : chainName === "Polygon"
+                            ? "Amoy"
+                            : "Sepolia"}
+                        </span>
+                      </div>
                       <Image
-                        src="/base.svg"
-                        alt="Base"
-                        width={28}
-                        height={28}
-                        className="py-1"
+                        src="/chevron-down.svg"
+                        alt="chevron"
+                        width={16}
+                        height={16}
+                        className={`transition-transform ${
+                          chainDropdownOpen ? "rotate-180" : ""
+                        }`}
                       />
                     </button>
-                    <button
-                      onClick={() => setChainName("Scroll")}
-                      className={`px-4  rounded transition ${
-                        chainName === "Scroll"
-                          ? "bg-white shadow text-stone-900"
-                          : "opacity-50"
-                      }`}
-                    >
-                      <Image
-                        src="/scroll.svg"
-                        alt="scroll"
-                        width={28}
-                        height={28}
-                        className="inline-block"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setChainName("Optimism")}
-                      className={`px-4 rounded transition ${
-                        chainName === "Optimism"
-                          ? "bg-white shadow text-stone-900"
-                          : "opacity-50"
-                      }`}
-                    >
-                      <Image
-                        src="/optimism.svg"
-                        alt="optimism"
-                        width={28}
-                        height={28}
-                        className="inline-block"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setChainName("Arbitrum")}
-                      className={`px-4 rounded transition ${
-                        chainName === "Arbitrum"
-                          ? "bg-white shadow text-stone-900"
-                          : "opacity-50"
-                      } `}
-                    >
-                      <Image
-                        src="/arbitrum.svg"
-                        alt="arbitrum"
-                        width={28}
-                        height={28}
-                        className="inline-block"
-                      />
-                    </button>
-                    <button
-                      onClick={() => setChainName("Linea")}
-                      className={`px-4 rounded transition ${
-                        chainName === "Linea"
-                          ? "bg-white shadow text-stone-900"
-                          : "opacity-50"
-                      } `}
-                    >
-                      <Image
-                        src="/linea.svg"
-                        alt="Linea"
-                        width={28}
-                        height={28}
-                        className="inline-block"
-                      />
-                    </button>
+
+                    {chainDropdownOpen && (
+                      <div className="absolute z-20 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto">
+                        {[
+                          { name: "Base", icon: "base" },
+                          { name: "Scroll", icon: "scroll" },
+                          { name: "Optimism", icon: "optimism" },
+                          { name: "Arbitrum", icon: "arbitrum" },
+                          { name: "Linea", icon: "linea" },
+                          { name: "Celo", icon: "celo" },
+                          { name: "Polygon", icon: "polygon" },
+                          { name: "World Chain", icon: "worldchain" },
+                        ].map((chain) => (
+                          <button
+                            key={chain.name}
+                            onClick={() => {
+                              setChainName(chain.name);
+                              setChainDropdownOpen(false);
+                            }}
+                            className={`flex items-center gap-2 w-full p-3 hover:bg-gray-50 ${
+                              chainName === chain.name ? "bg-gray-50" : ""
+                            }`}
+                          >
+                            <Image
+                              src={`/${chain.icon}-icon.svg`}
+                              alt={chain.name}
+                              width={24}
+                              height={24}
+                              className="rounded-full"
+                            />
+                            <span>
+                              {chain.name}{" "}
+                              {chainModifier === ""
+                                ? ""
+                                : chain.name === "Celo"
+                                ? "Alfajores"
+                                : chain.name === "Polygon"
+                                ? "Amoy"
+                                : "Sepolia"}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="font-light mt-6">
                     Deploy L2{" "}
@@ -498,6 +511,31 @@ export default function Home() {
                     <div className="text-sm mt-2 text-stone-500">
                       This button adds your L2 registry to the L1 resolver.
                       <div className="my-4">
+<<<<<<< Updated upstream
+=======
+                        <div className="flex items-center rounded-md border border-stone-200 overflow-hidden">
+                          <div className="flex items-center gap-2 px-3 py-2 border-r border-stone-200 rounded-l-md">
+                            <Image
+                              src={`/${chainName.toLowerCase()}-icon.svg`}
+                              alt={chain}
+                              width={16}
+                              height={16}
+                              className="py-1"
+                            />
+                            <div className="text-stone-500 font-p whitespace-nowrap">
+                              {chainIdMap[chain]} :
+                            </div>
+                          </div>
+
+                          {/* Right section */}
+                          <input
+                            className="flex-1 px-3 py-3 text-stone-500 italic text-xs"
+                            value={recordInput}
+                            onChange={(e) => setRecordInput(e.target.value)}
+                            placeholder="Waiting for registry deploy..."
+                          />
+                        </div>
+>>>>>>> Stashed changes
                         <div className="my-4">
                           <SetRegistryButton
                             network={network}
