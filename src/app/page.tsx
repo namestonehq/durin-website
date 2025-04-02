@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
 import UpdateResolverButton from "./components/update-resolver-button";
-import AddRecordButton from "./components/add-record-button";
+import SetRegistryButton from "./components/set-registry-button";
 import { Domain } from "../lib/types";
 import { Copy, Check, ExternalLink, ScrollText, Sparkles } from "lucide-react";
 
@@ -493,36 +493,13 @@ export default function Home() {
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-end justify-between">
-                      <div className="font-light">Add Registry Record</div>
+                      <div className="font-light">Set L2 Registry</div>
                     </div>
                     <div className="text-sm mt-2 text-stone-500">
-                      This text record connects the name to the deployed
-                      registry.
+                      This button adds your L2 registry to the L1 resolver.
                       <div className="my-4">
-                        <div className="flex items-center rounded-md border border-stone-200 overflow-hidden">
-                          <div className="flex items-center gap-2 px-3 py-2 border-r border-stone-200 rounded-l-md">
-                            <Image
-                              src={`/${chainName.toLowerCase()}.svg`}
-                              alt={chain}
-                              width={16}
-                              height={16}
-                              className="py-1"
-                            />
-                            <div className="text-stone-500 font-p whitespace-nowrap">
-                              {chainIdMap[chain]} :
-                            </div>
-                          </div>
-
-                          {/* Right section */}
-                          <input
-                            className="flex-1 px-3 py-3 text-stone-500 italic text-xs"
-                            value={recordInput}
-                            onChange={(e) => setRecordInput(e.target.value)}
-                            placeholder="Waiting for registry deploy..."
-                          />
-                        </div>
                         <div className="my-4">
-                          <AddRecordButton
+                          <SetRegistryButton
                             network={network}
                             domainInput={selectedDomain?.name}
                             registryAddress={recordInput as Address}
@@ -535,7 +512,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-stone-150 flex text-stone-700 rounded-lg h-16 text-sm z-0 -mt-2 relative">
+              {/* <div className="bg-stone-150 flex text-stone-700 rounded-lg h-16 text-sm z-0 -mt-2 relative">
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Record Format:
                 </div>
@@ -544,7 +521,7 @@ export default function Home() {
                     {"{chain_id}"}:{" {registry}"}
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* Customize Registrar */}
@@ -691,10 +668,10 @@ export default function Home() {
                       <br />
                       The
                       <code className="px-1 ml-1 mr-1 py-1 bg-stone-50 rounded-lg border border-stone-200 font-mono text-xs text-stone-500">
-                        bash deploy/configureRegistry.sh
+                        bash ./bash/configureRegistry.sh
                       </code>
                       <Link
-                        href="https://github.com/namestonehq/durin/blob/main/deploy/configureRegistry.sh"
+                        href="https://github.com/namestonehq/durin/blob/main/bash/configureRegistry.sh"
                         target="_blank"
                         className="underline underline-offset-4"
                       >
