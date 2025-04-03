@@ -40,8 +40,8 @@ const chainScanMap = {
   "Linea Sepolia": "https://sepolia.lineascan.build/",
   "World Chain": "https://worldscan.org/",
   "World Chain Sepolia": "https://sepolia.worldscan.org/",
-  Celo: "https://explorer.celo.org/mainnet",
-  "Celo Alfajores": "https://explorer.celo.org/alfajores",
+  Celo: "https://celoscan.io/",
+  "Celo Alfajores": "https://alfajores.celoscan.io/",
   Polygon: "https://polygonscan.com/",
   "Polygon Amoy": "https://amoy.polygonscan.com/",
 };
