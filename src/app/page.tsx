@@ -12,7 +12,7 @@ import SetRegistryButton from "./components/set-registry-button";
 import { Domain } from "../lib/types";
 import { Copy, Check, ExternalLink, ScrollText, Sparkles } from "lucide-react";
 
-import { RESOLVER_ADDRESSES, chainIdMap } from "@/lib/utils";
+import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
