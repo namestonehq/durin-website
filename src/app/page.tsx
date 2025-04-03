@@ -272,7 +272,9 @@ export default function Home() {
                     >
                       <div className="flex items-center gap-2">
                         <Image
-                          src={`/${chainName.toLowerCase()}-icon.svg`}
+                          src={`/${chainName
+                            .toLowerCase()
+                            .replace(/\s+/g, "")}-icon.svg`}
                           alt={chainName}
                           width={24}
                           height={24}
