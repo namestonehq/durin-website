@@ -14,8 +14,8 @@ export function formatEthereumAddress(address: string): string {
 }
 //todo change mainnet address
 export const RESOLVER_ADDRESSES = {
-  Sepolia: "0x0bc45886470e9256DccD48e90d706630DB5228ED" as Address,
-  Mainnet: "0x0bc45886470e9256DccD48e90d706630DB5228ED" as Address,
+  Sepolia: "0x8A968aB9eb8C084FBC44c531058Fc9ef945c3D61" as Address,
+  Mainnet: "0x8A968aB9eb8C084FBC44c531058Fc9ef945c3D61" as Address,
 };
 
 export const chainIdMap: { [key: string]: number } = {
