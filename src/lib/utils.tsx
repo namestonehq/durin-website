@@ -12,10 +12,10 @@ export function formatEthereumAddress(address: string): string {
   }
   return `${address.slice(0, 5)}...${address.slice(-5)}`;
 }
-
+//todo change mainnet address
 export const RESOLVER_ADDRESSES = {
-  Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
-  Mainnet: "0x2A6C785b002Ad859a3BAED69211167C7e998aAeC" as Address,
+  Sepolia: "0x0bc45886470e9256DccD48e90d706630DB5228ED" as Address,
+  Mainnet: "0x0bc45886470e9256DccD48e90d706630DB5228ED" as Address,
 };
 
 export const chainIdMap: { [key: string]: number } = {
@@ -31,4 +31,10 @@ export const chainIdMap: { [key: string]: number } = {
   "Scroll Sepolia": 534351,
   Linea: 59144,
   "Linea Sepolia": 59141,
+  "World Chain": 480,
+  "World Chain Sepolia": 4801,
+  Celo: 42220,
+  "Celo alfajores": 44787,
+  Polygon: 137,
+  "Polygon Amoy": 80001,
 };

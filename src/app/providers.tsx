@@ -18,6 +18,12 @@ import {
   arbitrumSepolia,
   lineaSepolia,
   scrollSepolia,
+  polygon,
+  polygonAmoy,
+  celo,
+  celoAlfajores,
+  worldchain,
+  worldchainSepolia,
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -37,6 +43,12 @@ const config = getDefaultConfig({
     arbitrumSepolia,
     lineaSepolia,
     scrollSepolia,
+    polygon,
+    polygonAmoy,
+    celo,
+    celoAlfajores,
+    worldchain,
+    worldchainSepolia,
   ],
   ssr: true,
 });

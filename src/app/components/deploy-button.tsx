@@ -31,10 +31,10 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   const { chain: current } = useAccount();
   const chains = useChains();
   const { switchChain, error: switchError } = useSwitchChain();
-
+  const { address: adminAddress } = useAccount();
   const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address;
   const FACTORY_ABI = parseAbi([
-    "function deployRegistry(string name, string symbol, string baseURI) external returns (address)",
+    "function deployRegistry(string name, string symbol, string baseURI, address admin) external returns (address)",
   ]);
 
   const { writeContract, data: hash, error: writeError } = useWriteContract();
@@ -84,6 +84,10 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       const deploy = async () => {
         try {
           if (!selectedBaseName) return;
+          if (!adminAddress) {
+            toast.error("Wallet not connected");
+            return;
+          }
 
           const contractName = selectedBaseName;
           const contractSymbol = selectedBaseName;
@@ -93,7 +97,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
             address: FACTORY_ADDRESS,
             abi: FACTORY_ABI,
             functionName: "deployRegistry",
-            args: [contractName, contractSymbol, baseUri],
+            args: [contractName, contractSymbol, baseUri, adminAddress],
             chainId: targetChainId,
           });
         } catch (error) {
@@ -113,6 +117,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
     selectedChain,
     selectedBaseName,
     writeContract,
+    adminAddress,
   ]);
 
   // Handle deployment success
@@ -149,6 +154,10 @@ const DeployButton: React.FC<DeployButtonProps> = ({
         toast.error("Wallet not connected or no domain selected");
         return;
       }
+      if (!adminAddress) {
+        toast.error("Wallet not connected");
+        return;
+      }
       setIsDeploying(true);
       const targetChainId = chainIdMap[selectedChain];
 
@@ -169,7 +178,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
           address: FACTORY_ADDRESS,
           abi: FACTORY_ABI,
           functionName: "deployRegistry",
-          args: [contractName, contractSymbol, baseUri],
+          args: [contractName, contractSymbol, baseUri, adminAddress],
           chainId: targetChainId,
         });
       }

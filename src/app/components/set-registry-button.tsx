@@ -6,16 +6,14 @@ import {
   useAccount,
   useWaitForTransactionReceipt,
   useWalletClient,
+  useWriteContract,
 } from "wagmi";
-import { type Address } from "viem";
-import { mainnet, sepolia } from "viem/chains";
-import { createWalletClient, custom } from "viem";
-import { setRecords } from "@ensdomains/ensjs/wallet";
-import { addEnsContracts } from "@ensdomains/ensjs";
+import { type Address, parseAbi, namehash } from "viem";
 import toast from "react-hot-toast";
 import { chainIdMap } from "@/lib/utils";
+import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
-interface AddRecordButtonProps {
+interface SetRegistryButtonProps {
   network: string;
   domainInput: string | undefined;
   registryAddress: Address;
@@ -23,35 +21,47 @@ interface AddRecordButtonProps {
   addTransaction: (action: string, chain: string, hash: string) => void;
 }
 
-const RESOLVER_ADDRESSES = {
-  Sepolia: "0x00f9314C69c3e7C37b3C7aD36EF9FB40d94eDDe1" as Address,
-  Mainnet: "0x2A6C785b002Ad859a3BAED69211167C7e998aAeC" as Address,
-};
+const RESOLVER_ABI = parseAbi([
+  "function setL2Registry(bytes32 node, uint64 targetChainId, address targetRegistryAddress) external",
+]);
 
-const AddRecordButton: React.FC<AddRecordButtonProps> = ({
+const SetRegistryButton: React.FC<SetRegistryButtonProps> = ({
   network,
   domainInput,
   registryAddress,
   selectedChain,
   addTransaction,
 }) => {
-  const [buttonText, setButtonText] = useState("Add Record");
-  const [hash, setHash] = useState<`0x${string}` | undefined>();
+  const [buttonText, setButtonText] = useState("Set Registry");
   const [isProcessing, setIsProcessing] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const { isConnected, address, chain: current } = useAccount();
   const chains = useChains();
   const { switchChain } = useSwitchChain();
   const { data: walletClient } = useWalletClient();
+  const { writeContract, data: hash, error: writeError } = useWriteContract();
 
   const { isLoading: isWaitingForTx, isSuccess: updateSuccess } =
     useWaitForTransactionReceipt({
       hash,
     });
 
+  // Reset states when write contract fails
+  useEffect(() => {
+    if (writeError) {
+      setButtonText("Failed");
+      setIsProcessing(false);
+      setShouldUpdate(false);
+      toast.error("Transaction rejected");
+      setTimeout(() => {
+        setButtonText("Set Registry");
+      }, 1500);
+    }
+  }, [writeError]);
+
   // Handle network switch and record update
   useEffect(() => {
-    const addRecord = async () => {
+    const setRegistry = async () => {
       if (
         !shouldUpdate ||
         !isConnected ||
@@ -76,46 +86,32 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
             throw new Error("Invalid L2 chain selected");
           }
 
-          // Create the record value string
-          const recordValue = `${chainId}:${registryAddress}`;
-
-          // Create ENS wallet client
-          const ensWalletClient = createWalletClient({
-            account: address,
-            chain: addEnsContracts(network === "Mainnet" ? mainnet : sepolia),
-            transport: custom(walletClient.transport),
-          });
-
-          // Set the record using ENS.js
-          const txHash = await setRecords(ensWalletClient, {
-            name: domainInput,
-            resolverAddress:
+          // Set the L2 registry using the resolver contract
+          const node = namehash(domainInput);
+          await writeContract({
+            address:
               RESOLVER_ADDRESSES[network as keyof typeof RESOLVER_ADDRESSES],
-            texts: [
-              {
-                key: "registry",
-                value: recordValue,
-              },
-            ],
+            abi: RESOLVER_ABI,
+            functionName: "setL2Registry",
+            args: [node, BigInt(chainId), registryAddress],
           });
 
-          setHash(txHash);
           setButtonText("Pending...");
           setShouldUpdate(false);
         }
       } catch (error) {
-        console.error("Add record error:", error);
-        toast.error("Failed to add record");
+        console.error("Set registry error:", error);
+        toast.error("Failed to set registry");
         setButtonText("Failed");
         setShouldUpdate(false);
         setIsProcessing(false);
         setTimeout(() => {
-          setButtonText("Add Record");
+          setButtonText("Set Registry");
         }, 1500);
       }
     };
 
-    addRecord();
+    setRegistry();
   }, [
     current?.id,
     shouldUpdate,
@@ -126,9 +122,10 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
     isConnected,
     registryAddress,
     selectedChain,
+    writeContract,
   ]);
 
-  const handleAddRecord = async () => {
+  const handleSetRegistry = async () => {
     if (!isConnected || !domainInput || !walletClient || !address) {
       toast.error("Please connect your wallet and select a domain");
       return;
@@ -162,31 +159,30 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
         setShouldUpdate(true);
       }
     } catch (error) {
-      console.error("Add record error:", error);
+      console.error("Set registry error:", error);
       toast.error("Failed to switch network");
       setButtonText("Failed");
       setIsProcessing(false);
       setShouldUpdate(false);
       setTimeout(() => {
-        setButtonText("Add Record");
+        setButtonText("Set Registry");
       }, 1500);
     }
   };
 
   // Reset states on success
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccess && hash) {
       setButtonText("Success!");
       setIsProcessing(false);
       setShouldUpdate(false);
-      addTransaction("Added Record", network, hash as string);
+      addTransaction("Set Registry", network, hash);
       const toastOptions = {
         id: `record-add-${hash}`, // Prevent duplicate toasts
       };
-      toast.success("Record added ", toastOptions);
+      toast.success("Registry set", toastOptions);
       setTimeout(() => {
-        setButtonText("Add Record");
-        setHash(undefined);
+        setButtonText("Set Registry");
       }, 1500);
     }
   }, [updateSuccess, hash, network, addTransaction]);
@@ -195,7 +191,7 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
 
   return (
     <button
-      onClick={handleAddRecord}
+      onClick={handleSetRegistry}
       disabled={isDisabled}
       className={`px-4 shadow border-stone-300 h-9 text-sm border rounded-lg text-stone-900 ${
         isDisabled ? "bg-stone-100 cursor-not-allowed" : "hover:bg-stone-100"
@@ -206,4 +202,4 @@ const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   );
 };
 
-export default AddRecordButton;
+export default SetRegistryButton;
