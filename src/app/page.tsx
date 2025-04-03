@@ -677,20 +677,6 @@ export default function Home() {
                     <div className="text-sm mt-2 text-stone-500">
                       As the final step, call <code>addRegistrar()</code> on
                       your registry with the address of your deployed registrar.{" "}
-                      <br />
-                      <br />
-                      The
-                      <code className="px-1 ml-1 mr-1 py-1 bg-stone-50 rounded-lg border border-stone-200 font-mono text-xs text-stone-500">
-                        bash ./bash/configureRegistry.sh
-                      </code>
-                      <Link
-                        href="https://github.com/namestonehq/durin/blob/main/bash/configureRegistry.sh"
-                        target="_blank"
-                        className="underline underline-offset-4"
-                      >
-                        script
-                      </Link>{" "}
-                      adds the Registrar to the Registry.
                     </div>
                   </div>
                 </div>
