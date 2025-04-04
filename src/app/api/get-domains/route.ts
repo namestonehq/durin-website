@@ -60,10 +60,7 @@ export async function GET(request: NextRequest) {
 
     // Make sure it's a known 2LD
     const filteredResult = result.filter(
-      (item) =>
-        !!item.name &&
-        !item.name?.startsWith("[") &&
-        item.name?.split(".").length === 2
+      (item) => !!item.name && item.name?.split(".").length === 2
     );
 
     const displayedData = await batch(
