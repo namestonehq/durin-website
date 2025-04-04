@@ -352,7 +352,7 @@ export default function Home() {
                       target="_blank"
                       className="underline underline-offset-4"
                       href={
-                        "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
+                        "https://github.com/namestonehq/durin/blob/main/src/examples/L2Registrar.sol"
                       }
                     >
                       Registry
@@ -570,7 +570,7 @@ export default function Home() {
                     <div className="text-sm mt-2 text-stone-500">
                       Select a template{" "}
                       <Link
-                        href="https://github.com/namestonehq/durin/blob/main/src/L2Registrar.sol"
+                        href="https://github.com/namestonehq/durin/blob/main/src/examples/L2Registrar.sol"
                         target="_blank"
                         className="underline underline-offset-4"
                       >
