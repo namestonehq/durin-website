@@ -58,8 +58,12 @@ export async function GET(request: NextRequest) {
       pageSize: 1000,
     });
 
+    // Make sure it's a known 2LD
     const filteredResult = result.filter(
-      (item): item is NameWithRelation => !!item.name
+      (item) =>
+        !!item.name &&
+        !item.name?.startsWith("[") &&
+        item.name?.split(".").length === 2
     );
 
     const displayedData = await batch(
