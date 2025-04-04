@@ -113,14 +113,14 @@ export default function Home() {
       <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
         <Image
           className="rounded-lg mt-4 hidden md:block"
-          src="/banner.png"
+          src="/banner.webp"
           alt="durin"
           width={1024}
           height={1024}
         ></Image>
         <Image
           className="rounded-lg mt-4 self-center block md:hidden"
-          src="/banner-square.png"
+          src="/banner-square.webp"
           alt="durin"
           width={256}
           height={256}
@@ -714,7 +714,7 @@ export default function Home() {
                       <br />
                       Under Contract select register() and write.
                       <Image
-                        src="/etherscan-screenshot.png"
+                        src="/etherscan-screenshot.webp"
                         alt="etherscan"
                         width={400}
                         height={400}
@@ -804,7 +804,7 @@ export default function Home() {
             <Link href="https://x.com/namestonehq" target="_blank">
               <Image
                 className="mr-1"
-                src="/x-logo.png"
+                src="/x-logo.webp"
                 alt="Logo"
                 width={12}
                 height={12}

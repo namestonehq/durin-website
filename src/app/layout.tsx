@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     description: "The developer's gateway to ENS L2 Subnames",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "Durin - L2 Names Made Easy",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Durin - L2 Names Made Easy",
     description: "The developer's gateway to ENS L2 Subnames",
-    images: ["/opengraph-image.png"],
+    images: ["/opengraph-image.jpg"],
   },
 };
 
