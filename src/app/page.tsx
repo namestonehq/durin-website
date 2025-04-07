@@ -46,11 +46,20 @@ const chainScanMap = {
   "Polygon Amoy": "https://amoy.polygonscan.com/",
 };
 
+function getFullChainName(chainName: string, isTestnet: boolean) {
+  return isTestnet
+    ? chainName === "Celo"
+      ? "Celo Alfajores"
+      : chainName === "Polygon"
+      ? "Polygon Amoy"
+      : `${chainName} Sepolia`
+    : chainName;
+}
+
 export default function Home() {
   const [network, setNetwork] = useState("Sepolia");
-  const [chain, setChain] = useState("Base");
   const [chainName, setChainName] = useState("Base");
-  const [chainModifier, setChainModifier] = useState("Sepolia");
+  const [isTestnet, setIsTestnet] = useState(true);
   const [chainDropdownOpen, setChainDropdownOpen] = useState(false);
 
   const [selectedDomain, setSelectedDomain] = useState<Domain | undefined>();
@@ -79,15 +88,6 @@ export default function Home() {
       ]);
     }
   };
-
-  // useEffect to update chain when chainName or chainModifier changes
-  useEffect(() => {
-    if (chainModifier === "") {
-      setChain(chainName);
-    } else {
-      setChain(`${chainName} ${chainModifier}`);
-    }
-  }, [chainName, chainModifier]);
 
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
@@ -229,17 +229,11 @@ export default function Home() {
                     <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
                       <button
                         onClick={() => {
-                          // Set chain-specific testnet name
-                          const testnetName =
-                            chainName === "Celo"
-                              ? "Alfajores"
-                              : chainName === "Polygon"
-                              ? "Amoy"
-                              : "Sepolia";
-                          setChainModifier(testnetName);
+                          // Set isTestnet to true
+                          setIsTestnet(true);
                         }}
                         className={`px-4 rounded transition ${
-                          chainModifier !== ""
+                          isTestnet
                             ? "bg-white shadow text-black py-1"
                             : "text-gray-500"
                         }`}
@@ -248,11 +242,11 @@ export default function Home() {
                       </button>
                       <button
                         onClick={() => {
-                          // Set chainModifier to empty string meaning mainnet
-                          setChainModifier("");
+                          // Set isTestnet to false
+                          setIsTestnet(false);
                         }}
                         className={`px-4  rounded transition ${
-                          chainModifier === ""
+                          !isTestnet
                             ? "bg-white shadow text-stone-900  py-1"
                             : "text-stone-500"
                         }`}
@@ -280,16 +274,7 @@ export default function Home() {
                           height={24}
                           className="rounded-full"
                         />
-                        <span>
-                          {chainName}{" "}
-                          {chainModifier === ""
-                            ? ""
-                            : chainName === "Celo"
-                            ? "Alfajores"
-                            : chainName === "Polygon"
-                            ? "Amoy"
-                            : "Sepolia"}
-                        </span>
+                        <span>{getFullChainName(chainName, isTestnet)}</span>
                       </div>
                       <Image
                         src="/chevron-down.svg"
@@ -332,14 +317,7 @@ export default function Home() {
                               className="rounded-full"
                             />
                             <span>
-                              {chain.name}{" "}
-                              {chainModifier === ""
-                                ? ""
-                                : chain.name === "Celo"
-                                ? "Alfajores"
-                                : chain.name === "Polygon"
-                                ? "Amoy"
-                                : "Sepolia"}
+                              {getFullChainName(chain.name, isTestnet)}
                             </span>
                           </button>
                         ))}
@@ -357,7 +335,7 @@ export default function Home() {
                     >
                       Registry
                     </Link>{" "}
-                    on {chainName} {chainModifier}
+                    on {getFullChainName(chainName, isTestnet)}
                   </div>
                   <div className="text-sm text-stone-600 ">
                     This will use your connected wallet to deploy the L2
@@ -365,7 +343,7 @@ export default function Home() {
                   </div>
                   <DeployButton
                     selectedBaseName={selectedDomain?.name}
-                    selectedChain={chain}
+                    selectedChain={getFullChainName(chainName, isTestnet)}
                     onDeploySuccess={handleDeploySuccess}
                     addTransaction={addTransaction}
                   />
@@ -406,7 +384,12 @@ export default function Home() {
                       className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
                       onClick={() => {
                         window.open(
-                          chainScanMap[chain as keyof typeof chainScanMap] +
+                          chainScanMap[
+                            getFullChainName(
+                              chainName,
+                              isTestnet
+                            ) as keyof typeof chainScanMap
+                          ] +
                             "address/" +
                             registryAddress,
                           "_blank"
@@ -518,7 +501,10 @@ export default function Home() {
                             network={network}
                             domainInput={selectedDomain?.name}
                             registryAddress={recordInput as Address}
-                            selectedChain={chain}
+                            selectedChain={getFullChainName(
+                              chainName,
+                              isTestnet
+                            )}
                             addTransaction={addTransaction}
                           />
                         </div>
@@ -636,7 +622,12 @@ export default function Home() {
                       className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1"
                       onClick={() => {
                         window.open(
-                          chainScanMap[chain as keyof typeof chainScanMap] +
+                          chainScanMap[
+                            getFullChainName(
+                              chainName,
+                              isTestnet
+                            ) as keyof typeof chainScanMap
+                          ] +
                             "address/" +
                             registryAddress,
                           "_blank"

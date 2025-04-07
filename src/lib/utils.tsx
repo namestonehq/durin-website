@@ -36,5 +36,5 @@ export const chainIdMap: { [key: string]: number } = {
   Celo: 42220,
   "Celo Alfajores": 44787,
   Polygon: 137,
-  "Polygon Amoy": 80001,
+  "Polygon Amoy": 80002,
 };

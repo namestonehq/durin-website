@@ -160,10 +160,6 @@ const DeployButton: React.FC<DeployButtonProps> = ({
       }
       setIsDeploying(true);
 
-      if (selectedChain === "Celo Sepolia") {
-        selectedChain = "Celo Alfajores";
-      }
-
       const targetChainId = chainIdMap[selectedChain];
 
       if (current?.id !== targetChainId) {
