@@ -4,12 +4,12 @@ The official website for [Durin](https://durin.dev) - an ENS protocol for issuin
 
 ## Overview
 
-This repository contains the frontend application for Durin, allowing users to:
+This repository contains the frontend application for Durin, allowing users to deploy their own L2 subname service by:
 
-- Deploy L2 Registry contracts
-- Configure ENS resolvers
-- Connect L1 resolvers to L2 registries
-- Mint and manage ENS subdomains on Layer 2 networks
+- Deploying L2 Registry contracts
+- Configuring the ENS resolvers
+- Connecing L1 resolvers to L2 registries
+- Minting and managing ENS subdomains on Layer 2 networks
 
 ## Related Resources
 
@@ -41,6 +41,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Supported Networks
 
 Durin supports multiple Layer 2 networks, including:
+
 - Base
 - Optimism
 - Arbitrum
