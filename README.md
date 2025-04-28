@@ -1,38 +1,51 @@
-## Durin Website
+# Durin Website
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The official website for [Durin](https://durin.dev) - an ENS protocol for issuing subdomains on Layer 2 blockchains.
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This repository contains the frontend application for Durin, allowing users to:
+
+- Deploy L2 Registry contracts
+- Configure ENS resolvers
+- Connect L1 resolvers to L2 registries
+- Mint and manage ENS subdomains on Layer 2 networks
+
+## Related Resources
+
+- **Smart Contracts**: The Durin protocol contracts are available at [github.com/namestonehq/durin](https://github.com/namestonehq/durin)
+- **Live Website**: The application is deployed at [durin.dev](https://durin.dev) via Render
+
+## Development
+
+This is a [Next.js](https://nextjs.org) project.
 
 ```bash
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technology Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 15
+- RainbowKit for wallet connection
+- Wagmi/Viem for blockchain interactions
+- TailwindCSS for styling
+- TypeScript
 
-## Learn More
+## Supported Networks
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Durin supports multiple Layer 2 networks, including:
+- Base
+- Optimism
+- Arbitrum
+- Scroll
+- Linea
+- Celo
+- Polygon
+- World Chain
