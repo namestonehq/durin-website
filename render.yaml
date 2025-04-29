@@ -22,9 +22,6 @@ services:
     region: ohio
     buildCommand: npm install; npm run build
     startCommand: npm run start
-    domains:
-      - www.durin.dev
-      - durin.dev
     autoDeploy: true
   - type: web
     name: durin-website-staging
@@ -32,9 +29,18 @@ services:
     repo: https://github.com/namestonehq/durin-website
     plan: free
     envVars:
+      - key: NEXT_PUBLIC_FACTORY_ADDRESS
+        sync: false
+      - key: NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
+        sync: false
+      - key: NEXT_PUBLIC_ALCHEMY_API_KEY
+        sync: false
+      - key: SEPOLIA_SUBGRAPH_URL
+        sync: false
+      - key: SUBGRAPH_URL
+        sync: false
       - key: PORT
         sync: false
-      - fromGroup: Durin-website
     region: ohio
     buildCommand: npm install; npm run build
     startCommand: npm run start
