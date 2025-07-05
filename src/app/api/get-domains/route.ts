@@ -10,9 +10,12 @@ type EnrichedNameData = NameWithRelation & {
   resolver: string | null;
 };
 
+// const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+const alchemyApiKey = 'jMD1nSPG4ZFsUPjIuUkhO';
+
 // Constants
-const providerUrl = `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-const sepoliaProviderUrl = `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+const providerUrl = `https://eth-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
+const sepoliaProviderUrl = `https://eth-sepolia.g.alchemy.com/v2/${alchemyApiKey}`;
 
 // Function to get the appropriate client based on network
 const getNetworkClient = (network?: string | null) => {
