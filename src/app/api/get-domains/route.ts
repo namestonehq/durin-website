@@ -10,8 +10,7 @@ type EnrichedNameData = NameWithRelation & {
   resolver: string | null;
 };
 
-// const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
-const alchemyApiKey = 'jMD1nSPG4ZFsUPjIuUkhO';
+const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 
 // Constants
 const providerUrl = `https://eth-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;

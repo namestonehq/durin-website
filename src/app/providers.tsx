@@ -28,8 +28,7 @@ import {
 } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-// const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
-const alchemyApiKey = 'jMD1nSPG4ZFsUPjIuUkhO';
+const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
 
 if (!alchemyApiKey) {
   throw new Error("NEXT_PUBLIC_ALCHEMY_API_KEY is not set");
