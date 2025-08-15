@@ -570,7 +570,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           window.open(
-                            "https://github.com/namestonehq/durin?tab=readme-ov-file#3-customize-registrar-template",
+                            "https://github.com/namestonehq/durin?tab=readme-ov-file#3-customize-the-registrar-template",
                             "_blank"
                           );
                         }}
