@@ -41,16 +41,14 @@ const chainScanMap = {
   "World Chain": "https://worldscan.org/",
   "World Chain Sepolia": "https://sepolia.worldscan.org/",
   Celo: "https://celoscan.io/",
-  "Celo Alfajores": "https://alfajores.celoscan.io/",
+  "Celo Sepolia": "https://celo-sepolia.blockscout.com/",
   Polygon: "https://polygonscan.com/",
   "Polygon Amoy": "https://amoy.polygonscan.com/",
 };
 
 function getFullChainName(chainName: string, isTestnet: boolean) {
   return isTestnet
-    ? chainName === "Celo"
-      ? "Celo Alfajores"
-      : chainName === "Polygon"
+    ? chainName === "Polygon"
       ? "Polygon Amoy"
       : `${chainName} Sepolia`
     : chainName;

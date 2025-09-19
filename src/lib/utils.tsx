@@ -34,7 +34,7 @@ export const chainIdMap: { [key: string]: number } = {
   "World Chain": 480,
   "World Chain Sepolia": 4801,
   Celo: 42220,
-  "Celo Alfajores": 44787,
+  "Celo Sepolia": 11142220,
   Polygon: 137,
   "Polygon Amoy": 80002,
 };

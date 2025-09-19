@@ -22,7 +22,7 @@ import {
   polygon,
   polygonAmoy,
   celo,
-  celoAlfajores,
+  celoSepolia,
   worldchain,
   worldchainSepolia,
 } from "wagmi/chains";
@@ -53,7 +53,7 @@ const config = getDefaultConfig({
     polygon,
     polygonAmoy,
     celo,
-    celoAlfajores,
+    celoSepolia,
     worldchain,
     worldchainSepolia,
   ],
@@ -93,8 +93,8 @@ const config = getDefaultConfig({
       `https://polygon-amoy.g.alchemy.com/v2/${alchemyApiKey}`
     ),
     [celo.id]: http(`https://celo-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
-    [celoAlfajores.id]: http(
-      `https://celo-alfajores.g.alchemy.com/v2/${alchemyApiKey}`
+    [celoSepolia.id]: http(
+      `https://celo-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
     ),
     [worldchain.id]: http(
       `https://worldchain-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
