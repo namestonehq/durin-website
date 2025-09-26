@@ -9,7 +9,8 @@ jobs:
     name: Website
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_ALCHEMY_API_KEY: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      NEXT_PUBLIC_ALCHEMY_API_KEY: xxxxxxxx
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: xxxxxxxx
 
     steps:
       - name: Checkout code
