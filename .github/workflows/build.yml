@@ -8,6 +8,8 @@ jobs:
   build:
     name: Website
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_ALCHEMY_API_KEY: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     steps:
       - name: Checkout code
