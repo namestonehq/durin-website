@@ -94,7 +94,9 @@ const config = getDefaultConfig({
     ),
     [celo.id]: http(`https://celo-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
     [celoSepolia.id]: http(
-      `https://celo-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
+      // Temporary fix
+      "https://lb.drpc.org/celo-sepolia/Ari_kElGqUKLsEudIEgtHTm-Dzhsm7cR8L7Qwg8TMB_n"
+      // `https://celo-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
     ),
     [worldchain.id]: http(
       `https://worldchain-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
