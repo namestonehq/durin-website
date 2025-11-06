@@ -328,7 +328,7 @@ export default function Home() {
                       target="_blank"
                       className="underline underline-offset-4"
                       href={
-                        "https://github.com/namestonehq/durin/blob/main/src/examples/L2Registrar.sol"
+                        "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
                       }
                     >
                       Registry
