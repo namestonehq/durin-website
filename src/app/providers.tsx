@@ -26,12 +26,13 @@ import {
   worldchain,
   worldchainSepolia,
 } from "wagmi/chains";
+import { drpc, DrpcChain } from "evm-providers";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-const alchemyApiKey = "_chxYh4fY4m2EfHsfA-PL";
+const drpcApiKey = process.env.NEXT_PUBLIC_DRPC_API_KEY_FRONTEND;
 
-if (!alchemyApiKey) {
-  throw new Error("NEXT_PUBLIC_ALCHEMY_API_KEY is not set");
+function getChainTransport(chainId: DrpcChain) {
+  return http(drpc(chainId, drpcApiKey));
 }
 
 const config = getDefaultConfig({
@@ -58,50 +59,25 @@ const config = getDefaultConfig({
     worldchainSepolia,
   ],
   transports: {
-    [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
-    [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${alchemyApiKey}`),
-    [base.id]: http(`https://base-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
-    [optimism.id]: http(
-      `https://opt-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [arbitrum.id]: http(
-      `https://arb-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [linea.id]: http(`https://linea-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
-    [scroll.id]: http(
-      `https://scroll-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [baseSepolia.id]: http(
-      `https://base-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [optimismSepolia.id]: http(
-      `https://opt-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [arbitrumSepolia.id]: http(
-      `https://arb-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [lineaSepolia.id]: http(
-      `https://linea-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [scrollSepolia.id]: http(
-      `https://scroll-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [polygon.id]: http(
-      `https://polygon-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [polygonAmoy.id]: http(
-      `https://polygon-amoy.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [celo.id]: http(`https://celo-mainnet.g.alchemy.com/v2/${alchemyApiKey}`),
-    [celoSepolia.id]: http(
-      `https://celo-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [worldchain.id]: http(
-      `https://worldchain-mainnet.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
-    [worldchainSepolia.id]: http(
-      `https://worldchain-sepolia.g.alchemy.com/v2/${alchemyApiKey}`
-    ),
+    [mainnet.id]: getChainTransport(mainnet.id),
+    [sepolia.id]: getChainTransport(sepolia.id),
+    [base.id]: getChainTransport(base.id),
+    [optimism.id]: getChainTransport(optimism.id),
+    [arbitrum.id]: getChainTransport(arbitrum.id),
+    [linea.id]: getChainTransport(linea.id),
+    [scroll.id]: getChainTransport(scroll.id),
+    [baseSepolia.id]: getChainTransport(baseSepolia.id),
+    [optimismSepolia.id]: getChainTransport(optimismSepolia.id),
+    [arbitrumSepolia.id]: getChainTransport(arbitrumSepolia.id),
+    [lineaSepolia.id]: getChainTransport(lineaSepolia.id),
+    [scrollSepolia.id]: getChainTransport(scrollSepolia.id),
+    [polygon.id]: getChainTransport(polygon.id),
+    [polygonAmoy.id]: getChainTransport(polygonAmoy.id),
+    [celo.id]: getChainTransport(celo.id),
+    [celoSepolia.id]: getChainTransport(celoSepolia.id),
+    // evm-providers doesn't support Worldchain for DRPC, so using default RPC for now
+    [worldchain.id]: http(),
+    [worldchainSepolia.id]: http(),
   },
   ssr: true,
 });

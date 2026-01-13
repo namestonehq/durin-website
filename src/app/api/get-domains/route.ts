@@ -4,17 +4,18 @@ import { batch, getResolver } from "@ensdomains/ensjs/public";
 import { mainnet, sepolia } from "viem/chains";
 import { createPublicClient, http, isAddress } from "viem";
 import { NextRequest, NextResponse } from "next/server";
+import { drpc } from "evm-providers";
 
 // Types
 type EnrichedNameData = NameWithRelation & {
   resolver: string | null;
 };
 
-const alchemyApiKey = "_chxYh4fY4m2EfHsfA-PL";
+const drpcApiKey = process.env.DRPC_API_KEY_BACKEND;
 
 // Constants
-const providerUrl = `https://eth-mainnet.g.alchemy.com/v2/${alchemyApiKey}`;
-const sepoliaProviderUrl = `https://eth-sepolia.g.alchemy.com/v2/${alchemyApiKey}`;
+const providerUrl = drpc(mainnet.id, drpcApiKey);
+const sepoliaProviderUrl = drpc(sepolia.id, drpcApiKey);
 
 // Function to get the appropriate client based on network
 const getNetworkClient = (network?: string | null) => {
