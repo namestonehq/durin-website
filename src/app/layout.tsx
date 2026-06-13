@@ -3,6 +3,7 @@ import "./globals.css";
 import { Gelasio } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
+import Ensv2WarningBanner from "./components/ensv2-warning-banner";
 
 const gelasio = Gelasio({
   weight: ["500", "400", "700"],
@@ -42,6 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={gelasio.className}>
         <Providers>
+          <Ensv2WarningBanner />
           <Toaster
             position="top-right"
             toastOptions={{
