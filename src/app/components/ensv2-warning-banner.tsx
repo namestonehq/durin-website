@@ -8,8 +8,13 @@ export default function Ensv2WarningBanner() {
     >
       <TriangleAlert className="h-4 w-4 shrink-0 text-amber-600" aria-hidden />
       <p>
-        <span className="font-bold">Warning:</span> Durin does not currently
-        work with ENSv2.
+        <a
+          href="https://gist.github.com/gskril/997a95d6dc8493d3ffe82531382b0924"
+          target="_blank"
+          className="underline underline-offset-2"
+        >
+          Follow this guide to use Durin on Sepolia with ENSv2.
+        </a>
       </p>
     </div>
   );
