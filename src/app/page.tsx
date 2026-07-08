@@ -140,15 +140,7 @@ export default function Home() {
               >
                 open source
               </Link>{" "}
-              and PRs are welcomed. For support reach out to Slobo on{" "}
-              <Link
-                target="_blank"
-                href={"https://t.me/superslobo"}
-                className="underline underline-offset-4"
-              >
-                Telegram
-              </Link>
-              .
+              and PRs are welcomed.
             </div>
             <div className="absolute hidden md:block right-4 -top-20 bg-stone-150 p-6 w-80 rounded-lg shadow-md">
               <div className="text-stone-900 font-bold mb-2">
@@ -779,26 +771,16 @@ export default function Home() {
       <footer className="mt-10">
         <div className=" bg-neutral-900 h-16 absolute items-center w-full z-10 flex">
           <div className="flex  items-center justify-center sm:w-[800px] mx-auto">
-            <span className="ml-1  text-neutral-300">
-              Built By{" "}
+            <span className="text-sm text-neutral-500">
+              Originally created by{" "}
               <Link
-                href="https://namestone.com"
+                href="https://x.com/AlexSlobodnik"
                 target="_blank"
-                className=" hover:text-orange-400 transition-colors duration-300 ease-in text-neutral-300"
+                className="text-neutral-300 hover:text-orange-400 transition-colors duration-300 ease-in-out"
               >
-                NameStone
-              </Link>{" "}
-              <span className="mr-2 text-neutral-300">|</span>
+                Alex Slobodnik
+              </Link>
             </span>
-            <Link href="https://x.com/namestonehq" target="_blank">
-              <Image
-                className="mr-1"
-                src="/x-logo.webp"
-                alt="Logo"
-                width={12}
-                height={12}
-              />
-            </Link>
           </div>
         </div>
       </footer>
