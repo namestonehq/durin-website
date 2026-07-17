@@ -32,7 +32,7 @@ const DeployButton: React.FC<DeployButtonProps> = ({
   const chains = useChains();
   const { switchChain, error: switchError } = useSwitchChain();
   const { address: adminAddress } = useAccount();
-  const FACTORY_ADDRESS = process.env.NEXT_PUBLIC_FACTORY_ADDRESS as Address;
+  const FACTORY_ADDRESS = import.meta.env.VITE_FACTORY_ADDRESS as Address;
   const FACTORY_ABI = parseAbi([
     "function deployRegistry(string name, string symbol, string baseURI, address admin) external returns (address)",
   ]);

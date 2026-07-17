@@ -12,7 +12,7 @@ import { mainnet, sepolia } from "viem/chains";
 import { setResolver } from "@ensdomains/ensjs/wallet";
 import { addEnsContracts } from "@ensdomains/ensjs";
 import { createWalletClient, custom } from "viem";
-import { Domain } from "../../lib/types";
+import { Domain } from "../lib/types";
 import toast from "react-hot-toast";
 import { RESOLVER_ADDRESSES } from "@/lib/utils";
 
