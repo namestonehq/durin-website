@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: "Gelasio";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./fonts/GelasioVF.woff2") format("woff2");
+}
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

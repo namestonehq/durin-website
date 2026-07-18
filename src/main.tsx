@@ -1,14 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-
-const REQUIRED_ENV_VARS = [
-  "VITE_WALLET_CONNECT_PROJECT_ID",
-  "VITE_DRPC_API_KEY_FRONTEND",
-  "VITE_SUBGRAPH_URL",
-  "VITE_SEPOLIA_SUBGRAPH_URL",
-  "VITE_FACTORY_ADDRESS",
-] as const;
+import { findMissingEnvVars } from "./config/env";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
@@ -42,7 +35,7 @@ function StartupError({ title, details }: { title: string; details: string[] }) 
   );
 }
 
-const missing = REQUIRED_ENV_VARS.filter((key) => !import.meta.env[key]);
+const missing = findMissingEnvVars(import.meta.env);
 
 if (missing.length > 0) {
   root.render(

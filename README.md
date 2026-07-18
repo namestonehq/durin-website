@@ -1,6 +1,6 @@
 # Durin Website
 
-The official website for [Durin](https://durin.dev) - an ENS protocol for issuing subdomains on Layer 2 blockchains.
+The official website for [Durin](https://durin.dev), an ENS protocol for issuing subdomains on Layer 2 blockchains.
 
 ## Overview
 
@@ -8,35 +8,51 @@ This repository contains the frontend application for Durin, allowing users to d
 
 - Deploying L2 Registry contracts
 - Configuring the ENS resolvers
-- Connecing L1 resolvers to L2 registries
+- Connecting L1 resolvers to L2 registries
 - Minting and managing ENS subdomains on Layer 2 networks
 
 ## Related Resources
 
 - **Smart Contracts**: The Durin protocol contracts are available at [github.com/ensdomains/durin](https://github.com/ensdomains/durin)
-- **Live Website**: The application is deployed at [durin.dev](https://durin.dev) via Render
+- **Live website**: [durin.dev](https://durin.dev), hosted on Cloudflare Workers as static assets
 
 ## Development
 
-This is a [Next.js](https://nextjs.org) project.
+Install [Bun](https://bun.sh), copy `example.env` to `.env.local`, and fill in the required values.
 
 ```bash
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
+bun install
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+Create a production build with:
+
+```bash
+bun run build
+```
+
+Preview the production build locally with Wrangler:
+
+```bash
+bun run preview
+```
+
+Deploy the static assets to Cloudflare Workers with:
+
+```bash
+bun run deploy
+```
 
 ## Technology Stack
 
-- Next.js 15
+- Vite and React
 - RainbowKit for wallet connection
 - Wagmi/Viem for blockchain interactions
-- TailwindCSS for styling
+- Tailwind CSS for styling
 - TypeScript
+- Cloudflare Workers Static Assets for hosting
 
 ## Supported Networks
 
