@@ -4,8 +4,12 @@
   "compatibility_date": "2026-07-09",
   // Don't delete vars/secrets set manually in the Cloudflare dashboard on deploy
   "keep_vars": true,
+  "preview_urls": true,
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
+  },
+  "observability": {
+    "enabled": true
   }
 }
