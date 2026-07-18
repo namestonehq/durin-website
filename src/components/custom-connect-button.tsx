@@ -91,7 +91,7 @@ export function CustomConnectButton({ className }: { className?: string }) {
                   )}
                 >
                   <img
-                    src="/logo-small-dark.svg"
+                    src="/img/logo-small-dark.svg"
                     alt="gon.id Logo"
                     width={20}
                     height={20}

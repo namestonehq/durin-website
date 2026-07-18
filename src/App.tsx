@@ -84,7 +84,7 @@ export default function Home() {
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
         <img
           alt="logo"
-          src="/durin-logo-with-arch.svg"
+          src="/img/durin-logo-with-arch.svg"
           width={115}
           height={30}
         />
@@ -103,14 +103,14 @@ export default function Home() {
       <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
         <img
           className="rounded-lg mt-4 hidden md:block"
-          src="/banner.webp"
+          src="/img/banner.webp"
           alt="durin"
           width={1024}
           height={1024}
         />
         <img
           className="rounded-lg mt-4 self-center block md:hidden"
-          src="/banner-square.webp"
+          src="/img/banner-square.webp"
           alt="durin"
           width={256}
           height={256}
@@ -248,7 +248,7 @@ export default function Home() {
                     >
                       <div className="flex items-center gap-2">
                         <img
-                          src={`/${chainName
+                          src={`/img/${chainName
                             .toLowerCase()
                             .replace(/\s+/g, "")}-icon.svg`}
                           alt={chainName}
@@ -259,7 +259,7 @@ export default function Home() {
                         <span>{getFullChainName(chainName, isTestnet)}</span>
                       </div>
                       <img
-                        src="/chevron-down.svg"
+                        src="/img/chevron-down.svg"
                         alt="chevron"
                         width={16}
                         height={16}
@@ -292,7 +292,7 @@ export default function Home() {
                             }`}
                           >
                             <img
-                              src={`/${chain.icon}-icon.svg`}
+                              src={`/img/${chain.icon}-icon.svg`}
                               alt={chain.name}
                               width={24}
                               height={24}
@@ -359,7 +359,7 @@ export default function Home() {
                   )}
                   {registryAddress && (
                     <img
-                      src={"/etherscan-logo.svg"}
+                      src={"/img/etherscan-logo.svg"}
                       alt="etherscan"
                       width={24}
                       height={24}
@@ -445,7 +445,7 @@ export default function Home() {
                     ]?.slice(-4)}
                   </div>
                   <img
-                    src={"/etherscan-logo.svg"}
+                    src={"/img/etherscan-logo.svg"}
                     alt="etherscan"
                     width={24}
                     height={24}
@@ -560,7 +560,7 @@ export default function Home() {
                       >
                         <img
                           alt="github"
-                          src="/github.svg"
+                          src="/img/github.svg"
                           width={16}
                           height={16}
                         />
@@ -597,7 +597,7 @@ export default function Home() {
                   )}
                   {registryAddress && (
                     <img
-                      src={"/etherscan-logo.svg"}
+                      src={"/img/etherscan-logo.svg"}
                       alt="etherscan"
                       width={24}
                       height={24}
@@ -687,7 +687,7 @@ export default function Home() {
                       <br />
                       Under Contract select register() and write.
                       <img
-                        src="/etherscan-screenshot.webp"
+                        src="/img/etherscan-screenshot.webp"
                         alt="etherscan"
                         width={400}
                         height={400}
@@ -864,7 +864,7 @@ function DomainSelector({
         />
         <img
           alt="chevron"
-          src="/chevron-down.svg"
+          src="/img/chevron-down.svg"
           width={16}
           height={16}
           className="absolute transform -translate-y-1/2 right-3 top-1/2"
