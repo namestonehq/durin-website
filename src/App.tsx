@@ -100,7 +100,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
+      <main className="flex px-4 lg:px-0 flex-col grow w-full max-w-5xl gap-6 mx-auto">
         <img
           className="rounded-lg mt-4 hidden md:block"
           src="/img/banner.webp"
@@ -157,7 +157,7 @@ export default function Home() {
             1. Deploy the L2 Registry
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registry</span>
@@ -176,12 +176,12 @@ export default function Home() {
                 <div className="flex items-end justify-between">
                   <div className="font-light">Choose an ENS Name</div>
                   {/* Toggle Network */}
-                  <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                  <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded-sm">
                     <button
                       onClick={() => setNetwork("Sepolia")}
                       className={`px-4 rounded transition ${
                         network === "Sepolia"
-                          ? "bg-white shadow text-black py-1"
+                          ? "bg-white shadow-sm text-black py-1"
                           : "text-gray-500"
                       }`}
                     >
@@ -191,7 +191,7 @@ export default function Home() {
                       onClick={() => setNetwork("Mainnet")}
                       className={`px-4  rounded transition ${
                         network === "Mainnet"
-                          ? "bg-white shadow text-stone-900  py-1"
+                          ? "bg-white shadow-sm text-stone-900  py-1"
                           : "text-stone-500"
                       }`}
                     >
@@ -208,7 +208,7 @@ export default function Home() {
                   <div className="flex items-end justify-between">
                     <div className="font-light">Choose a Chain</div>
                     {/* Toggle testnet or mainnet */}
-                    <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                    <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded-sm">
                       <button
                         onClick={() => {
                           // Set isTestnet to true
@@ -216,7 +216,7 @@ export default function Home() {
                         }}
                         className={`px-4 rounded transition ${
                           isTestnet
-                            ? "bg-white shadow text-black py-1"
+                            ? "bg-white shadow-sm text-black py-1"
                             : "text-gray-500"
                         }`}
                       >
@@ -229,7 +229,7 @@ export default function Home() {
                         }}
                         className={`px-4  rounded transition ${
                           !isTestnet
-                            ? "bg-white shadow text-stone-900  py-1"
+                            ? "bg-white shadow-sm text-stone-900  py-1"
                             : "text-stone-500"
                         }`}
                       >
@@ -244,7 +244,7 @@ export default function Home() {
                   <div className="relative">
                     <button
                       onClick={() => setChainDropdownOpen(!chainDropdownOpen)}
-                      className="flex items-center justify-between w-full p-3 text-sm bg-gray-100 rounded"
+                      className="flex items-center justify-between w-full p-3 text-sm bg-gray-100 rounded-sm"
                     >
                       <div className="flex items-center gap-2">
                         <img
@@ -336,7 +336,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
                   {registryAddress && (
                     <button
@@ -389,7 +389,7 @@ export default function Home() {
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
             {/* L1 Resolver Box*/}
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L1 Resolver</span>
@@ -434,7 +434,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Resolver Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-between">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex justify-between">
                   <div className="truncate">
                     {RESOLVER_ADDRESSES[
                       network as keyof typeof RESOLVER_ADDRESSES
@@ -449,7 +449,7 @@ export default function Home() {
                     alt="etherscan"
                     width={24}
                     height={24}
-                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1 flex-shrink-0 ml-2"
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1 shrink-0 ml-2"
                     onClick={() => {
                       window.open(
                         network === "Sepolia"
@@ -499,7 +499,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Record Format:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex gap-2">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex gap-2">
                   <div className="font-mono text-xs text-stone-500">
                     {"{chain_id}"}:{" {registry}"}
                   </div>
@@ -512,7 +512,7 @@ export default function Home() {
             3. Customize Registrar
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registrar</span>
@@ -556,7 +556,7 @@ export default function Home() {
                             "_blank"
                           );
                         }}
-                        className="flex items-center gap-2 h-9 px-2 text-sm border rounded-lg shadow text- text-stone-900 hover:bg-stone-100"
+                        className="flex items-center gap-2 h-9 px-2 text-sm border rounded-lg shadow-sm text- text-stone-900 hover:bg-stone-100"
                       >
                         <img
                           alt="github"
@@ -574,7 +574,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
                   {registryAddress && (
                     <button
@@ -626,7 +626,7 @@ export default function Home() {
             4. Connect Registrar to Registry
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText />
                 <span className="font-bold">
@@ -662,7 +662,7 @@ export default function Home() {
             5. Mint your first subdomain
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <Sparkles />
                 <span className="font-bold">Mint</span>
@@ -856,7 +856,7 @@ function DomainSelector({
             setTimeout(() => setDomainInputSelected(false), 200);
           }}
           disabled={!isConnected || isLoading}
-          className={`w-full h-10 px-4 border-stone-200 border rounded-lg appearance-none focus:ring-2 focus:ring-stone-200 focus:outline-none focus:border-transparent ${
+          className={`w-full h-10 px-4 border-stone-200 border rounded-lg appearance-none focus:ring-2 focus:ring-stone-200 focus:outline-hidden focus:border-transparent ${
             !isConnected || isLoading
               ? "bg-stone-100 text-stone-400 cursor-not-allowed"
               : ""
