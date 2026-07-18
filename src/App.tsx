@@ -115,14 +115,14 @@ export default function Home() {
           width={256}
           height={256}
         />
-        <div className="relative">
-          <h1
-            className={`self-start font-gelasio w-full md:w-[calc(100%-340px)] text-2xl md:text-3xl`}
-          >
-            Issue onchain ENS subdomains on an L2
-          </h1>
-          <div className="flex">
-            <div className="self-start mt-4 w-full md:w-[calc(100%-340px)] text-stone-600 mr-12">
+        <div>
+          {/* Hero: text on the left, card overlapping the banner on the right */}
+          <div className="md:grid md:grid-cols-[minmax(0,1fr)_21rem]">
+            <div>
+              <h1 className="font-gelasio text-2xl md:text-3xl">
+                Issue onchain ENS subdomains on an L2
+              </h1>
+              <div className="mt-4 text-stone-600">
               Durin is an opinionated approach to issuing ENS L2 subdomains.
               Durin is{" "}
               <a
@@ -133,8 +133,9 @@ export default function Home() {
                 open source
               </a>{" "}
               and PRs are welcomed.
+              </div>
             </div>
-            <div className="absolute hidden md:block right-4 -top-20 bg-stone-150 p-6 w-80 rounded-lg shadow-md">
+            <aside className="hidden md:block self-start -mt-20 w-80 bg-stone-150 p-6 rounded-lg shadow-md">
               <div className="text-stone-900 font-bold mb-2">
                 What you&apos;ll need
               </div>
@@ -144,7 +145,7 @@ export default function Home() {
                 <li>Familiarity with solidity</li>
                 <li>RPC URL for the chosen chain</li>
               </ul>
-            </div>
+            </aside>
           </div>
 
           <div className="mt-4">
