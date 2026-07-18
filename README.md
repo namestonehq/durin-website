@@ -13,7 +13,7 @@ This repository contains the frontend application for Durin, allowing users to d
 
 ## Related Resources
 
-- **Smart Contracts**: The Durin protocol contracts are available at [github.com/namestonehq/durin](https://github.com/namestonehq/durin)
+- **Smart Contracts**: The Durin protocol contracts are available at [github.com/ensdomains/durin](https://github.com/ensdomains/durin)
 - **Live Website**: The application is deployed at [durin.dev](https://durin.dev) via Render
 
 ## Development

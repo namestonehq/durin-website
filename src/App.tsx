@@ -127,7 +127,7 @@ export default function Home() {
               Durin is{" "}
               <a
                 target="_blank"
-                href={"https://github.com/namestonehq/durin"}
+                href={"https://github.com/ensdomains/durin"}
                 className="underline underline-offset-4"
               >
                 open source
@@ -313,7 +313,7 @@ export default function Home() {
                       target="_blank"
                       className="underline underline-offset-4"
                       href={
-                        "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
+                        "https://github.com/ensdomains/durin/blob/main/src/L2Registry.sol"
                       }
                     >
                       Registry
@@ -539,7 +539,7 @@ export default function Home() {
                     <div className="text-sm mt-2 text-stone-500">
                       Select a template{" "}
                       <a
-                        href="https://github.com/namestonehq/durin/blob/main/src/examples/L2Registrar.sol"
+                        href="https://github.com/ensdomains/durin/blob/main/src/examples/L2Registrar.sol"
                         target="_blank"
                         className="underline underline-offset-4"
                       >
@@ -553,7 +553,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           window.open(
-                            "https://github.com/namestonehq/durin?tab=readme-ov-file#3-customize-the-registrar-template",
+                            "https://github.com/ensdomains/durin?tab=readme-ov-file#3-customize-the-registrar-template",
                             "_blank"
                           );
                         }}
