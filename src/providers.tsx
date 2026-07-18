@@ -1,5 +1,3 @@
-"use client";
-
 import { WagmiProvider } from "wagmi";
 import "@rainbow-me/rainbowkit/styles.css";
 import { RainbowKitProvider, midnightTheme } from "@rainbow-me/rainbowkit";
@@ -29,7 +27,7 @@ import {
 import { drpc, DrpcChain } from "evm-providers";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-const drpcApiKey = process.env.NEXT_PUBLIC_DRPC_API_KEY_FRONTEND;
+const drpcApiKey = import.meta.env.VITE_DRPC_API_KEY_FRONTEND;
 
 function getChainTransport(chainId: DrpcChain) {
   return http(drpc(chainId, drpcApiKey));
@@ -37,7 +35,7 @@ function getChainTransport(chainId: DrpcChain) {
 
 const config = getDefaultConfig({
   appName: "Durin",
-  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "",
+  projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID || "",
   chains: [
     mainnet,
     sepolia,
@@ -79,7 +77,7 @@ const config = getDefaultConfig({
     [worldchain.id]: http(),
     [worldchainSepolia.id]: http(),
   },
-  ssr: true,
+  ssr: false,
 });
 
 const queryClient = new QueryClient();

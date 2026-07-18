@@ -1,7 +1,3 @@
-"use client";
-import Image from "next/image";
-import { Gelasio } from "next/font/google";
-import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
@@ -9,15 +5,11 @@ import DeployButton from "./components/deploy-button";
 import { type Address } from "viem";
 import UpdateResolverButton from "./components/update-resolver-button";
 import SetRegistryButton from "./components/set-registry-button";
-import { Domain } from "../lib/types";
+import { Domain } from "./lib/types";
+import { getDomains } from "./lib/get-domains";
 import { Copy, Check, ExternalLink, ScrollText, Sparkles } from "lucide-react";
 
 import { RESOLVER_ADDRESSES } from "@/lib/utils";
-
-const gelasio = Gelasio({
-  weight: ["500", "400", "700"],
-  subsets: ["latin"],
-});
 
 interface Transactionn {
   action: string;
@@ -90,12 +82,12 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen font-sans text-stone-900 relative">
       <div className="flex items-center justify-between h-16 px-4 md:px-10 mt-4">
-        <Image
+        <img
           alt="logo"
-          src="durin-logo-with-arch.svg"
+          src="/img/durin-logo-with-arch.svg"
           width={115}
           height={30}
-        ></Image>
+        />
 
         <ConnectButton
           showBalance={false}
@@ -108,41 +100,42 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex px-4 lg:px-0 flex-col flex-grow w-full max-w-5xl gap-6 mx-auto">
-        <Image
+      <main className="flex px-4 lg:px-0 flex-col grow w-full max-w-5xl gap-6 mx-auto">
+        <img
           className="rounded-lg mt-4 hidden md:block"
-          src="/banner.webp"
+          src="/img/banner.webp"
           alt="durin"
           width={1024}
           height={1024}
-        ></Image>
-        <Image
+        />
+        <img
           className="rounded-lg mt-4 self-center block md:hidden"
-          src="/banner-square.webp"
+          src="/img/banner-square.webp"
           alt="durin"
           width={256}
           height={256}
-        ></Image>
-        <div className="relative">
-          <h1
-            className={`self-start ${gelasio.className} w-full md:w-[calc(100%-340px)] text-2xl md:text-3xl`}
-          >
-            Issue onchain ENS subdomains on an L2
-          </h1>
-          <div className="flex">
-            <div className="self-start mt-4 w-full md:w-[calc(100%-340px)] text-stone-600 mr-12">
+        />
+        <div>
+          {/* Hero: text on the left, card overlapping the banner on the right */}
+          <div className="md:grid md:grid-cols-[minmax(0,1fr)_21rem]">
+            <div>
+              <h1 className="font-gelasio text-2xl md:text-3xl">
+                Issue onchain ENS subdomains on an L2
+              </h1>
+              <div className="mt-4 text-stone-600">
               Durin is an opinionated approach to issuing ENS L2 subdomains.
               Durin is{" "}
-              <Link
+              <a
                 target="_blank"
-                href={"https://github.com/namestonehq/durin"}
+                href={"https://github.com/ensdomains/durin"}
                 className="underline underline-offset-4"
               >
                 open source
-              </Link>{" "}
+              </a>{" "}
               and PRs are welcomed.
+              </div>
             </div>
-            <div className="absolute hidden md:block right-4 -top-20 bg-stone-150 p-6 w-80 rounded-lg shadow-md">
+            <aside className="hidden md:block self-start -mt-20 w-80 bg-stone-150 p-6 rounded-lg shadow-md">
               <div className="text-stone-900 font-bold mb-2">
                 What you&apos;ll need
               </div>
@@ -152,7 +145,7 @@ export default function Home() {
                 <li>Familiarity with solidity</li>
                 <li>RPC URL for the chosen chain</li>
               </ul>
-            </div>
+            </aside>
           </div>
 
           <div className="mt-4">
@@ -161,11 +154,11 @@ export default function Home() {
           </div>
           <hr className="bg-stone-100 my-6" />
           {/* Deploy L2 Registry */}
-          <h2 className={`${gelasio.className} mb-3 text-xl`}>
+          <h2 className={`font-gelasio mb-3 text-xl`}>
             1. Deploy the L2 Registry
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registry</span>
@@ -184,12 +177,12 @@ export default function Home() {
                 <div className="flex items-end justify-between">
                   <div className="font-light">Choose an ENS Name</div>
                   {/* Toggle Network */}
-                  <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                  <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded-sm">
                     <button
                       onClick={() => setNetwork("Sepolia")}
                       className={`px-4 rounded transition ${
                         network === "Sepolia"
-                          ? "bg-white shadow text-black py-1"
+                          ? "bg-white shadow-sm text-black py-1"
                           : "text-gray-500"
                       }`}
                     >
@@ -199,7 +192,7 @@ export default function Home() {
                       onClick={() => setNetwork("Mainnet")}
                       className={`px-4  rounded transition ${
                         network === "Mainnet"
-                          ? "bg-white shadow text-stone-900  py-1"
+                          ? "bg-white shadow-sm text-stone-900  py-1"
                           : "text-stone-500"
                       }`}
                     >
@@ -216,7 +209,7 @@ export default function Home() {
                   <div className="flex items-end justify-between">
                     <div className="font-light">Choose a Chain</div>
                     {/* Toggle testnet or mainnet */}
-                    <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded">
+                    <div className="flex p-1 mt-2 text-sm bg-gray-100 rounded-sm">
                       <button
                         onClick={() => {
                           // Set isTestnet to true
@@ -224,7 +217,7 @@ export default function Home() {
                         }}
                         className={`px-4 rounded transition ${
                           isTestnet
-                            ? "bg-white shadow text-black py-1"
+                            ? "bg-white shadow-sm text-black py-1"
                             : "text-gray-500"
                         }`}
                       >
@@ -237,7 +230,7 @@ export default function Home() {
                         }}
                         className={`px-4  rounded transition ${
                           !isTestnet
-                            ? "bg-white shadow text-stone-900  py-1"
+                            ? "bg-white shadow-sm text-stone-900  py-1"
                             : "text-stone-500"
                         }`}
                       >
@@ -252,11 +245,11 @@ export default function Home() {
                   <div className="relative">
                     <button
                       onClick={() => setChainDropdownOpen(!chainDropdownOpen)}
-                      className="flex items-center justify-between w-full p-3 text-sm bg-gray-100 rounded"
+                      className="flex items-center justify-between w-full p-3 text-sm bg-gray-100 rounded-sm"
                     >
                       <div className="flex items-center gap-2">
-                        <Image
-                          src={`/${chainName
+                        <img
+                          src={`/img/${chainName
                             .toLowerCase()
                             .replace(/\s+/g, "")}-icon.svg`}
                           alt={chainName}
@@ -266,8 +259,8 @@ export default function Home() {
                         />
                         <span>{getFullChainName(chainName, isTestnet)}</span>
                       </div>
-                      <Image
-                        src="/chevron-down.svg"
+                      <img
+                        src="/img/chevron-down.svg"
                         alt="chevron"
                         width={16}
                         height={16}
@@ -299,8 +292,8 @@ export default function Home() {
                               chainName === chain.name ? "bg-gray-50" : ""
                             }`}
                           >
-                            <Image
-                              src={`/${chain.icon}-icon.svg`}
+                            <img
+                              src={`/img/${chain.icon}-icon.svg`}
                               alt={chain.name}
                               width={24}
                               height={24}
@@ -316,15 +309,15 @@ export default function Home() {
                   </div>
                   <div className="font-light mt-6">
                     Deploy L2{" "}
-                    <Link
+                    <a
                       target="_blank"
                       className="underline underline-offset-4"
                       href={
-                        "https://github.com/namestonehq/durin/blob/main/src/L2Registry.sol"
+                        "https://github.com/ensdomains/durin/blob/main/src/L2Registry.sol"
                       }
                     >
                       Registry
-                    </Link>{" "}
+                    </a>{" "}
                     on {getFullChainName(chainName, isTestnet)}
                   </div>
                   <div className="text-sm text-stone-600 ">
@@ -344,7 +337,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
                   {registryAddress && (
                     <button
@@ -366,8 +359,8 @@ export default function Home() {
                     </button>
                   )}
                   {registryAddress && (
-                    <Image
-                      src={"etherscan-logo.svg"}
+                    <img
+                      src={"/img/etherscan-logo.svg"}
                       alt="etherscan"
                       width={24}
                       height={24}
@@ -392,12 +385,12 @@ export default function Home() {
             </div>
           </div>
           {/* Configure L1 Resolver */}
-          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
+          <h2 className={`font-gelasio mb-3 mt-12 text-xl`}>
             2. Configure L1 Resolver
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
             {/* L1 Resolver Box*/}
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L1 Resolver</span>
@@ -442,7 +435,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Resolver Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex justify-between">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex justify-between">
                   <div className="truncate">
                     {RESOLVER_ADDRESSES[
                       network as keyof typeof RESOLVER_ADDRESSES
@@ -452,12 +445,12 @@ export default function Home() {
                       network as keyof typeof RESOLVER_ADDRESSES
                     ]?.slice(-4)}
                   </div>
-                  <Image
-                    src={"etherscan-logo.svg"}
+                  <img
+                    src={"/img/etherscan-logo.svg"}
                     alt="etherscan"
                     width={24}
                     height={24}
-                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1 flex-shrink-0 ml-2"
+                    className="cursor-pointer hover:bg-stone-200 rounded-md transition-colors p-1 shrink-0 ml-2"
                     onClick={() => {
                       window.open(
                         network === "Sepolia"
@@ -507,7 +500,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Record Format:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex gap-2">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex gap-2">
                   <div className="font-mono text-xs text-stone-500">
                     {"{chain_id}"}:{" {registry}"}
                   </div>
@@ -516,11 +509,11 @@ export default function Home() {
             </div>
           </div>
           {/* Customize Registrar */}
-          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
+          <h2 className={`font-gelasio mb-3 mt-12 text-xl`}>
             3. Customize Registrar
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText /> Key Contract:{" "}
                 <span className="font-bold">L2 Registrar</span>
@@ -545,13 +538,13 @@ export default function Home() {
                     </div>
                     <div className="text-sm mt-2 text-stone-500">
                       Select a template{" "}
-                      <Link
-                        href="https://github.com/namestonehq/durin/blob/main/src/examples/L2Registrar.sol"
+                      <a
+                        href="https://github.com/ensdomains/durin/blob/main/src/examples/L2Registrar.sol"
                         target="_blank"
                         className="underline underline-offset-4"
                       >
                         L2 registrar
-                      </Link>{" "}
+                      </a>{" "}
                       and modify it as needed. You will need your registry
                       address.
                     </div>
@@ -560,18 +553,18 @@ export default function Home() {
                       <button
                         onClick={() => {
                           window.open(
-                            "https://github.com/namestonehq/durin?tab=readme-ov-file#3-customize-the-registrar-template",
+                            "https://github.com/ensdomains/durin?tab=readme-ov-file#3-customize-the-registrar-template",
                             "_blank"
                           );
                         }}
-                        className="flex items-center gap-2 h-9 px-2 text-sm border rounded-lg shadow text- text-stone-900 hover:bg-stone-100"
+                        className="flex items-center gap-2 h-9 px-2 text-sm border rounded-lg shadow-sm text- text-stone-900 hover:bg-stone-100"
                       >
-                        <Image
+                        <img
                           alt="github"
-                          src="/github.svg"
+                          src="/img/github.svg"
                           width={16}
                           height={16}
-                        ></Image>
+                        />
                         Customize
                       </button>
                     </div>
@@ -582,7 +575,7 @@ export default function Home() {
                 <div className="flex pt-7 whitespace-nowrap pl-6 pr-2">
                   Registry Address:
                 </div>
-                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-none bg-white text-stone-400 flex ">
+                <div className="flex-1 items-center mr-2 h-10 px-4 mt-4 py-1 overflow-hidden border-stone-200 border focus:border-transparent rounded-lg appearance-none focus:ring-2 focus:ring-stone-500 focus:outline-hidden bg-white text-stone-400 flex ">
                   {registryAddress ? registryAddress : "Waiting for Deploy..."}
                   {registryAddress && (
                     <button
@@ -604,8 +597,8 @@ export default function Home() {
                     </button>
                   )}
                   {registryAddress && (
-                    <Image
-                      src={"etherscan-logo.svg"}
+                    <img
+                      src={"/img/etherscan-logo.svg"}
                       alt="etherscan"
                       width={24}
                       height={24}
@@ -630,11 +623,11 @@ export default function Home() {
             </div>
           </div>
           {/* Connect Registrar to Registry*/}
-          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
+          <h2 className={`font-gelasio mb-3 mt-12 text-xl`}>
             4. Connect Registrar to Registry
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <ScrollText />
                 <span className="font-bold">
@@ -666,11 +659,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <h2 className={`${gelasio.className} mb-3 mt-12 text-xl`}>
+          <h2 className={`font-gelasio mb-3 mt-12 text-xl`}>
             5. Mint your first subdomain
           </h2>
           <div className="flex flex-col md:flex-row gap-20">
-            <div className="bg-stone-150 z-10 w-full md:w-96 flex-shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
+            <div className="bg-stone-150 z-10 w-full md:w-96 shrink-0 flex flex-col gap-3 p-6 rounded-lg h-fit">
               <div className="flex items-center gap-2">
                 <Sparkles />
                 <span className="font-bold">Mint</span>
@@ -694,8 +687,8 @@ export default function Home() {
                       Etherscan. <br />
                       <br />
                       Under Contract select register() and write.
-                      <Image
-                        src="/etherscan-screenshot.webp"
+                      <img
+                        src="/img/etherscan-screenshot.webp"
                         alt="etherscan"
                         width={400}
                         height={400}
@@ -711,7 +704,7 @@ export default function Home() {
         {/* Tx history */}
         <div className="items-start w-full flex-col gap-2">
           <div className="flex items-center justify-between">
-            <div className={`${gelasio.className} text-xl py-4`}>
+            <div className={`font-gelasio text-xl py-4`}>
               Transaction History
             </div>
             <div className="relative group">
@@ -773,13 +766,13 @@ export default function Home() {
           <div className="flex  items-center justify-center sm:w-[800px] mx-auto">
             <span className="text-sm text-neutral-500">
               Originally created by{" "}
-              <Link
+              <a
                 href="https://x.com/AlexSlobodnik"
                 target="_blank"
                 className="text-neutral-300 hover:text-orange-400 transition-colors duration-300 ease-in-out"
               >
                 Alex Slobodnik
-              </Link>
+              </a>
             </span>
           </div>
         </div>
@@ -815,21 +808,8 @@ function DomainSelector({
 
       try {
         setIsLoading(true);
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
-        const url = new URL(`${baseUrl}/api/get-domains`);
-        url.searchParams.append("address", address);
-        url.searchParams.append("network", network);
-
-        const response = await fetch(url.toString());
-        const data: Domain[] = await response.json();
-
-        if (response.status === 200) {
-          setUserDomains(data.filter((name) => name !== null));
-        } else {
-          console.error("Error fetching domains:", data);
-          setUserDomains([]);
-        }
+        const data = (await getDomains(address, network)) as Domain[];
+        setUserDomains(data.filter((name) => name !== null));
       } catch (error) {
         console.error("Error fetching ENS names:", error);
         setUserDomains([]);
@@ -877,15 +857,15 @@ function DomainSelector({
             setTimeout(() => setDomainInputSelected(false), 200);
           }}
           disabled={!isConnected || isLoading}
-          className={`w-full h-10 px-4 border-stone-200 border rounded-lg appearance-none focus:ring-2 focus:ring-stone-200 focus:outline-none focus:border-transparent ${
+          className={`w-full h-10 px-4 border-stone-200 border rounded-lg appearance-none focus:ring-2 focus:ring-stone-200 focus:outline-hidden focus:border-transparent ${
             !isConnected || isLoading
               ? "bg-stone-100 text-stone-400 cursor-not-allowed"
               : ""
           }`}
         />
-        <Image
+        <img
           alt="chevron"
-          src="/chevron-down.svg"
+          src="/img/chevron-down.svg"
           width={16}
           height={16}
           className="absolute transform -translate-y-1/2 right-3 top-1/2"

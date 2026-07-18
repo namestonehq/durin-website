@@ -1,8 +1,5 @@
-"use client";
-
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { cn, formatEthereumAddress } from "@/lib/utils";
-import Image from "next/image";
 
 export function CustomConnectButton({ className }: { className?: string }) {
   return (
@@ -93,8 +90,8 @@ export function CustomConnectButton({ className }: { className?: string }) {
                     "text-white transition-colors duration-300 rounded-lg bg-stone-900 w-fit hover:bg-stone-700 disabled:opacity-50 flex items-center justify-center gap-2"
                   )}
                 >
-                  <Image
-                    src="/logo-small-dark.svg"
+                  <img
+                    src="/img/logo-small-dark.svg"
                     alt="gon.id Logo"
                     width={20}
                     height={20}
